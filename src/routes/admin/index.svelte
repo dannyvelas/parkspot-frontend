@@ -8,14 +8,17 @@
 	export const load: Load<Record<string, string>, Record<string, any>, Props> = async ({
 		session
 	}) => {
-		return session.user ? { props: session.user.id } : {};
+		if (session.user) {
+			return { props: { id: session.user.id } };
+		} else {
+			return {};
+		}
 	};
 </script>
 
 <script lang="ts">
 	export let id: string;
 </script>
-
 
 <h1>Welcome {id}</h1>
 <h2>Admin Dashboard</h2>
