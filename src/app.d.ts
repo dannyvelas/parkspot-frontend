@@ -4,18 +4,20 @@
 // for information about these interfaces
 import { Admin } from '$lib/models';
 
-declare namespace App {
-	interface Locals {
-		user?: Admin;
-		//driver: Driver;
-		//secrets: Secrets;
+declare global {
+	declare namespace App {
+		interface Locals {
+			user?: Admin;
+			//driver: Driver;
+			//secrets: Secrets;
+		}
+
+		interface Platform {}
+
+		interface Session {
+			user?: Admin;
+		}
+
+		interface Stuff {}
 	}
-
-	interface Platform {}
-
-	interface Session {
-		user?: Admin;
-	}
-
-	interface Stuff {}
 }
