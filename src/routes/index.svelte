@@ -2,7 +2,11 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ session }) => {
-		return session.user ? { status: 302, redirect: '/' } : {};
+		if (session.user) {
+			return { status: 302, redirect: '/' };
+		} else {
+			return {};
+		}
 	};
 </script>
 
@@ -43,7 +47,7 @@
 {/if}
 <form on:submit|preventDefault={submit}>
 	<fieldset class="form-group">
-		<input type="username" required placeholder="Resident ID" bind:value={id} />
+		<input type="username" required placeholder="Username" bind:value={id} />
 	</fieldset>
 	<fieldset class="form-group">
 		<input type="password" required placeholder="Password" bind:value={password} />
