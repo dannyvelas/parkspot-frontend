@@ -1,26 +1,26 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
+	import type { Admin } from '$lib/models';
 
 	type Props = {
-		id: string;
+		admin: Admin;
 	};
-
 	export const load: Load<Record<string, string>, Record<string, any>, Props> = async ({
 		session
 	}) => {
 		if (session.user) {
-			return { props: { id: session.user.id } };
+			return { props: { admin: session.user } };
 		} else {
-			return {};
+			return { status: 302, redirect: '/' };
 		}
 	};
 </script>
 
 <script lang="ts">
-	export let id: string;
+	export let admin: Admin;
 </script>
 
-<h1>Welcome {id}</h1>
+<h1>Welcome {admin.firstName}</h1>
 <h2>Admin Dashboard</h2>
 
 <p>
