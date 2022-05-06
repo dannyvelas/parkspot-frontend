@@ -1,1 +1,4 @@
 - [ ] add env variable for backend URL
+- [ ] fix error messages in login page
+- [ ] make params a `{}` argument or use generated types in index.svelte
+- [ ] make `credentials=true` in fetch options, only work in dev if it's not necessary in prod
