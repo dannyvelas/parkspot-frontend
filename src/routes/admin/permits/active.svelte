@@ -6,7 +6,7 @@
 	export const load: Load = async ({ session: { user } }) => {
 		if (!user) return { status: 302, redirect: '/' };
 
-		const permits = await get<Array<Permit>>(`api/admin/permits/all`);
+		const permits = await get<Array<Permit>>(`api/admin/permits/active`);
 
 		return {
 			props: {
@@ -25,10 +25,10 @@
 </script>
 
 <svelte:head>
-	<title>All Permits</title>
+	<title>Active Permits</title>
 </svelte:head>
 
-<h1>All Permits</h1>
+<h1>Active Permits</h1>
 
 {#if !isOk(permits)}
 	{permits.error}
