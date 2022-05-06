@@ -25,19 +25,19 @@
 
 <p>
 	List Active Parking Permits:
-	<a href="/permits/active"><button>Submit</button></a>
+	<a href="/admin/permits/active"><button>Submit</button></a>
 </p>
 <p>
 	List All Parking Permits:
-	<a href="/permits/all"><button>Submit</button></a>
+	<a href="/admin/permits/all"><button>Submit</button></a>
 </p>
 <p>
 	List Expired Parking Permits:
-	<a href="/permits/expired"><button>Submit</button></a>
+	<a href="/admin/permits/expired"><button>Submit</button></a>
 </p>
 <p>
 	List Exceptions:
-	<a href="/permits/exceptions"><button>Submit</button></a>
+	<a href="/admin/permits/exceptions"><button>Submit</button></a>
 </p>
 <p>
 	List Parking Days Given To Guests by Resident Id:
