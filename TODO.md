@@ -2,3 +2,5 @@
 - [ ] fix error messages in login page
 - [ ] make params a `{}` argument or use generated types in index.svelte
 - [ ] make `credentials=true` in fetch options, only work in dev if it's not necessary in prod
+- [ ] make svelte not sign you out on re-fresh
+- [ ] show actual number of all permits instead of just the amount on the page
