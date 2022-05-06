@@ -33,7 +33,6 @@
 			$session.user = result.data;
 			goto('/admin');
 		} else {
-			console.log(result.error);
 			error = result.error;
 		}
 	};
