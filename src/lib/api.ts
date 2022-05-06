@@ -6,12 +6,13 @@ type FetchOpts = {
 	method: Method;
 	headers?: Headers;
 	body?: string;
+	credentials: 'include';
 };
 
 const send =
 	(method: Method) =>
 	async <ReqBody, ResBody>(path: string, data: ReqBody): Promise<Result<ResBody>> => {
-		const opts: FetchOpts = { method };
+		const opts: FetchOpts = { method, credentials: 'include' };
 		if (data) {
 			opts.headers = new Headers({ 'Content-Type': 'application/json' });
 			opts.body = JSON.stringify(data);
