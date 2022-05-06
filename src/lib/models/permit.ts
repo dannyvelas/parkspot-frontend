@@ -1,0 +1,23 @@
+import * as decoders from 'decoders';
+import type { Car } from './car';
+import { carDecoder } from './car';
+
+export type Permit = {
+	id: number;
+	residentId: string;
+	car: Car;
+	startDate: Date;
+	endDate: Date;
+	requestTS: number;
+	affectsDays: boolean;
+};
+
+export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
+	id: decoders.number,
+	residentId: decoders.string,
+	car: carDecoder,
+	startDate: decoders.iso8601,
+	endDate: decoders.iso8601,
+	requestTS: decoders.number,
+	affectsDays: decoders.boolean
+});

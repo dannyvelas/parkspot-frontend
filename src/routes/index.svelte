@@ -12,6 +12,7 @@
 
 <script lang="ts">
 	import type { Admin } from '$lib/models';
+	import { adminDecoder } from '$lib/models';
 	import { isOk } from '$lib/functional';
 	import { getStores } from '$app/stores';
 	import { goto } from '$app/navigation';
@@ -28,7 +29,7 @@
 	let error = '';
 
 	const submit = async () => {
-		const result = await post<Credentials, Admin>('api/login', { id, password });
+		const result = await post<Credentials, Admin>('api/login', { id, password }, adminDecoder);
 		if (isOk(result)) {
 			$session.user = result.data;
 			goto('/admin');

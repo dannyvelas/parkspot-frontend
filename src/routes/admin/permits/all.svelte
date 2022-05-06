@@ -1,12 +1,14 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	import type { Permit } from '$lib/models';
+	import { permitDecoder } from '$lib/models';
+	import { array } from 'decoders';
 	import { get } from '$lib/api';
 
 	export const load: Load = async ({ session: { user } }) => {
 		if (!user) return { status: 302, redirect: '/' };
 
-		const permits = await get<Array<Permit>>(`api/admin/permits/all`);
+		const permits = await get<Array<Permit>>(`api/admin/permits/all?size=1`, array(permitDecoder));
 
 		return {
 			props: {
@@ -21,11 +23,8 @@
 	import { isOk } from '$lib/functional';
 	export let permits: Result<Array<Permit>>;
 
-	const renderDate = (rfc3339: string): string => {
-		const date = new Date(rfc3339);
-		const dateStr = date.toISOString();
-
-		return dateStr.split('T')[0];
+	const renderDate = (date: Date): string => {
+		return date.toISOString().split('T')[0];
 	};
 	const tsToDate = (ts: number): string => {
 		const date = new Date(ts * 1000);

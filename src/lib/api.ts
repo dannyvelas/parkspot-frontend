@@ -1,5 +1,6 @@
 import type { Result } from '$lib/functional';
 import { newOk, newErr } from '$lib/functional';
+import type { Decoder } from 'decoders';
 type Method = 'GET' | 'DELETE' | 'POST' | 'PUT';
 
 type FetchOpts = {
@@ -11,7 +12,11 @@ type FetchOpts = {
 
 const send =
 	(method: Method) =>
-	async <ReqBody, ResBody>(path: string, data: ReqBody): Promise<Result<ResBody>> => {
+	async <ReqBody, ResBody>(
+		path: string,
+		data: ReqBody,
+		responseDecoder: Decoder<ResBody>
+	): Promise<Result<ResBody>> => {
 		const opts: FetchOpts = { method, credentials: 'include' };
 		if (data) {
 			opts.headers = new Headers({ 'Content-Type': 'application/json' });
@@ -23,7 +28,8 @@ const send =
 			if (response.ok) {
 				try {
 					const jsonResponse = await response.json();
-					return newOk(jsonResponse);
+					const decodedResponse = responseDecoder.verify(jsonResponse);
+					return newOk(decodedResponse);
 				} catch (error) {
 					return newErr(`Error parsing json: ${error}`);
 				}
@@ -35,7 +41,10 @@ const send =
 		}
 	};
 
-export const get = <ResBody>(path: string) => send('GET')<undefined, ResBody>(path, undefined);
-export const del = <ResBody>(path: string) => send('DELETE')<undefined, ResBody>(path, undefined);
+export const get = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
+	send('GET')<undefined, ResBody>(path, undefined, responseDecoder);
+//export const del = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
+//	send('DELETE')<undefined, ResBody>(path, responseDecoder, undefined);
+
 export const post = send('POST');
 export const put = send('PUT');
