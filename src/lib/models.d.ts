@@ -5,3 +5,22 @@ export type Admin = {
 	email: string;
 	isPrivileged: boolean;
 };
+
+export type Permit = {
+	id: number;
+	residentId: string;
+	car: Car;
+	startDate: string;
+	endDate: string;
+	requestTS: number;
+	affectsDays: boolean;
+};
+
+export type Car = {
+	id: string;
+	licensePlate: string;
+	color: string;
+	make: string;
+	model: string;
+	amtParkingDaysUsed: number;
+};
