@@ -14,6 +14,7 @@ export type Permit = {
 	endDate: string;
 	requestTS: number;
 	affectsDays: boolean;
+	exceptionReason: string;
 };
 
 export type Car = {
