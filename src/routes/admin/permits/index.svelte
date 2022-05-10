@@ -6,7 +6,7 @@
 	export const load: Load = async ({ session: { user } }) => {
 		if (!user) return { status: 302, redirect: '/' };
 
-		const permits = await get<Array<Permit>>(`api/admin/permits/all`);
+		const permits = await get<Array<Permit>>(`api/admin/permits`);
 
 		return {
 			props: {
