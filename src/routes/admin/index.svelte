@@ -41,11 +41,11 @@
 </p>
 <p>
 	List Parking Days Given To Guests by Resident Id:
-	<a href="/resident/parking-days"><button>Submit</button></a>
+	<a href="/admin/residents/days"><button>Submit</button></a>
 </p>
 <p>
 	List Resident Accounts:
-	<a href="/resident/accounts"><button>Submit</button></a>
+	<a href="/admin/residents"><button>Submit</button></a>
 </p>
 <p>
 	List Visitors:
