@@ -25,3 +25,13 @@ export type Car = {
 	model: string;
 	amtParkingDaysUsed: number;
 };
+
+export type Resident = {
+	id: string;
+	firstName: string;
+	lastName: string;
+	phone: string;
+	email: string;
+	unlimDays: boolean;
+	amtParkingDaysUsed: number;
+};
