@@ -10,6 +10,7 @@ export type Permit = {
 	endDate: Date;
 	requestTS: number;
 	affectsDays: boolean;
+	exceptionReason?: string | null;
 };
 
 export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
@@ -19,5 +20,6 @@ export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
 	startDate: decoders.iso8601,
 	endDate: decoders.iso8601,
 	requestTS: decoders.number,
-	affectsDays: decoders.boolean
+	affectsDays: decoders.boolean,
+	exceptionReason: decoders.maybe(decoders.string)
 });

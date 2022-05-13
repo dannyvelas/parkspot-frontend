@@ -8,7 +8,7 @@
 	export const load: Load = async ({ session: { user } }) => {
 		if (!user) return { status: 302, redirect: '/' };
 
-		const permits = await get<Array<Permit>>(`api/admin/permits/all?size=1`, array(permitDecoder));
+		const permits = await get<Array<Permit>>(`api/admin/permits/exceptions`, array(permitDecoder));
 
 		return {
 			props: {
@@ -22,23 +22,13 @@
 	import type { Result } from '$lib/functional';
 	import { isOk } from '$lib/functional';
 	export let permits: Result<Array<Permit>>;
-
-	const renderDate = (date: Date): string => {
-		return date.toISOString().split('T')[0];
-	};
-	const tsToDate = (ts: number): string => {
-		const date = new Date(ts * 1000);
-		const offset = date.getTimezoneOffset();
-		const offset_date = new Date(date.getTime() - offset * 60 * 1000).toISOString();
-		return offset_date.replace('T', ' ').split('.')[0];
-	};
 </script>
 
 <svelte:head>
-	<title>All Permits</title>
+	<title>Exceptions</title>
 </svelte:head>
 
-<h1>All Permits</h1>
+<h1>Exceptions</h1>
 
 {#if !isOk(permits)}
 	{permits.error}
@@ -54,10 +44,7 @@
 					<td>Color</td>
 					<td>Make</td>
 					<td>Model</td>
-					<td>Start Date</td>
-					<td>End Date</td>
-					<td>Request Date</td>
-					<td>Delete</td>
+					<td>Reason For Exception</td>
 				</tr>
 				{#each permits.data as permit}
 					<tr>
@@ -67,10 +54,7 @@
 						<td>{permit.car.color}</td>
 						<td>{permit.car.make}</td>
 						<td>{permit.car.model}</td>
-						<td>{renderDate(permit.startDate)}</td>
-						<td>{renderDate(permit.endDate)}</td>
-						<td>{tsToDate(permit.requestTS)}</td>
-						<td><button>Delete</button></td>
+						<td>{permit.exceptionReason}</td>
 					</tr>
 				{/each}
 			</table>
@@ -79,13 +63,13 @@
 {/if}
 
 <style>
+	h1 {
+		text-align: center;
+	}
+
 	table,
 	td {
 		border: 1px solid black;
-	}
-
-	h1 {
-		text-align: center;
 	}
 
 	.stack-container {

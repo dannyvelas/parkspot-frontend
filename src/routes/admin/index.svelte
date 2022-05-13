@@ -29,7 +29,7 @@
 </p>
 <p>
 	List All Parking Permits:
-	<a href="/admin/permits/all"><button>Submit</button></a>
+	<a href="/admin/permits"><button>Submit</button></a>
 </p>
 <p>
 	List Expired Parking Permits:
@@ -41,11 +41,11 @@
 </p>
 <p>
 	List Parking Days Given To Guests by Resident Id:
-	<a href="/resident/parking-days"><button>Submit</button></a>
+	<a href="/admin/residents/days"><button>Submit</button></a>
 </p>
 <p>
 	List Resident Accounts:
-	<a href="/resident/accounts"><button>Submit</button></a>
+	<a href="/admin/residents"><button>Submit</button></a>
 </p>
 <p>
 	List Visitors:
