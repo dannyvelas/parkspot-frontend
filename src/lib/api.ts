@@ -19,7 +19,7 @@ const send =
 		}
 
 		try {
-			const response = await fetch(`http://localhost:5000/${path}`, opts);
+			const response = await fetch(`${import.meta.env.VITE_DEV_SERVER}/${path}`, opts);
 			if (response.ok) {
 				try {
 					const jsonResponse = await response.json();
