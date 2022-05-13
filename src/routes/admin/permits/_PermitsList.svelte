@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Permit } from '$lib/models';
 	export let permits: Array<Permit>;
+	export let totalAmount: number;
 
 	const renderDate = (date: Date): string => {
 		const dateStr = date.toISOString();
@@ -16,7 +17,7 @@
 </script>
 
 <div class="stack-container">
-	<h2>Amount of Permits: {permits.length}</h2>
+	<h2>Amount of Permits: {totalAmount}</h2>
 	<div>
 		<table>
 			<tr>
