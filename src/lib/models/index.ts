@@ -6,3 +6,6 @@ export { permitDecoder } from './permit';
 
 export type { Resident } from './resident';
 export { residentDecoder } from './resident';
+
+export type { Metadata, ListWithMetadata } from './list';
+export { listWithMetadataDecoder } from './list';
