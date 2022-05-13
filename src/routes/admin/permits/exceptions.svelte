@@ -1,18 +1,21 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	import type { Permit } from '$lib/models';
-	import { permitDecoder } from '$lib/models';
-	import { array } from 'decoders';
+	import type { ListWithMetadata } from '$lib/models';
+	import { permitDecoder, listWithMetadataDecoder } from '$lib/models';
 	import { get } from '$lib/api';
 
 	export const load: Load = async ({ session: { user } }) => {
 		if (!user) return { status: 302, redirect: '/' };
 
-		const permits = await get<Array<Permit>>(`api/admin/permits/exceptions`, array(permitDecoder));
+		const result = await get<ListWithMetadata<Permit>>(
+			`api/admin/permits/exceptions`,
+			listWithMetadataDecoder(permitDecoder)
+		);
 
 		return {
 			props: {
-				permits
+				result
 			}
 		};
 	};
@@ -21,7 +24,8 @@
 <script lang="ts">
 	import type { Result } from '$lib/functional';
 	import { isOk } from '$lib/functional';
-	export let permits: Result<Array<Permit>>;
+
+	export let result: Result<ListWithMetadata<Permit>>;
 </script>
 
 <svelte:head>
@@ -30,11 +34,11 @@
 
 <h1>Exceptions</h1>
 
-{#if !isOk(permits)}
-	{permits.error}
+{#if !isOk(result)}
+	{result.error}
 {:else}
 	<div class="stack-container">
-		<h2>Amount of Permits: {permits.data.length}</h2>
+		<h2>Amount of Permits: {result.data.metadata.totalAmount}</h2>
 		<div>
 			<table>
 				<tr>
@@ -46,7 +50,7 @@
 					<td>Model</td>
 					<td>Reason For Exception</td>
 				</tr>
-				{#each permits.data as permit}
+				{#each result.data.records as permit}
 					<tr>
 						<td>{permit.id}</td>
 						<td>{permit.residentId}</td>

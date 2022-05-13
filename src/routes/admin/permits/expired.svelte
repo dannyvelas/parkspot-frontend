@@ -1,18 +1,21 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	import type { Permit } from '$lib/models';
-	import { permitDecoder } from '$lib/models';
-	import { array } from 'decoders';
+	import type { ListWithMetadata } from '$lib/models';
+	import { permitDecoder, listWithMetadataDecoder } from '$lib/models';
 	import { get } from '$lib/api';
 
 	export const load: Load = async ({ session: { user } }) => {
 		if (!user) return { status: 302, redirect: '/' };
 
-		const permits = await get<Array<Permit>>(`api/admin/permits/expired`, array(permitDecoder));
+		const result = await get<ListWithMetadata<Permit>>(
+			`api/admin/permits/expired`,
+			listWithMetadataDecoder(permitDecoder)
+		);
 
 		return {
 			props: {
-				permits
+				result
 			}
 		};
 	};
@@ -23,7 +26,7 @@
 	import { isOk } from '$lib/functional';
 	import PermitsList from './_PermitsList.svelte';
 
-	export let permits: Result<Array<Permit>>;
+	export let result: Result<ListWithMetadata<Permit>>;
 </script>
 
 <svelte:head>
@@ -32,10 +35,10 @@
 
 <h1>Expired Permits</h1>
 
-{#if !isOk(permits)}
-	{permits.error}
+{#if !isOk(result)}
+	{result.error}
 {:else}
-	<PermitsList permits={permits.data} />
+	<PermitsList totalAmount={result.data.metadata.totalAmount} permits={result.data.records} />
 {/if}
 
 <style>
