@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import type { Permit } from '$lib/models';
-	import type { ListWithMetadata } from '$lib/models';
+	import type { Permit, ListWithMetadata } from '$lib/models';
 	import { permitDecoder, listWithMetadataDecoder } from '$lib/models';
 	import { get } from '$lib/api';
 
