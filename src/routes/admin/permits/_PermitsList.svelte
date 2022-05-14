@@ -30,6 +30,7 @@
 				<td>Start Date</td>
 				<td>End Date</td>
 				<td>Request Date</td>
+				<td>Edit</td>
 				<td>Delete</td>
 			</tr>
 			{#each permits as permit}
@@ -43,6 +44,7 @@
 					<td>{renderDate(permit.startDate)}</td>
 					<td>{renderDate(permit.endDate)}</td>
 					<td>{tsToDate(permit.requestTS)}</td>
+					<td><a href="permit/{permit.id}">Edit</a></td>
 					<td><button>Delete</button></td>
 				</tr>
 			{/each}
