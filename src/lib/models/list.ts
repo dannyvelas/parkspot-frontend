@@ -20,11 +20,3 @@ export const listWithMetadataDecoder = <T>(
 const metadataDecoder: decoders.Decoder<Metadata> = decoders.object({
 	totalAmount: decoders.number
 });
-
-//export const listDecoder: ()decoders.Decoder<list> = decoders.object({
-//	id: decoders.string,
-//	firstName: decoders.string,
-//	lastName: decoders.string,
-//	email: decoders.string,
-//	isPrivileged: decoders.boolean
-//});
