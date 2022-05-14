@@ -1,27 +1,16 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import type { Permit, ListWithMetadata } from '$lib/models';
-	import { permitDecoder, listWithMetadataDecoder } from '$lib/models';
-	import { get } from '$lib/api';
+	import { permitLoad } from './_permitLoad';
 
-	export const load: Load = async ({ session: { user } }) => {
-		if (!user) return { status: 302, redirect: '/' };
-
-		const result = await get<ListWithMetadata<Permit>>(
-			`api/admin/permits/expired`,
-			listWithMetadataDecoder(permitDecoder)
-		);
-
-		return {
-			props: {
-				result
-			}
-		};
+	export const load: Load = async (args) => {
+		const loadFn: Load = permitLoad('api/admin/permits');
+		return loadFn(args);
 	};
 </script>
 
 <script lang="ts">
 	import type { Result } from '$lib/functional';
+	import type { Permit, ListWithMetadata } from '$lib/models';
 	import { isOk } from '$lib/functional';
 	import PermitsList from './_PermitsList.svelte';
 
