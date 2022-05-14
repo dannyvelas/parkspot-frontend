@@ -6,6 +6,8 @@
 - [ ] show actual number of all permits instead of just the amount on the page
 ## Missing From Spec
 - [ ] search functionality
+- [ ] edit and delete
+- [ ] nav bar at top of admin page and bottom of list pages
 - [ ] pages
 ## Won't do
 - [✗] make params a `{}` argument or use generated types in index.svelte
