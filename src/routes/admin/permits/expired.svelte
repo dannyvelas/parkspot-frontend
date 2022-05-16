@@ -3,7 +3,7 @@
 	import { permitLoad } from './_permitLoad';
 
 	export const load: Load = async (args) => {
-		const loadFn: Load = permitLoad('api/admin/permits/expired');
+		const loadFn: Load = permitLoad('api/permits/expired');
 		return loadFn(args);
 	};
 </script>

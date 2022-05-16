@@ -3,7 +3,7 @@
 	import { permitLoad } from './_permitLoad';
 
 	export const load: Load = async (args) => {
-		const loadFn: Load = permitLoad('api/admin/permits/active');
+		const loadFn: Load = permitLoad('api/permits/active');
 		return loadFn(args);
 	};
 </script>
