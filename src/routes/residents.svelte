@@ -8,7 +8,7 @@
 	export const load: Load = async ({ session: { user } }) => {
 		if (!user) return { status: 302, redirect: '/' };
 
-		const residents = await get<Array<Resident>>(`api/admin/residents`, array(residentDecoder));
+		const residents = await get<Array<Resident>>(`api/residents`, array(residentDecoder));
 
 		return {
 			props: {
