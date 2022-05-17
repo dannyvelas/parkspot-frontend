@@ -34,7 +34,15 @@ const send =
 					return newErr(`Error parsing json: ${error}`);
 				}
 			} else {
-				return newErr(await response.text());
+				const statusText = `${response.status}: ${response.statusText}`;
+				let errorText = statusText;
+
+				const responseText = await response.text();
+				if (responseText) {
+					errorText = `${errorText}. ${responseText}`;
+				}
+
+				return newErr(errorText);
 			}
 		} catch (error) {
 			return newErr(`Error sending request: ${error}`);
