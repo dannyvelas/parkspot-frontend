@@ -2,18 +2,11 @@
 	import type { Load } from './[id]';
 	import type { Car } from '$lib/models';
 	import { carDecoder } from '$lib/models';
-	import { get } from '$lib/api';
+	import { getLoadFn } from '$lib/loadFn';
 
-	export const load: Load = async ({ params, session: { user } }) => {
-		if (!user) return { status: 302, redirect: '/' };
-
-		const result = await get<Car>(`api/car/${params.id}`, carDecoder);
-
-		return {
-			props: {
-				result
-			}
-		};
+	export const load: Load = async (args) => {
+		const loadFn = getLoadFn(`api/car/${args.params.id}`, carDecoder);
+		return loadFn(args);
 	};
 </script>
 
