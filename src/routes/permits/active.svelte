@@ -1,9 +1,10 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import { permitLoad } from './_permitLoad';
+	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
+	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn: Load = permitLoad('api/permits/active');
+		const loadFn = getLoadFn('api/permits/active', listWithMetadataDecoder(permitDecoder));
 		return loadFn(args);
 	};
 </script>
