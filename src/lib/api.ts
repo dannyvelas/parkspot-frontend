@@ -13,9 +13,9 @@ type FetchOpts = {
 };
 
 const getResponse = async (path: string, fetchOpts: FetchOpts): Promise<Result<Response>> => {
+	let response;
 	try {
-		const response = await fetch(`${HOSTNAME}/${path}`, fetchOpts);
-		return newOk(response);
+		response = await fetch(`${HOSTNAME}/${path}`, fetchOpts);
 	} catch (error) {
 		if (error instanceof TypeError) {
 			return newErr(error.message);
@@ -23,6 +23,20 @@ const getResponse = async (path: string, fetchOpts: FetchOpts): Promise<Result<R
 			return newErr('Unhandled error connecting to server');
 		}
 	}
+
+	if (!response.ok) {
+		const statusText = `${response.status}: ${response.statusText}`;
+		let errorText = statusText;
+
+		const responseText = await response.text();
+		if (responseText) {
+			errorText = `${errorText}. ${responseText}`;
+		}
+
+		return newErr(errorText);
+	}
+
+	return newOk(response);
 };
 
 const getJson = async (response: Response): Promise<Result<any>> => {
@@ -65,16 +79,6 @@ const send =
 		const response = await getResponse(path, fetchOpts);
 		if (!isOk(response)) {
 			return newErr(response.error);
-		} else if (!response.data.ok) {
-			const statusText = `${response.data.status}: ${response.data.statusText}`;
-			let errorText = statusText;
-
-			const responseText = await response.data.text();
-			if (responseText) {
-				errorText = `${errorText}. ${responseText}`;
-			}
-
-			return newErr(errorText);
 		}
 
 		const jsonResponse = await getJson(response.data);
@@ -92,8 +96,9 @@ const send =
 
 export const get = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
 	send('GET')<undefined, ResBody>(path, undefined, responseDecoder);
-//export const del = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
-//	send('DELETE')<undefined, ResBody>(path, responseDecoder, undefined);
+
+export const del = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
+	send('DELETE')<undefined, ResBody>(path, undefined, responseDecoder);
 
 export const post = send('POST');
 export const put = send('PUT');
