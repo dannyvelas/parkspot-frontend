@@ -26,12 +26,11 @@
 	};
 
 	// model
-	type Model = {
+	let model: {
 		car: Car;
 		editCarArgs: EditCarArgs;
 		bannerError: string;
 	};
-	let model: Model;
 	if (isOk(result)) {
 		model = {
 			car: result.data,
