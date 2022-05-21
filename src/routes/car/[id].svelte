@@ -12,7 +12,7 @@
 
 <script lang="ts">
 	import type { Result } from '$lib/functional';
-	import { isOk, newOk } from '$lib/functional';
+	import { isOk } from '$lib/functional';
 	import { put } from '$lib/api';
 
 	// props
@@ -26,34 +26,43 @@
 	};
 
 	// model
-	let car: Car;
-	let editCarArgs: EditCarArgs;
-	let bannerError: string;
+	type Model = {
+		car: Car;
+		editCarArgs: EditCarArgs;
+		bannerError: string;
+	};
+	let model: Model;
 	if (isOk(result)) {
-		car = result.data;
-		editCarArgs = {
-			color: result.data.color,
-			make: result.data.make,
-			model: result.data.model
+		model = {
+			car: result.data,
+			editCarArgs: {
+				color: result.data.color,
+				make: result.data.make,
+				model: result.data.model
+			},
+			bannerError: ''
 		};
-		bannerError = '';
 	}
-	//****************************/
 
+	// events
 	const submit = async () => {
 		const payload: Partial<EditCarArgs> = {
-			color: editCarArgs.color || undefined,
-			make: editCarArgs.make || undefined,
-			model: editCarArgs.model || undefined
+			color: model.editCarArgs.color || undefined,
+			make: model.editCarArgs.make || undefined,
+			model: model.editCarArgs.model || undefined
 		};
 
-		const putRes = await put<Partial<EditCarArgs>, Car>(`api/car/${car.id}`, payload, carDecoder);
+		const putRes = await put<Partial<EditCarArgs>, Car>(
+			`api/car/${model.car.id}`,
+			payload,
+			carDecoder
+		);
 		if (!isOk(putRes)) {
-			bannerError = putRes.error;
+			model.bannerError = putRes.error;
 			return;
 		}
 
-		result = newOk(putRes.data);
+		model.car = putRes.data;
 	};
 </script>
 
@@ -65,19 +74,19 @@
 	<p>Error: {result.error}</p>
 {:else}
 	<h1>Edit Car</h1>
-	{#if bannerError != ''}
+	{#if model.bannerError != ''}
 		<div>
-			<p>Error editing permit: {bannerError}. Please try again later.</p>
+			<p>Error editing permit: {model.bannerError}. Please try again later.</p>
 		</div>
 	{/if}
-	<p>License Plate: {car.licensePlate}</p>
+	<p>License Plate: {model.car.licensePlate}</p>
 	<form on:submit|preventDefault={submit}>
 		Color:
-		<input type="text" placeholder={car.color} bind:value={editCarArgs.color} />
+		<input type="text" placeholder={model.car.color} bind:value={model.editCarArgs.color} />
 		Make:
-		<input type="text" placeholder={car.make} bind:value={editCarArgs.make} />
+		<input type="text" placeholder={model.car.make} bind:value={model.editCarArgs.make} />
 		Model:
-		<input type="text" placeholder={car.model} bind:value={editCarArgs.model} />
+		<input type="text" placeholder={model.car.model} bind:value={model.editCarArgs.model} />
 		<button type="submit">Submit</button>
 	</form>
 {/if}
