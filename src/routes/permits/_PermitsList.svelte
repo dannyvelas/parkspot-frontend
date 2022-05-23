@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { Permit } from '$lib/models';
+	import { del } from '$lib/api';
+	import { isOk } from '$lib/functional';
+
 	export let permits: Array<Permit>;
 	export let totalAmount: number;
 
 	const renderDate = (date: Date): string => {
 		const dateStr = date.toISOString();
-
 		return dateStr.split('T')[0];
 	};
 	const tsToDate = (ts: number): string => {
@@ -13,6 +15,22 @@
 		const offset = date.getTimezoneOffset();
 		const offset_date = new Date(date.getTime() - offset * 60 * 1000).toISOString();
 		return offset_date.replace('T', ' ').split('.')[0];
+	};
+
+	const deletePermit = async (i: number, permitId: number) => {
+		if (confirm(`Are you sure you want to delete ${permitId}?`)) {
+			const delRes = await del(`api/permit/${permitId}`);
+			if (!isOk(delRes)) {
+				alert(`Error deleting permit ${permitId}. Please try again later`);
+				return;
+			}
+
+			permits = [...permits.slice(0, i), ...permits.slice(i + 1)];
+
+			alert(`Deleted permit ${permitId}`);
+		} else {
+			alert('you clicked no');
+		}
 	};
 </script>
 
@@ -33,7 +51,7 @@
 				<td>Edit</td>
 				<td>Delete</td>
 			</tr>
-			{#each permits as permit}
+			{#each permits as permit, i (permit.id)}
 				<tr>
 					<td>{permit.id}</td>
 					<td>{permit.residentId}</td>
@@ -45,7 +63,7 @@
 					<td>{renderDate(permit.endDate)}</td>
 					<td>{tsToDate(permit.requestTS)}</td>
 					<td><a href="car/{permit.car.id}">Edit</a></td>
-					<td><button>Delete</button></td>
+					<td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
 				</tr>
 			{/each}
 		</table>
