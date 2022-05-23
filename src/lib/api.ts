@@ -97,8 +97,16 @@ const send =
 export const get = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
 	send('GET')<undefined, ResBody>(path, undefined, responseDecoder);
 
-export const del = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
-	send('DELETE')<undefined, ResBody>(path, undefined, responseDecoder);
+export const del = async (path: string): Promise<Result<{}>> => {
+	const fetchOpts: FetchOpts = { method: 'DELETE', credentials: 'include' };
+
+	const response = await getResponse(path, fetchOpts);
+	if (!isOk(response)) {
+		return newErr(response.error);
+	}
+
+	return newOk({});
+};
 
 export const post = send('POST');
 export const put = send('PUT');
