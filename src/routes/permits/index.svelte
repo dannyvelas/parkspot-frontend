@@ -4,7 +4,7 @@
 	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn = getLoadFn('api/permits', listWithMetadataDecoder(permitDecoder));
+		const loadFn = getLoadFn('api/permits?reversed=true', listWithMetadataDecoder(permitDecoder));
 		return loadFn(args);
 	};
 </script>
