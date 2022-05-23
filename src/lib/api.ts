@@ -18,9 +18,9 @@ const getResponse = async (path: string, fetchOpts: FetchOpts): Promise<Result<R
 		response = await fetch(`${HOSTNAME}/${path}`, fetchOpts);
 	} catch (error) {
 		if (error instanceof TypeError) {
-			return newErr(error.message);
+			return newErr('Error getting response: ' + error.message);
 		} else {
-			return newErr('Unhandled error connecting to server');
+			return newErr('Unhandled error getting response');
 		}
 	}
 
@@ -45,7 +45,7 @@ const getJson = async (response: Response): Promise<Result<any>> => {
 		return newOk(jsonResponse);
 	} catch (error) {
 		if (error instanceof SyntaxError) {
-			return newErr(error.message);
+			return newErr('Error parsing JSON: ' + error.message);
 		} else {
 			return newErr('Unhandled error parsing JSON');
 		}
@@ -57,7 +57,7 @@ const decodeJson = <T>(json: any, responseDecoder: Decoder<T>): Result<T> => {
 	if (decodedResponse.ok) {
 		return newOk(decodedResponse.value);
 	} else if (decodedResponse.error.text !== undefined) {
-		return newErr(decodedResponse.error.text);
+		return newErr('Error decoding response: ' + decodedResponse.error.text);
 	} else {
 		return newErr('Unhandled error decoding response');
 	}
