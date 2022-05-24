@@ -1,5 +1,7 @@
 import type { Result } from '$lib/functional';
+import type { EmptyResponse } from '$lib/models';
 import { isOk, newOk, newErr } from '$lib/functional';
+import { emptyResponseDecoder } from '$lib/models';
 import type { Decoder } from 'decoders';
 type Method = 'GET' | 'DELETE' | 'POST' | 'PUT';
 
@@ -101,16 +103,8 @@ export const get = <ResBody>(
 	responseDecoder: Decoder<ResBody>
 ) => sendReq<undefined, ResBody>('GET', path, params, undefined, responseDecoder);
 
-export const del = async (path: string): Promise<Result<{}>> => {
-	const fetchOpts: FetchOpts = { method: 'DELETE', credentials: 'include' };
-
-	const response = await getResponse(path, fetchOpts);
-	if (!isOk(response)) {
-		return newErr(response.error);
-	}
-
-	return newOk({});
-};
+export const del = async (path: string): Promise<Result<EmptyResponse>> =>
+	sendReq<undefined, EmptyResponse>('DELETE', path, {}, undefined, emptyResponseDecoder);
 
 export const post = <ReqBody, ResBody>(
 	path: string,
