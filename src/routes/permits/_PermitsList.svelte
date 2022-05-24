@@ -1,25 +1,14 @@
 <script lang="ts">
 	import type { Permit } from '$lib/models';
 	import { del } from '$lib/api';
-	import { PAGE_LIMIT } from '$lib/constants';
 	import { isOk } from '$lib/functional';
+	import Pagination from '$lib/Pagination.svelte';
 
 	// props
 	export let permits: Array<Permit>;
 	export let totalAmount: number;
 	export let href: (a: number) => string; // pagination
 	export let currPageNum: number; // pagination
-
-	// pagination
-	const amountPages = (() => {
-		const int_div = totalAmount / PAGE_LIMIT;
-		if (totalAmount % PAGE_LIMIT !== 0) {
-			return int_div + 1;
-		} else {
-			return int_div;
-		}
-	})();
-	const pageNums = Array.from({ length: amountPages }, (_, i) => i + 1);
 
 	// rendering
 	const renderDate = (date: Date): string => {
@@ -83,15 +72,7 @@
 			{/each}
 		</table>
 	</div>
-	<nav>
-		<ul class="pagination">
-			{#each pageNums as pageNum}
-				<li class="page-item" class:active={currPageNum == pageNum}>
-					<a class="page-link" href={href(pageNum)}>{pageNum}</a>
-				</li>
-			{/each}
-		</ul>
-	</nav>
+	<Pagination {totalAmount} {href} {currPageNum} />
 </div>
 
 <style>
