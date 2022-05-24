@@ -3,18 +3,11 @@
 	import type { Resident } from '$lib/models';
 	import { residentDecoder } from '$lib/models';
 	import { array } from 'decoders';
-	import { get } from '$lib/api';
+	import { getLoadFn } from '$lib/loadFn';
 
-	export const load: Load = async ({ session: { user } }) => {
-		if (!user) return { status: 302, redirect: '/' };
-
-		const residents = await get<Array<Resident>>(`api/residents`, array(residentDecoder));
-
-		return {
-			props: {
-				residents
-			}
-		};
+	export const load: Load = async (args) => {
+		const loadFn = getLoadFn(`api/residents`, {}, array(residentDecoder));
+		return loadFn(args);
 	};
 </script>
 
@@ -22,7 +15,8 @@
 	import type { Result } from '$lib/functional';
 	import { isOk } from '$lib/functional';
 
-	export let residents: Result<Array<Resident>>;
+	export let result: Result<Array<Resident>>;
+	export let currPageNum: number;
 </script>
 
 <svelte:head>
@@ -31,11 +25,11 @@
 
 <h1>All Residents</h1>
 
-{#if !isOk(residents)}
-	{residents.error}
+{#if !isOk(result)}
+	{result.error}
 {:else}
 	<div class="stack-container">
-		<h2>Amount of Residents: {residents.data.length}</h2>
+		<h2>Amount of Residents: {result.data.length}</h2>
 		<div>
 			<table>
 				<tr>
@@ -48,7 +42,7 @@
 					<td>Edit</td>
 					<td>Delete</td>
 				</tr>
-				{#each residents.data as resident}
+				{#each result.data as resident}
 					<tr>
 						<td>{resident.id}</td>
 						<td>{resident.firstName}</td>
