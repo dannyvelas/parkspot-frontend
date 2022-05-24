@@ -1,21 +1,22 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	import type { Resident } from '$lib/models';
-	import { residentDecoder } from '$lib/models';
-	import { array } from 'decoders';
+	import { residentDecoder, listWithMetadataDecoder } from '$lib/models';
 	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn = getLoadFn(`api/residents`, {}, array(residentDecoder));
+		const loadFn = getLoadFn(`api/residents`, {}, listWithMetadataDecoder(residentDecoder));
 		return loadFn(args);
 	};
 </script>
 
 <script lang="ts">
 	import type { Result } from '$lib/functional';
+	import type { ListWithMetadata } from '$lib/models';
 	import { isOk } from '$lib/functional';
+	import Pagination from '$lib/Pagination.svelte';
 
-	export let result: Result<Array<Resident>>;
+	export let result: Result<ListWithMetadata<Resident>>;
 	export let currPageNum: number;
 </script>
 
@@ -29,7 +30,7 @@
 	{result.error}
 {:else}
 	<div class="stack-container">
-		<h2>Amount of Residents: {result.data.length}</h2>
+		<h2>Amount of Residents: {result.data.metadata.totalAmount}</h2>
 		<div>
 			<table>
 				<tr>
@@ -42,7 +43,7 @@
 					<td>Edit</td>
 					<td>Delete</td>
 				</tr>
-				{#each result.data as resident}
+				{#each result.data.records as resident}
 					<tr>
 						<td>{resident.id}</td>
 						<td>{resident.firstName}</td>
@@ -56,6 +57,11 @@
 				{/each}
 			</table>
 		</div>
+		<Pagination
+			totalAmount={result.data.metadata.totalAmount}
+			href={(page) => `residents?page=${page}`}
+			{currPageNum}
+		/>
 	</div>
 {/if}
 
