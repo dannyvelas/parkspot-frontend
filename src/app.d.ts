@@ -7,13 +7,13 @@ import { Admin } from '$lib/models';
 declare global {
 	declare namespace App {
 		interface Locals {
-			user?: Admin;
+			user?: User;
 		}
 
 		interface Platform {}
 
 		interface Session {
-			user?: Admin;
+			user?: User;
 		}
 
 		interface Stuff {}
