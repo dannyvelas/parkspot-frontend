@@ -3,10 +3,11 @@
 
 	export const load: Load = async ({ session }) => {
 		if (session.user) {
-			return { status: 302, redirect: '/' };
-		} else {
-			return {};
+			const dashboard = session.user.role === 'resident' ? `/resident` : '/admin';
+			return { status: 302, redirect: dashboard };
 		}
+
+		return {};
 	};
 </script>
 
@@ -30,12 +31,13 @@
 
 	const submit = async () => {
 		const result = await post<Credentials, Admin>('api/login', { id, password }, adminDecoder);
-		if (isOk(result)) {
-			$session.user = result.data;
-			goto('/admin');
-		} else {
+		if (!isOk(result)) {
 			error = result.error;
+			return;
 		}
+
+		$session.user = result.data;
+		goto('/admin');
 	};
 </script>
 
