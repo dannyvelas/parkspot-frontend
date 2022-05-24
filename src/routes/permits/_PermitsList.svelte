@@ -1,11 +1,27 @@
 <script lang="ts">
 	import type { Permit } from '$lib/models';
 	import { del } from '$lib/api';
+	import { PAGE_LIMIT } from '$lib/constants';
 	import { isOk } from '$lib/functional';
 
+	// props
 	export let permits: Array<Permit>;
 	export let totalAmount: number;
+	export let href: (a: number) => string; // pagination
+	export let currPageNum: number; // pagination
 
+	// pagination
+	const amountPages = (() => {
+		const int_div = totalAmount / PAGE_LIMIT;
+		if (totalAmount % PAGE_LIMIT !== 0) {
+			return int_div + 1;
+		} else {
+			return int_div;
+		}
+	})();
+	const pageNums = Array.from({ length: amountPages }, (_, i) => i + 1);
+
+	// rendering
 	const renderDate = (date: Date): string => {
 		const dateStr = date.toISOString();
 		return dateStr.split('T')[0];
@@ -17,6 +33,7 @@
 		return offset_date.replace('T', ' ').split('.')[0];
 	};
 
+	// events
 	const deletePermit = async (i: number, permitId: number) => {
 		if (confirm(`Are you sure you want to delete ${permitId}?`)) {
 			const delRes = await del(`api/permit/${permitId}`);
@@ -28,8 +45,6 @@
 			permits = [...permits.slice(0, i), ...permits.slice(i + 1)];
 
 			alert(`Deleted permit ${permitId}`);
-		} else {
-			alert('you clicked no');
 		}
 	};
 </script>
@@ -68,6 +83,15 @@
 			{/each}
 		</table>
 	</div>
+	<nav>
+		<ul class="pagination">
+			{#each pageNums as pageNum}
+				<li class="page-item" class:active={currPageNum == pageNum}>
+					<a class="page-link" href={href(pageNum)}>{pageNum}</a>
+				</li>
+			{/each}
+		</ul>
+	</nav>
 </div>
 
 <style>
