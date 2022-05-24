@@ -4,7 +4,7 @@
 	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn = getLoadFn('api/permits/exceptions', listWithMetadataDecoder(permitDecoder));
+		const loadFn = getLoadFn('api/permits/exceptions', {}, listWithMetadataDecoder(permitDecoder));
 		return loadFn(args);
 	};
 </script>
@@ -15,6 +15,7 @@
 	import { isOk } from '$lib/functional';
 
 	export let result: Result<ListWithMetadata<Permit>>;
+	export let currPageNum: number;
 </script>
 
 <svelte:head>

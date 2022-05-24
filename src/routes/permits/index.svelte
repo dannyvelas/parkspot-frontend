@@ -4,7 +4,11 @@
 	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn = getLoadFn('api/permits?reversed=true', listWithMetadataDecoder(permitDecoder));
+		const loadFn = getLoadFn(
+			'api/permits',
+			{ reversed: 'true' },
+			listWithMetadataDecoder(permitDecoder)
+		);
 		return loadFn(args);
 	};
 </script>
@@ -16,6 +20,7 @@
 	import PermitsList from './_PermitsList.svelte';
 
 	export let result: Result<ListWithMetadata<Permit>>;
+	export let currPageNum: number;
 </script>
 
 <svelte:head>
@@ -27,7 +32,12 @@
 {#if !isOk(result)}
 	{result.error}
 {:else}
-	<PermitsList totalAmount={result.data.metadata.totalAmount} permits={result.data.records} />
+	<PermitsList
+		totalAmount={result.data.metadata.totalAmount}
+		permits={result.data.records}
+		href={(pageNum) => `/permits?page=${pageNum}`}
+		{currPageNum}
+	/>
 {/if}
 
 <style>
