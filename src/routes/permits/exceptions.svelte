@@ -4,7 +4,11 @@
 	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn = getLoadFn('api/permits/exceptions', {}, listWithMetadataDecoder(permitDecoder));
+		const loadFn = getLoadFn(
+			'api/permits/exceptions',
+			{ reversed: 'true', limit: '1000' },
+			listWithMetadataDecoder(permitDecoder)
+		);
 		return loadFn(args);
 	};
 </script>
@@ -13,6 +17,7 @@
 	import type { Result } from '$lib/functional';
 	import type { Permit, ListWithMetadata } from '$lib/models';
 	import { isOk } from '$lib/functional';
+	import Pagination from '$lib/Pagination.svelte';
 
 	export let result: Result<ListWithMetadata<Permit>>;
 	export let currPageNum: number;
@@ -53,6 +58,11 @@
 				{/each}
 			</table>
 		</div>
+		<Pagination
+			totalAmount={result.data.metadata.totalAmount}
+			href={(pageNum) => `/permits/exceptions?page=${pageNum}`}
+			{currPageNum}
+		/>
 	</div>
 {/if}
 
