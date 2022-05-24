@@ -5,7 +5,11 @@
 	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn = getLoadFn(`api/residents`, {limit: '1000'}, listWithMetadataDecoder(residentDecoder));
+		const loadFn = getLoadFn(
+			`api/residents`,
+			{ limit: '1000' },
+			listWithMetadataDecoder(residentDecoder)
+		);
 		return loadFn(args);
 	};
 </script>
