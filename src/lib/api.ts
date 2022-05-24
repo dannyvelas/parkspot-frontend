@@ -63,39 +63,43 @@ const decodeJson = <T>(json: any, responseDecoder: Decoder<T>): Result<T> => {
 	}
 };
 
-const send =
-	(method: Method) =>
-	async <ReqBody, ResBody>(
-		path: string,
-		data: ReqBody,
-		responseDecoder: Decoder<ResBody>
-	): Promise<Result<ResBody>> => {
-		const fetchOpts: FetchOpts = { method, credentials: 'include' };
-		if (data) {
-			fetchOpts.headers = new Headers({ 'Content-Type': 'application/json' });
-			fetchOpts.body = JSON.stringify(data);
-		}
+const sendReq = async <ReqBody, ResBody>(
+	method: Method,
+	path: string,
+	params: Record<string, string>,
+	request: ReqBody,
+	responseDecoder: Decoder<ResBody>
+): Promise<Result<ResBody>> => {
+	const fetchOpts: FetchOpts = { method, credentials: 'include' };
+	if (request) {
+		fetchOpts.headers = new Headers({ 'Content-Type': 'application/json' });
+		fetchOpts.body = JSON.stringify(request);
+	}
 
-		const response = await getResponse(path, fetchOpts);
-		if (!isOk(response)) {
-			return newErr(response.error);
-		}
+	const paramStr = new URLSearchParams(params).toString();
+	const response = await getResponse(`${path}?${paramStr}`, fetchOpts);
+	if (!isOk(response)) {
+		return newErr(response.error);
+	}
 
-		const jsonResponse = await getJson(response.data);
-		if (!isOk(jsonResponse)) {
-			return newErr(jsonResponse.error);
-		}
+	const jsonResponse = await getJson(response.data);
+	if (!isOk(jsonResponse)) {
+		return newErr(jsonResponse.error);
+	}
 
-		const decodedResponse = decodeJson(jsonResponse.data, responseDecoder);
-		if (!isOk(decodedResponse)) {
-			return newErr(decodedResponse.error);
-		}
+	const decodedResponse = decodeJson(jsonResponse.data, responseDecoder);
+	if (!isOk(decodedResponse)) {
+		return newErr(decodedResponse.error);
+	}
 
-		return newOk(decodedResponse.data);
-	};
+	return newOk(decodedResponse.data);
+};
 
-export const get = <ResBody>(path: string, responseDecoder: Decoder<ResBody>) =>
-	send('GET')<undefined, ResBody>(path, undefined, responseDecoder);
+export const get = <ResBody>(
+	path: string,
+	params: Record<string, string>,
+	responseDecoder: Decoder<ResBody>
+) => sendReq<undefined, ResBody>('GET', path, params, undefined, responseDecoder);
 
 export const del = async (path: string): Promise<Result<{}>> => {
 	const fetchOpts: FetchOpts = { method: 'DELETE', credentials: 'include' };
@@ -108,5 +112,14 @@ export const del = async (path: string): Promise<Result<{}>> => {
 	return newOk({});
 };
 
-export const post = send('POST');
-export const put = send('PUT');
+export const post = <ReqBody, ResBody>(
+	path: string,
+	request: ReqBody,
+	responseDecoder: Decoder<ResBody>
+) => sendReq<ReqBody, ResBody>('POST', path, {}, request, responseDecoder);
+
+export const put = <ReqBody, ResBody>(
+	path: string,
+	request: ReqBody,
+	responseDecoder: Decoder<ResBody>
+) => sendReq<ReqBody, ResBody>('PUT', path, {}, request, responseDecoder);
