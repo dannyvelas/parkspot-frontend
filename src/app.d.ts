@@ -6,7 +6,9 @@ import { Admin } from '$lib/models';
 
 declare global {
 	declare namespace App {
-		interface Locals {}
+		interface Locals {
+			user?: Admin;
+		}
 
 		interface Platform {}
 
