@@ -12,3 +12,6 @@ export { residentDecoder } from './resident';
 
 export type { Metadata, ListWithMetadata } from './list';
 export { listWithMetadataDecoder } from './list';
+
+export type { User } from './user';
+export { userDecoder } from './user';
