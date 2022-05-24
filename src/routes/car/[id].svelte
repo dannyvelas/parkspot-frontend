@@ -5,7 +5,7 @@
 	import { getLoadFn } from '$lib/loadFn';
 
 	export const load: Load = async (args) => {
-		const loadFn = getLoadFn(`api/car/${args.params.id}`, carDecoder);
+		const loadFn = getLoadFn(`api/car/${args.params.id}`, {}, carDecoder);
 		return loadFn(args);
 	};
 </script>
