@@ -8,11 +8,13 @@
 	export const load: Load<Record<string, string>, Record<string, any>, Props> = async ({
 		session
 	}) => {
-		if (session.user) {
-			return { props: { admin: session.user } };
-		} else {
-			return { status: 302, redirect: '/' };
-		}
+		if (!session.user) return { status: 302, redirect: '/' };
+
+		return {
+			props: {
+				admin: session.user
+			}
+		};
 	};
 </script>
 
