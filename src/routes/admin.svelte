@@ -1,29 +1,12 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import type { Admin } from '$lib/models';
 
-	type Props = {
-		admin: Admin;
-	};
-	export const load: Load<Record<string, string>, Record<string, any>, Props> = async ({
-		session
-	}) => {
+	export const load: Load = async ({ session }) => {
 		if (!session.user) return { status: 302, redirect: '/' };
 
-		return {
-			props: {
-				admin: session.user
-			}
-		};
+		return {};
 	};
 </script>
-
-<script lang="ts">
-	export let admin: Admin;
-</script>
-
-<h1>Welcome {admin.firstName}</h1>
-<h2>Admin Dashboard</h2>
 
 <p>
 	List Active Parking Permits:
