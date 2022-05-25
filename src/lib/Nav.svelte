@@ -6,6 +6,9 @@
 	import { post } from '$lib/api';
 	const { session, page } = getStores();
 
+	const dashboard = () => ($session.user.role === 'resident' ? `/resident` : '/admin');
+
+	// events
 	async function logout() {
 		const postRes = await post(`api/logout`, {}, emptyResponseDecoder);
 		if (!isOk(postRes)) {
@@ -20,8 +23,13 @@
 <nav>
 	<ul>
 		{#if $session.user}
-			<li><a href="/admin">Go Back To Dashboard</a></li>
-			<li><button on:click={logout}>Logout</button></li>
+			{#if $page.url.pathname !== '/admin' && $page.url.pathname !== '/resident'}
+				<div style="text-align:center;">
+					<a href={dashboard()}>Go Back To Dashboard</a>
+				</div>
+			{:else}
+				<button on:click={logout}>Go Back To Start Page</button>
+			{/if}
 		{:else}
 			<li><a href="/login" class:active={$page.url.pathname === '/login'}>Login</a></li>
 			<li><a href="/register" class:active={$page.url.pathname === '/register'}>Register</a></li>
