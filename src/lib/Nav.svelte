@@ -19,11 +19,8 @@
 
 <nav>
 	<ul>
-		<li>
-			<a class:active={$page.url.pathname === '/'} href="/">Home</a>
-		</li>
 		{#if $session.user}
-			<li><a href="/admin">Dashboard</a></li>
+			<li><a href="/admin">Go Back To Dashboard</a></li>
 			<li><button on:click={logout}>Logout</button></li>
 		{:else}
 			<li><a href="/login" class:active={$page.url.pathname === '/login'}>Login</a></li>
