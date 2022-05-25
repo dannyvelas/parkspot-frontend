@@ -4,10 +4,12 @@
 	import { residentDecoder, listWithMetadataDecoder } from '$lib/models';
 	import { getLoadFn } from '$lib/loadFn';
 
+	const amountPerPage = 1000;
+
 	export const load: Load = async (args) => {
 		const loadFn = getLoadFn(
 			`api/residents`,
-			{ limit: '1000' },
+			{ limit: `${amountPerPage}` },
 			listWithMetadataDecoder(residentDecoder)
 		);
 		return loadFn(args);
@@ -65,6 +67,7 @@
 			totalAmount={result.data.metadata.totalAmount}
 			href={(page) => `residents?page=${page}`}
 			{currPageNum}
+			{amountPerPage}
 		/>
 	</div>
 {/if}

@@ -9,6 +9,7 @@
 	export let totalAmount: number;
 	export let href: (a: number) => string; // pagination
 	export let currPageNum: number; // pagination
+	export let amountPerPage: number; // pagination
 
 	// rendering
 	const renderDate = (date: Date): string => {
@@ -72,7 +73,7 @@
 			{/each}
 		</table>
 	</div>
-	<Pagination {totalAmount} {href} {currPageNum} />
+	<Pagination {totalAmount} {href} {currPageNum} {amountPerPage} />
 </div>
 
 <style>

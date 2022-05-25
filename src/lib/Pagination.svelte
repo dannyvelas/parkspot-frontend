@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { PAGE_LIMIT } from '$lib/constants';
-
 	export let totalAmount: number;
 	export let href: (a: number) => string;
 	export let currPageNum: number;
+	export let amountPerPage: number;
 
 	const amountPages = (() => {
-		const int_div = totalAmount / PAGE_LIMIT;
-		if (totalAmount % PAGE_LIMIT !== 0) {
+		const int_div = totalAmount / amountPerPage;
+		if (totalAmount % amountPerPage !== 0) {
 			return int_div + 1;
 		} else {
 			return int_div;

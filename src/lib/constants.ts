@@ -1,1 +1,1 @@
-export const PAGE_LIMIT = 1000;
+export const DEFAULT_AMT_PER_PAGE = 100;

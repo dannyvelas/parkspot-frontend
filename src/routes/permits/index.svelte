@@ -2,11 +2,14 @@
 	import type { Load } from '@sveltejs/kit';
 	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
 	import { getLoadFn } from '$lib/loadFn';
+	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
+
+	const amountPerPage = DEFAULT_AMT_PER_PAGE;
 
 	export const load: Load = async (args) => {
 		const loadFn = getLoadFn(
 			'api/permits',
-			{ reversed: 'true' },
+			{ reversed: 'true', limit: `${amountPerPage}` },
 			listWithMetadataDecoder(permitDecoder)
 		);
 		return loadFn(args);
@@ -37,6 +40,7 @@
 		permits={result.data.records}
 		href={(pageNum) => `/permits?page=${pageNum}`}
 		{currPageNum}
+		{amountPerPage}
 	/>
 {/if}
 
