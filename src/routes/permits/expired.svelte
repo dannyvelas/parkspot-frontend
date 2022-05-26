@@ -2,4 +2,9 @@
 	import PermitsList from './_PermitsList.svelte';
 </script>
 
-<PermitsList listType="expired" reversed={false} />
+<PermitsList
+	listType="expired"
+	endpoint="api/permits/expired"
+	pageNumCb={(a) => `/permits/expired?page=${a}`}
+	reversed={false}
+/>

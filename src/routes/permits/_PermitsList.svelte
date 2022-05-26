@@ -14,8 +14,10 @@
 
 	// props
 	export let listType: ListType;
-	export let limit = DEFAULT_AMT_PER_PAGE;
+	export let endpoint: string;
+	export let pageNumCb: (a: number) => string;
 	export let reversed: boolean;
+	export let limit = DEFAULT_AMT_PER_PAGE;
 
 	// this is set in onMount
 	let model: Status<{
@@ -26,18 +28,14 @@
 
 	onMount(async () => {
 		const tempCurrPageNum = Number($page.url.searchParams.get('page')) || 1;
+		console.log(`tempCurrPageNum: ${tempCurrPageNum}`);
 		const params: Record<string, string> = {
 			page: `${tempCurrPageNum}`,
 			limit: `${limit}`,
 			reversed: `${reversed ?? false}`
 		};
-		const endpoint = listType !== 'all' ? `/${listType}` : '';
 
-		const getRes = await get(
-			`api/permits${endpoint}`,
-			params,
-			listWithMetadataDecoder(permitDecoder)
-		);
+		const getRes = await get(endpoint, params, listWithMetadataDecoder(permitDecoder));
 		if (!isOk(getRes)) {
 			model = newErr(getRes.message);
 			return;
@@ -126,7 +124,7 @@
 		</div>
 		<Pagination
 			totalAmount={model.data.totalAmount}
-			href={(pageNum) => `/permits/${listType}?page=${pageNum}`}
+			href={pageNumCb}
 			currPageNum={model.data.currPageNum}
 			amountPerPage={limit}
 		/>
