@@ -1,15 +1,54 @@
 <script lang="ts">
 	import type { Permit } from '$lib/models';
-	import { del } from '$lib/api';
-	import { isOk } from '$lib/functional';
+	import type { Status } from '$lib/functional';
+	import { getStores } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
+	import { get, del } from '$lib/api';
+	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
 	import Pagination from '$lib/Pagination.svelte';
+	import { newOk, newErr, isOk } from '$lib/functional';
+	const { page } = getStores();
+
+	type ListType = 'active' | 'expired' | 'all';
 
 	// props
-	export let permits: Array<Permit>;
-	export let totalAmount: number;
-	export let href: (a: number) => string; // pagination
-	export let currPageNum: number; // pagination
-	export let amountPerPage: number; // pagination
+	export let listType: ListType;
+	export let limit: number | undefined;
+	export let reversed: boolean | undefined;
+
+	// after load
+	let model: Status<{
+		permits: Array<Permit>;
+		totalAmount: number;
+		currPageNum: number;
+	}> = { tag: 'Loading', message: 'loading...', data: undefined };
+
+	onMount(async () => {
+		const tempCurrPageNum = Number($page.url.searchParams.get('page')) || 1;
+		const params: Record<string, string> = {
+			page: `${tempCurrPageNum}`,
+			limit: `${limit || DEFAULT_AMT_PER_PAGE}`,
+			reversed: `${reversed ?? false}`
+		};
+		const endpoint = listType !== 'all' ? `/${listType}` : '';
+
+		const getRes = await get(
+			`api/permits${endpoint}`,
+			params,
+			listWithMetadataDecoder(permitDecoder)
+		);
+		if (!isOk(getRes)) {
+			model = newErr(getRes.message);
+			return;
+		}
+
+		model = newOk({
+			permits: getRes.data.records,
+			totalAmount: getRes.data.metadata.totalAmount,
+			currPageNum: tempCurrPageNum
+		});
+	});
 
 	// rendering
 	const renderDate = (date: Date): string => {
@@ -32,49 +71,67 @@
 				return;
 			}
 
-			permits = [...permits.slice(0, i), ...permits.slice(i + 1)];
+			model.data!.permits = [
+				...model.data!.permits.slice(0, i),
+				...model.data!.permits.slice(i + 1)
+			];
 
 			alert(`Deleted permit ${permitId}`);
 		}
 	};
 </script>
 
-<div class="stack-container">
-	<h2>Amount of Permits: {totalAmount}</h2>
-	<div>
-		<table>
-			<tr>
-				<td>Permit ID</td>
-				<td>Resident ID</td>
-				<td>License Plate</td>
-				<td>Color</td>
-				<td>Make</td>
-				<td>Model</td>
-				<td>Start Date</td>
-				<td>End Date</td>
-				<td>Request Date</td>
-				<td>Edit</td>
-				<td>Delete</td>
-			</tr>
-			{#each permits as permit, i (permit.id)}
+<svelte:head>
+	<title>{listType.toUpperCase()} Permits</title>
+</svelte:head>
+
+<h1>{listType.toUpperCase()} Permits</h1>
+
+{#if !isOk(model)}
+	{model.message}
+{:else}
+	<div class="stack-container">
+		<h2>Amount of Permits: {model.data.totalAmount}</h2>
+		<div>
+			<table>
 				<tr>
-					<td>{permit.id}</td>
-					<td>{permit.residentId}</td>
-					<td>{permit.car.licensePlate}</td>
-					<td>{permit.car.color}</td>
-					<td>{permit.car.make}</td>
-					<td>{permit.car.model}</td>
-					<td>{renderDate(permit.startDate)}</td>
-					<td>{renderDate(permit.endDate)}</td>
-					<td>{tsToDate(permit.requestTS)}</td>
-					<td><a href="car/{permit.car.id}">Edit</a></td>
-					<td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
+					<td>Permit ID</td>
+					<td>Resident ID</td>
+					<td>License Plate</td>
+					<td>Color</td>
+					<td>Make</td>
+					<td>Model</td>
+					<td>Start Date</td>
+					<td>End Date</td>
+					<td>Request Date</td>
+					<td>Edit</td>
+					<td>Delete</td>
 				</tr>
-			{/each}
-		</table>
+				{#each model.data.permits as permit, i (permit.id)}
+					<tr>
+						<td>{permit.id}</td>
+						<td>{permit.residentId}</td>
+						<td>{permit.car.licensePlate}</td>
+						<td>{permit.car.color}</td>
+						<td>{permit.car.make}</td>
+						<td>{permit.car.model}</td>
+						<td>{renderDate(permit.startDate)}</td>
+						<td>{renderDate(permit.endDate)}</td>
+						<td>{tsToDate(permit.requestTS)}</td>
+						<td><a href="car/{permit.car.id}">Edit</a></td>
+						<td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
+					</tr>
+				{/each}
+			</table>
+		</div>
+		<Pagination
+			totalAmount={model.data.totalAmount}
+			href={(pageNum) => `/permits/${listType}?page=${pageNum}`}
+			currPageNum={model.data.currPageNum}
+			amountPerPage={limit || DEFAULT_AMT_PER_PAGE}
+		/>
 	</div>
-	<Pagination {totalAmount} {href} {currPageNum} {amountPerPage} />
-</div>
+{/if}
 
 <style>
 	table,
