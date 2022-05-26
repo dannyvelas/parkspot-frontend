@@ -7,4 +7,6 @@ export const newOk = <T>(data: T): Ok<T> => ({ tag: 'Ok', data });
 export const isOk = <T>(res: Result<T> | Status<T>): res is Ok<T> => res.tag === 'Ok';
 
 export type Loading = { tag: 'Loading'; message: 'loading...'; data: undefined };
-export type Status<T> = Err | Ok<T> | Loading
+export type Status<T> = Loading | Err | Ok<T>;
+
+export const newLoading: Loading = { tag: 'Loading', message: 'loading...', data: undefined };
