@@ -2,7 +2,7 @@
 	import type { Permit } from '$lib/models';
 	import type { Status } from '$lib/functional';
 	import { getStores } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
 	import { get, del } from '$lib/api';
 	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
@@ -19,16 +19,15 @@
 	export let reversed: boolean;
 	export let limit = DEFAULT_AMT_PER_PAGE;
 
-	// this is set in onMount
+	// this is set in afterNavigate
 	let model: Status<{
 		permits: Array<Permit>;
 		totalAmount: number;
 		currPageNum: number;
 	}> = newLoading;
 
-	onMount(async () => {
+	afterNavigate(async () => {
 		const tempCurrPageNum = Number($page.url.searchParams.get('page')) || 1;
-		console.log(`tempCurrPageNum: ${tempCurrPageNum}`);
 		const params: Record<string, string> = {
 			page: `${tempCurrPageNum}`,
 			limit: `${limit}`,
