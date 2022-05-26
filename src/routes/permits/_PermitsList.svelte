@@ -15,7 +15,7 @@
 	// props
 	export let listType: ListType;
 	export let limit: number | undefined;
-	export let reversed: boolean | undefined;
+	export let reversed: boolean;
 
 	// after load
 	let model: Status<{
