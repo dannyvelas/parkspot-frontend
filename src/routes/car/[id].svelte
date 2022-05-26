@@ -1,18 +1,25 @@
 <script context="module" lang="ts">
 	import type { Load } from './[id]';
 	import type { Car } from '$lib/models';
+	import { get } from '$lib/api';
 	import { carDecoder } from '$lib/models';
-	import { getLoadFn } from '$lib/loadFn';
 
-	export const load: Load = async (args) => {
-		const loadFn = getLoadFn(`api/car/${args.params.id}`, {}, carDecoder);
-		return loadFn(args);
+	export const load: Load = async ({ session: { user }, params }) => {
+		if (!user) return { status: 302, redirect: '/' };
+
+		const result = await get(`api/car/${params.id}`, {}, carDecoder);
+
+		return {
+			props: {
+				result
+			}
+		};
 	};
 </script>
 
 <script lang="ts">
-	import type { Result } from '$lib/functional';
-	import { isOk } from '$lib/functional';
+	import type { Result, Status } from '$lib/functional';
+	import { isOk, newOk, newLoading } from '$lib/functional';
 	import { put } from '$lib/api';
 
 	// props
@@ -26,13 +33,15 @@
 	};
 
 	// model
-	let model: {
+	let model: Status<{
 		car: Car;
 		editCarArgs: EditCarArgs;
 		bannerError: string;
-	};
-	if (isOk(result)) {
-		model = {
+	}> = newLoading;
+	if (!isOk(result)) {
+		model = result;
+	} else {
+		model = newOk({
 			car: result.data,
 			editCarArgs: {
 				color: result.data.color,
@@ -40,28 +49,28 @@
 				model: result.data.model
 			},
 			bannerError: ''
-		};
+		});
 	}
 
 	// events
 	const submit = async () => {
 		const payload: Partial<EditCarArgs> = {
-			color: model.editCarArgs.color || undefined,
-			make: model.editCarArgs.make || undefined,
-			model: model.editCarArgs.model || undefined
+			color: model.data!.editCarArgs.color || undefined,
+			make: model.data!.editCarArgs.make || undefined,
+			model: model.data!.editCarArgs.model || undefined
 		};
 
 		const putRes = await put<Partial<EditCarArgs>, Car>(
-			`api/car/${model.car.id}`,
+			`api/car/${model.data!.car.id}`,
 			payload,
 			carDecoder
 		);
 		if (!isOk(putRes)) {
-			model.bannerError = putRes.message;
+			model.data!.bannerError = putRes.message;
 			return;
 		}
 
-		model.car = putRes.data;
+		model.data!.car = putRes.data;
 	};
 </script>
 
@@ -69,23 +78,31 @@
 	<title>Edit Car</title>
 </svelte:head>
 
-{#if !isOk(result)}
-	<p>Error: {result.message}</p>
+{#if !isOk(model)}
+	<p>Error: {model.message}</p>
 {:else}
 	<h1>Edit Car</h1>
-	{#if model.bannerError != ''}
+	{#if model.data.bannerError != ''}
 		<div>
-			<p>Error editing permit: {model.bannerError}. Please try again later.</p>
+			<p>Error editing permit: {model.data.bannerError}. Please try again later.</p>
 		</div>
 	{/if}
-	<p>License Plate: {model.car.licensePlate}</p>
+	<p>License Plate: {model.data.car.licensePlate}</p>
 	<form on:submit|preventDefault={submit}>
 		Color:
-		<input type="text" placeholder={model.car.color} bind:value={model.editCarArgs.color} />
+		<input
+			type="text"
+			placeholder={model.data.car.color}
+			bind:value={model.data.editCarArgs.color}
+		/>
 		Make:
-		<input type="text" placeholder={model.car.make} bind:value={model.editCarArgs.make} />
+		<input type="text" placeholder={model.data.car.make} bind:value={model.data.editCarArgs.make} />
 		Model:
-		<input type="text" placeholder={model.car.model} bind:value={model.editCarArgs.model} />
+		<input
+			type="text"
+			placeholder={model.data.car.model}
+			bind:value={model.data.editCarArgs.model}
+		/>
 		<button type="submit">Submit</button>
 	</form>
 {/if}
