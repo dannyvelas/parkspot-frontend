@@ -7,7 +7,7 @@
 	import { get, del } from '$lib/api';
 	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
 	import Pagination from '$lib/Pagination.svelte';
-	import { newOk, newErr, isOk } from '$lib/functional';
+	import { newOk, newErr, newLoading, isOk } from '$lib/functional';
 	const { page } = getStores();
 
 	type ListType = 'active' | 'expired' | 'all';
@@ -17,12 +17,12 @@
 	export let limit = DEFAULT_AMT_PER_PAGE;
 	export let reversed: boolean;
 
-	// after load
+	// this is set in onMount
 	let model: Status<{
 		permits: Array<Permit>;
 		totalAmount: number;
 		currPageNum: number;
-	}> = { tag: 'Loading', message: 'loading...', data: undefined };
+	}> = newLoading;
 
 	onMount(async () => {
 		const tempCurrPageNum = Number($page.url.searchParams.get('page')) || 1;
@@ -118,7 +118,7 @@
 						<td>{renderDate(permit.startDate)}</td>
 						<td>{renderDate(permit.endDate)}</td>
 						<td>{tsToDate(permit.requestTS)}</td>
-						<td><a href="car/{permit.car.id}">Edit</a></td>
+						<td><a href="/car/{permit.car.id}">Edit</a></td>
 						<td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
 					</tr>
 				{/each}
