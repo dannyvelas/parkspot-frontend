@@ -33,7 +33,7 @@
 <h1>All Residents</h1>
 
 {#if !isOk(result)}
-	{result.error}
+	{result.message}
 {:else}
 	<div class="stack-container">
 		<h2>Amount of Residents: {result.data.metadata.totalAmount}</h2>

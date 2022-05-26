@@ -57,7 +57,7 @@
 			carDecoder
 		);
 		if (!isOk(putRes)) {
-			model.bannerError = putRes.error;
+			model.bannerError = putRes.message;
 			return;
 		}
 
@@ -70,7 +70,7 @@
 </svelte:head>
 
 {#if !isOk(result)}
-	<p>Error: {result.error}</p>
+	<p>Error: {result.message}</p>
 {:else}
 	<h1>Edit Car</h1>
 	{#if model.bannerError != ''}

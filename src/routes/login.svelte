@@ -32,7 +32,7 @@
 	const submit = async () => {
 		const result = await post<Credentials, Admin>('api/login', { id, password }, adminDecoder);
 		if (!isOk(result)) {
-			error = result.error;
+			error = result.message;
 			return;
 		}
 

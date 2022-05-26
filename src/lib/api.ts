@@ -81,17 +81,17 @@ const sendReq = async <ReqBody, ResBody>(
 	const paramStr = new URLSearchParams(params).toString();
 	const response = await getResponse(`${path}?${paramStr}`, fetchOpts);
 	if (!isOk(response)) {
-		return newErr(response.error);
+		return newErr(response.message);
 	}
 
 	const jsonResponse = await getJson(response.data);
 	if (!isOk(jsonResponse)) {
-		return newErr(jsonResponse.error);
+		return newErr(jsonResponse.message);
 	}
 
 	const decodedResponse = decodeJson(jsonResponse.data, responseDecoder);
 	if (!isOk(decodedResponse)) {
-		return newErr(decodedResponse.error);
+		return newErr(decodedResponse.message);
 	}
 
 	return newOk(decodedResponse.data);

@@ -28,7 +28,7 @@
 
 		const putRes = await put<Partial<EditCarArgs>, Car>(`api/car/${car.id}`, payload, carDecoder);
 		if (!isOk(putRes)) {
-			bannerError = putRes.error;
+			bannerError = putRes.message;
 			return;
 		}
 
