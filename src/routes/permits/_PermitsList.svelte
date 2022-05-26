@@ -14,7 +14,7 @@
 
 	// props
 	export let listType: ListType;
-	export let limit: number | undefined;
+	export let limit = DEFAULT_AMT_PER_PAGE;
 	export let reversed: boolean;
 
 	// after load
@@ -28,7 +28,7 @@
 		const tempCurrPageNum = Number($page.url.searchParams.get('page')) || 1;
 		const params: Record<string, string> = {
 			page: `${tempCurrPageNum}`,
-			limit: `${limit || DEFAULT_AMT_PER_PAGE}`,
+			limit: `${limit}`,
 			reversed: `${reversed ?? false}`
 		};
 		const endpoint = listType !== 'all' ? `/${listType}` : '';
@@ -128,7 +128,7 @@
 			totalAmount={model.data.totalAmount}
 			href={(pageNum) => `/permits/${listType}?page=${pageNum}`}
 			currPageNum={model.data.currPageNum}
-			amountPerPage={limit || DEFAULT_AMT_PER_PAGE}
+			amountPerPage={limit}
 		/>
 	</div>
 {/if}

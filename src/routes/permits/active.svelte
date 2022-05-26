@@ -2,4 +2,4 @@
 	import PermitsList from './_PermitsList.svelte';
 </script>
 
-<PermitsList listType="active" reversed={false} limit={undefined} />
+<PermitsList listType="active" reversed={false} />
