@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Permit } from '$lib/models';
-	import { del } from '$lib/api';
+	import { del, get } from '$lib/api';
+	import { afterNavigate } from '$app/navigation';
+	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
 	import { isOk } from '$lib/functional';
 	import Pagination from '$lib/Pagination.svelte';
 
@@ -10,6 +12,16 @@
 	export let pageToHref: (a: number) => string; // pagination
 	export let currPageNum: number; // pagination
 	export let limit: number; // pagination
+
+	// model
+	let initialPermits: Array<Permit>;
+	let searchVal = '';
+	let bannerError = '';
+
+	// initialize initialPermits
+	afterNavigate(() => {
+		initialPermits = permits;
+	});
 
 	// rendering
 	const renderDate = (date: Date): string => {
@@ -37,9 +49,55 @@
 			alert(`Deleted permit ${permitId}`);
 		}
 	};
+
+	const onSearch = async () => {
+		// restore view when nothing is being searched
+		if (searchVal === '') {
+			permits = initialPermits;
+			bannerError = '';
+			return;
+		}
+
+		// if the list is short-enough, just filter in-place
+		if (permits.length == totalAmount) {
+			permits = permits.filter((permit) => {
+				const searchableFields = `
+        ${permit.id}
+        ${permit.residentId}
+        ${permit.car.licensePlate}
+        ${permit.car.color}
+        ${permit.car.make}
+        ${permit.car.model}`.toLowerCase();
+				return searchableFields.includes(searchVal);
+			});
+			bannerError = '';
+			return;
+		}
+
+		// else use the search endpoint
+		const getRes = await get(
+			'api/permits/search',
+			{ search: searchVal },
+			listWithMetadataDecoder(permitDecoder)
+		);
+		if (!isOk(getRes)) {
+			permits = initialPermits;
+			bannerError = getRes.message;
+			return;
+		}
+
+		permits = getRes.data.records;
+		bannerError = '';
+	};
 </script>
 
 <div class="stack-container">
+	{#if bannerError != ''}
+		<div>
+			<p>Error searching: {bannerError}. Please try again later.</p>
+		</div>
+	{/if}
+	<input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Permits" />
 	<h2>Amount of Permits: {totalAmount}</h2>
 	<div>
 		<table>
