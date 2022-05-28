@@ -7,7 +7,7 @@
 	import Pagination from '$lib/Pagination.svelte';
 
 	// props
-	export let listType: 'all' | 'expired' | 'active';
+	export let listType: 'all' | 'expired' | 'active' | 'exceptions';
 	export let permits: Array<Permit>;
 	export let totalAmount: number;
 	export let pageToHref: (a: number) => string; // pagination
@@ -75,10 +75,10 @@
 			return;
 		}
 
-		// listType === 'all', we need to use the endpoint to search across all permits
+		// listType === 'all'|'exceptions', we need to use the endpoint to search across all permits
 		const getRes = await get(
 			'api/permits/search',
-			{ search: searchVal },
+			{ search: searchVal, listType: listType },
 			listWithMetadataDecoder(permitDecoder)
 		);
 		if (!isOk(getRes)) {
@@ -112,6 +112,9 @@
 				<td>Start Date</td>
 				<td>End Date</td>
 				<td>Request Date</td>
+				{#if listType === 'exceptions'}
+					<td>Exception Reason</td>
+				{/if}
 				<td>Edit</td>
 				<td>Delete</td>
 			</tr>
@@ -126,6 +129,9 @@
 					<td>{renderDate(permit.startDate)}</td>
 					<td>{renderDate(permit.endDate)}</td>
 					<td>{tsToDate(permit.requestTS)}</td>
+					{#if listType === 'exceptions'}
+						<td>{permit.exceptionReason}</td>
+					{/if}
 					<td><a href="car/{permit.car.id}">Edit</a></td>
 					<td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
 				</tr>
