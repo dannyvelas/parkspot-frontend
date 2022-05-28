@@ -7,9 +7,9 @@
 	// props
 	export let permits: Array<Permit>;
 	export let totalAmount: number;
-	export let href: (a: number) => string; // pagination
+	export let pageToHref: (a: number) => string; // pagination
 	export let currPageNum: number; // pagination
-	export let amountPerPage: number; // pagination
+	export let limit: number; // pagination
 
 	// rendering
 	const renderDate = (date: Date): string => {
@@ -73,7 +73,7 @@
 			{/each}
 		</table>
 	</div>
-	<Pagination {totalAmount} {href} {currPageNum} {amountPerPage} />
+	<Pagination {totalAmount} {pageToHref} {currPageNum} {limit} />
 </div>
 
 <style>

@@ -3,12 +3,12 @@
 	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
 	import { getLoadFn } from '$lib/loadFn';
 
-	const amountPerPage = 1000;
+	const limit = 1000;
 
 	export const load: Load = async (args) => {
 		const loadFn = getLoadFn(
 			'api/permits/exceptions',
-			{ reversed: 'true', limit: `${amountPerPage}` },
+			{ reversed: 'true', limit: `${limit}` },
 			listWithMetadataDecoder(permitDecoder)
 		);
 		return loadFn(args);
@@ -62,9 +62,9 @@
 		</div>
 		<Pagination
 			totalAmount={result.data.metadata.totalAmount}
-			href={(pageNum) => `/permits/exceptions?page=${pageNum}`}
+			pageToHref={(pageNum) => `/permits/exceptions?page=${pageNum}`}
 			{currPageNum}
-			{amountPerPage}
+			{limit}
 		/>
 	</div>
 {/if}

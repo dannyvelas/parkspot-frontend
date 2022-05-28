@@ -1,12 +1,12 @@
 <script lang="ts">
 	export let totalAmount: number;
-	export let href: (a: number) => string;
+	export let pageToHref: (a: number) => string;
 	export let currPageNum: number;
-	export let amountPerPage: number;
+	export let limit: number;
 
 	const amountPages = (() => {
-		const int_div = totalAmount / amountPerPage;
-		if (totalAmount % amountPerPage !== 0) {
+		const int_div = totalAmount / limit;
+		if (totalAmount % limit !== 0) {
 			return int_div + 1;
 		} else {
 			return int_div;
@@ -19,7 +19,7 @@
 	<ul class="pagination">
 		{#each pageNums as pageNum}
 			<li class="page-item" class:active={currPageNum == pageNum}>
-				<a class="page-link" href={href(pageNum)}>{pageNum}</a>
+				<a class="page-link" href={pageToHref(pageNum)}>{pageNum}</a>
 			</li>
 		{/each}
 	</ul>
