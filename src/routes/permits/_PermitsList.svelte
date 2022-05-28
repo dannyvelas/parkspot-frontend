@@ -7,6 +7,7 @@
 	import Pagination from '$lib/Pagination.svelte';
 
 	// props
+	export let listType: 'all' | 'expired' | 'active';
 	export let permits: Array<Permit>;
 	export let totalAmount: number;
 	export let pageToHref: (a: number) => string; // pagination
@@ -49,7 +50,6 @@
 			alert(`Deleted permit ${permitId}`);
 		}
 	};
-
 	const onSearch = async () => {
 		// restore view when nothing is being searched
 		if (searchVal === '') {
@@ -58,9 +58,10 @@
 			return;
 		}
 
-		// if the list is short-enough, just filter in-place
-		if (permits.length == totalAmount) {
-			permits = permits.filter((permit) => {
+		// these lists are usually so short, that all of the searchable permits are inside `initialPermits`
+		// so we can simply filter through `initialPermits`
+		if (listType === 'active' || listType === 'expired') {
+			permits = initialPermits.filter((permit) => {
 				const searchableFields = `
         ${permit.id}
         ${permit.residentId}
@@ -68,13 +69,13 @@
         ${permit.car.color}
         ${permit.car.make}
         ${permit.car.model}`.toLowerCase();
-				return searchableFields.includes(searchVal);
+				return searchableFields.includes(searchVal.toLowerCase());
 			});
 			bannerError = '';
 			return;
 		}
 
-		// else use the search endpoint
+		// listType === 'all', we need to use the endpoint to search across all permits
 		const getRes = await get(
 			'api/permits/search',
 			{ search: searchVal },

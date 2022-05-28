@@ -47,8 +47,9 @@
 	{result.message}
 {:else}
 	<PermitsList
-		totalAmount={result.data.metadata.totalAmount}
+		listType="expired"
 		permits={result.data.records}
+		totalAmount={result.data.metadata.totalAmount}
 		pageToHref={(pageNum) => `/permits/expired?page=${pageNum}`}
 		{currPageNum}
 		{limit}

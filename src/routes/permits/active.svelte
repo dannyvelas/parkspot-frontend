@@ -47,8 +47,9 @@
 	{result.message}
 {:else}
 	<PermitsList
-		totalAmount={result.data.metadata.totalAmount}
+		listType="active"
 		permits={result.data.records}
+		totalAmount={result.data.metadata.totalAmount}
 		pageToHref={(pageNum) => `/permits/active?page=${pageNum}`}
 		{currPageNum}
 		{limit}
