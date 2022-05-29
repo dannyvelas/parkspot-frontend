@@ -48,7 +48,7 @@
 						<td>{resident.phone}</td>
 						<td>{resident.email}</td>
 						<td>{resident.unlimDays}</td>
-						<td><button>Edit</button></td>
+						<td><a href="resident/{resident.id}">Edit</a></td>
 						<td><button>Delete</button></td>
 					</tr>
 				{/each}
