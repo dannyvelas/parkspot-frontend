@@ -1,10 +1,11 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 	import type { Resident } from '$lib/models';
+	import { MAX_AMT_PER_PAGE } from '$lib/constants';
 	import { residentDecoder, listWithMetadataDecoder } from '$lib/models';
 	import { get } from '$lib/api';
 
-	const limit = 1000;
+	const limit = MAX_AMT_PER_PAGE;
 
 	export const load: Load = async (loadInput) => {
 		if (!loadInput.session.user) return { status: 302, redirect: '/' };
