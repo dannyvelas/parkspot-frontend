@@ -1,33 +1,11 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
-	import { get } from '$lib/api';
+	import { MAX_AMT_PER_PAGE } from '$lib/constants';
+	import { getLoadFn } from './_load';
 
-	const limit = 1000;
+	const limit = MAX_AMT_PER_PAGE;
 
-	export const load: Load = async (loadInput) => {
-		if (!loadInput.session.user) return { status: 302, redirect: '/' };
-
-		const currPageNum = Number(loadInput.url.searchParams.get('page')) || 1;
-		const params = {
-			reversed: 'false',
-			limit: `${limit}`,
-			page: `${currPageNum}`
-		};
-
-		const result = await get(
-			'api/permits/exceptions',
-			params,
-			listWithMetadataDecoder(permitDecoder)
-		);
-
-		return {
-			props: {
-				result,
-				currPageNum
-			}
-		};
-	};
+	export const load: Load = getLoadFn('api/permits/exceptions', limit, false);
 </script>
 
 <script lang="ts">
