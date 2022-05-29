@@ -2,7 +2,7 @@
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-import { Admin } from '$lib/models';
+import type { User } from '$lib/models';
 
 declare global {
 	declare namespace App {
