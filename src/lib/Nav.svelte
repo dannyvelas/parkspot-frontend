@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { User } from '$lib/models';
 	import { getStores } from '$app/stores';
 	import { emptyResponseDecoder } from '$lib/models';
 	import { isOk } from '$lib/functional';
@@ -6,7 +7,7 @@
 	import { post } from '$lib/api';
 	const { session, page } = getStores();
 
-	const dashboard = () => ($session.user.role === 'resident' ? `/resident` : '/admin');
+	const dashboard = (user: User) => (user.role === 'resident' ? `/resident` : '/admin');
 
 	// events
 	async function logout() {
@@ -25,7 +26,7 @@
 		{#if $session.user}
 			{#if $page.url.pathname !== '/admin' && $page.url.pathname !== '/resident'}
 				<div style="text-align:center;">
-					<a href={dashboard()}>Go Back To Dashboard</a>
+					<a href={dashboard($session.user)}>Go Back To Dashboard</a>
 				</div>
 			{:else}
 				<button on:click={logout}>Go Back To Start Page</button>
