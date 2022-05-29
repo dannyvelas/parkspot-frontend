@@ -2,17 +2,28 @@
 	import type { Load } from '@sveltejs/kit';
 	import type { Resident } from '$lib/models';
 	import { residentDecoder, listWithMetadataDecoder } from '$lib/models';
-	import { getLoadFn } from '$lib/loadFn';
+	import { get } from '$lib/api';
 
 	const limit = 1000;
 
-	export const load: Load = async (args) => {
-		const loadFn = getLoadFn(
-			`api/residents`,
-			{ limit: `${limit}` },
-			listWithMetadataDecoder(residentDecoder)
-		);
-		return loadFn(args);
+	export const load: Load = async (loadInput) => {
+		if (!loadInput.session.user) return { status: 302, redirect: '/' };
+
+		const currPageNum = Number(loadInput.url.searchParams.get('page')) || 1;
+		const params = {
+			reversed: 'false',
+			limit: `${limit}`,
+			page: `${currPageNum}`
+		};
+
+		const result = await get('api/residents', params, listWithMetadataDecoder(residentDecoder));
+
+		return {
+			props: {
+				result,
+				currPageNum
+			}
+		};
 	};
 </script>
 
