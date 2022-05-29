@@ -84,7 +84,7 @@
 	<h1>Edit Car</h1>
 	{#if model.data.bannerError != ''}
 		<div>
-			<p>Error editing permit: {model.data.bannerError}. Please try again later.</p>
+			<p>Error editing car: {model.data.bannerError}. Please try again later.</p>
 		</div>
 	{/if}
 	<p>License Plate: {model.data.car.licensePlate}</p>
