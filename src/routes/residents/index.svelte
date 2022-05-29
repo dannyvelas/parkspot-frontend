@@ -1,36 +1,15 @@
 <script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
-	import type { Resident } from '$lib/models';
 	import { MAX_AMT_PER_PAGE } from '$lib/constants';
-	import { residentDecoder, listWithMetadataDecoder } from '$lib/models';
-	import { get } from '$lib/api';
+	import { getLoadFn } from './_load';
 
 	const limit = MAX_AMT_PER_PAGE;
 
-	export const load: Load = async (loadInput) => {
-		if (!loadInput.session.user) return { status: 302, redirect: '/' };
-
-		const currPageNum = Number(loadInput.url.searchParams.get('page')) || 1;
-		const params = {
-			reversed: 'false',
-			limit: `${limit}`,
-			page: `${currPageNum}`
-		};
-
-		const result = await get('api/residents', params, listWithMetadataDecoder(residentDecoder));
-
-		return {
-			props: {
-				result,
-				currPageNum
-			}
-		};
-	};
+	export const load = getLoadFn('api/residents', limit, false);
 </script>
 
 <script lang="ts">
 	import type { Result } from '$lib/functional';
-	import type { ListWithMetadata } from '$lib/models';
+	import type { ListWithMetadata, Resident } from '$lib/models';
 	import { isOk } from '$lib/functional';
 	import Pagination from '$lib/Pagination.svelte';
 
