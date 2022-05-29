@@ -1,11 +1,10 @@
 <script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
 	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
 	import { getLoadFn } from './_load';
 
 	const limit = DEFAULT_AMT_PER_PAGE;
 
-	export const load: Load = getLoadFn('api/permits/expired', limit, false);
+	export const load = getLoadFn('api/permits/expired', limit, false);
 </script>
 
 <script lang="ts">
