@@ -23,3 +23,10 @@ export type EditCarArgs = {
 	make: string;
 	model: string;
 };
+
+export type NewCarReq = {
+	licensePlate: string;
+	color: string;
+	make: string;
+	model: string;
+};

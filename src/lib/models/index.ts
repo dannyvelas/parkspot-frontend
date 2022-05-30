@@ -1,10 +1,10 @@
 export type { Admin } from './admin';
 export { adminDecoder } from './admin';
 
-export type { Permit } from './permit';
+export type { Permit, NewPermitReq } from './permit';
 export { permitDecoder } from './permit';
 
-export type { Car, EditCarArgs } from './car';
+export type { Car, EditCarArgs, NewCarReq } from './car';
 export { carDecoder } from './car';
 
 export type { Resident, EditResidentArgs } from './resident';
