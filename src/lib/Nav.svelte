@@ -37,3 +37,9 @@
 		{/if}
 	</ul>
 </nav>
+
+<style>
+	ul {
+		padding-inline-start: 0px;
+	}
+</style>
