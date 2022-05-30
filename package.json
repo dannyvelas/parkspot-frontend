@@ -34,6 +34,7 @@
   "dependencies": {
     "cookie": "^0.5.0",
     "decoders": "^2.0.0",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "litepicker": "^2.0.12"
   }
 }
