@@ -19,18 +19,12 @@
 
 <script lang="ts">
 	import type { Result, Status } from '$lib/functional';
+	import type { EditCarArgs } from '$lib/models';
 	import { isOk, newOk, newLoading } from '$lib/functional';
 	import { put } from '$lib/api';
 
 	// props
 	export let result: Result<Car>;
-
-	// types
-	type EditCarArgs = {
-		color: string;
-		make: string;
-		model: string;
-	};
 
 	// model
 	let model: Status<{

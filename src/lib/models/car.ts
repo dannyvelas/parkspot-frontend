@@ -17,3 +17,9 @@ export const carDecoder: decoders.Decoder<Car> = decoders.object({
 	model: decoders.string,
 	amtParkingDaysUsed: decoders.number
 });
+
+export type EditCarArgs = {
+	color: string;
+	make: string;
+	model: string;
+};

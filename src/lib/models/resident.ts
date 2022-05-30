@@ -19,3 +19,10 @@ export const residentDecoder: decoders.Decoder<Resident> = decoders.object({
 	unlimDays: decoders.boolean,
 	amtParkingDaysUsed: decoders.number
 });
+
+export type EditResidentArgs = {
+	firstName: string;
+	lastName: string;
+	phone: string;
+	email: string;
+};
