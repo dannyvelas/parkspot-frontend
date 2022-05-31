@@ -18,10 +18,15 @@
 	import { Litepicker } from 'litepicker';
 
 	// helpers
-	const dateToday = new Date();
+	const dateToday = (() => {
+		const tempDate = new Date();
+		tempDate.setHours(0, 0, 0, 0);
+		return tempDate;
+	})();
 	const dateTomorrow = (() => {
 		const tempDate = new Date();
-		tempDate.setDate(dateToday.getDate() + 1);
+		tempDate.setDate(tempDate.getDate() + 1);
+		tempDate.setHours(0, 0, 0, 0);
 		return tempDate;
 	})();
 
@@ -42,10 +47,11 @@
 	let isException = false;
 
 	onMount(() => {
+		const amtMilisInDay = 24 * 60 * 60 * 1000;
 		const litepicker = new Litepicker({
 			element: document.getElementById('litepicker') as HTMLElement,
 			minDays: 2,
-			minDate: Date.now() - 15 * 24 * 60 * 60 * 1000,
+			minDate: Date.now() - 15 * amtMilisInDay,
 			singleMode: false,
 			format: 'MM-DD-YYYY'
 		});
