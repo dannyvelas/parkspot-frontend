@@ -68,7 +68,11 @@
 	const submit = async () => {
 		const result = await post('api/permit', fields, permitDecoder);
 		if (!isOk(result)) {
-			bannerError = result.message;
+			if (result.message.includes('400')) {
+				alert(result.message);
+			} else {
+				bannerError = result.message;
+			}
 			return;
 		}
 		goto(`/permit/${result.data.id}`);
