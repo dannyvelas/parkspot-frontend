@@ -36,7 +36,7 @@
 			return;
 		}
 
-		$session.user = result.data;
+		$session.user = { ...result.data, role: 'admin' };
 		goto('/admin');
 	};
 </script>
