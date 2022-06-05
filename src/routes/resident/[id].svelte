@@ -4,8 +4,12 @@
 	import { get } from '$lib/api';
 	import { residentDecoder } from '$lib/models';
 
-	export const load: Load = async ({ session: { user }, params }) => {
-		if (!user) return { status: 302, redirect: '/' };
+	export const load: Load = async ({ session, params }) => {
+		if (!session.user) {
+			return { status: 302, redirect: '/' };
+		} else if (session.user.role !== 'admin') {
+			return { status: 302, redirect: '/resident' };
+		}
 
 		const result = await get(`api/resident/${params.id}`, {}, residentDecoder);
 
