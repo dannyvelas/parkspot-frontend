@@ -4,7 +4,12 @@
 	export const load: Load = async ({ session }) => {
 		if (!session.user) return { status: 302, redirect: '/' };
 
-		return {};
+		const residentId = session.user.role === 'admin' ? '' : session.user.id;
+		return {
+			props: {
+				residentId
+			}
+		};
 	};
 </script>
 
@@ -16,6 +21,9 @@
 	import { goto } from '$app/navigation';
 	import { post } from '$lib/api';
 	import { Litepicker } from 'litepicker';
+
+	// props
+	export let residentId: string;
 
 	// helpers
 	const dateToday = (() => {
@@ -32,7 +40,7 @@
 
 	// model
 	const fields: NewPermitReq = {
-		residentId: '',
+		residentId,
 		car: {
 			licensePlate: '',
 			color: '',
@@ -95,7 +103,13 @@
 	</div>
 {/if}
 <form on:submit|preventDefault={submit}>
-	<input required type="text" placeholder="Resident ID" bind:value={fields.residentId} />
+	<input
+		required
+		type="text"
+		placeholder="Resident ID"
+		readonly={residentId !== ''}
+		bind:value={fields.residentId}
+	/>
 	<input required type="text" placeholder="License Plate" bind:value={fields.car.licensePlate} />
 	<input required type="text" placeholder="Color" bind:value={fields.car.color} />
 	<input required type="text" placeholder="Make" bind:value={fields.car.make} />
