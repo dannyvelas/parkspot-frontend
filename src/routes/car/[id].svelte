@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
 	import type { Load } from './[id]';
-	import type { Car } from '$lib/models';
 	import { get } from '$lib/api';
 	import { carDecoder } from '$lib/models';
 
@@ -24,6 +23,7 @@
 <script lang="ts">
 	import type { Result, Status } from '$lib/functional';
 	import type { EditCarArgs } from '$lib/models';
+	import type { Car } from '$lib/models';
 	import { isOk, newOk, newLoading } from '$lib/functional';
 	import { put } from '$lib/api';
 
