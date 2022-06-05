@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import { MAX_AMT_PER_PAGE } from '$lib/constants';
-	import { getLoadFn } from './_load';
+	import { getLoadFn } from '$lib/loadPermits';
 
 	const limit = MAX_AMT_PER_PAGE;
 
@@ -11,7 +11,7 @@
 	import type { Result } from '$lib/functional';
 	import type { Permit, ListWithMetadata } from '$lib/models';
 	import { isOk } from '$lib/functional';
-	import PermitsList from './_PermitsList.svelte';
+	import PermitsList from '$lib/_PermitsList.svelte';
 
 	export let result: Result<ListWithMetadata<Permit>>;
 	export let currPageNum: number;
