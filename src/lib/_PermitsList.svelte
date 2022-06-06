@@ -75,7 +75,7 @@
 			return;
 		}
 
-		// listType === 'all'|'exceptions', we need to use the endpoint to search across all permits
+		// listType === 'all'|'exceptions', we need to use the endpoint to search across these
 		const getRes = await get(
 			'api/permits/search',
 			{ search: searchVal, listType: listType },
@@ -115,6 +115,7 @@
 				{#if listType === 'exceptions'}
 					<td>Exception Reason</td>
 				{/if}
+				<td>Reprint</td>
 				<td>Edit</td>
 				<td>Delete</td>
 			</tr>
@@ -132,6 +133,7 @@
 					{#if listType === 'exceptions'}
 						<td>{permit.exceptionReason}</td>
 					{/if}
+          <td><a href="/permit/{permit.id}">Reprint</a></td>
 					<td><a href="car/{permit.car.id}">Edit</a></td>
 					<td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
 				</tr>
