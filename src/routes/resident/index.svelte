@@ -17,7 +17,11 @@
 	export let user: User;
 </script>
 
-<h1>Resident Page</h1>
+<svelte:head>
+	<title>Resident Dashboard</title>
+</svelte:head>
+
+<h1>Resident Dashboard</h1>
 
 <main>
 	<p>

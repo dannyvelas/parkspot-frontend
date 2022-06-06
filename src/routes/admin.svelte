@@ -12,6 +12,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Admin Dashboard</title>
+</svelte:head>
+
 <p>
 	List Active Parking Permits:
 	<a href="/permits/active"><button>Submit</button></a>
