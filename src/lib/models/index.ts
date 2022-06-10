@@ -16,5 +16,8 @@ export { listWithMetadataDecoder } from './list';
 export type { User } from './user';
 export { userDecoder } from './user';
 
+export type { Visitor } from './visitor';
+export { visitorDecoder } from './visitor';
+
 export type { EmptyResponse } from './response';
 export { emptyResponseDecoder } from './response';
