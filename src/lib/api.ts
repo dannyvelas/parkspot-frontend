@@ -55,13 +55,11 @@ const getJson = async (response: Response): Promise<Result<any>> => {
 };
 
 const decodeJson = <T>(json: any, responseDecoder: Decoder<T>): Result<T> => {
-	const decodedResponse = responseDecoder.decode(json);
-	if (decodedResponse.ok) {
-		return newOk(decodedResponse.value);
-	} else if (decodedResponse.error.text !== undefined) {
-		return newErr('Error decoding response: ' + decodedResponse.error.text);
-	} else {
-		return newErr('Unhandled error decoding response');
+	try {
+		const decodedResponse = responseDecoder.verify(json);
+		return newOk(decodedResponse);
+	} catch (error) {
+		return newErr('Error decoding response: ' + error);
 	}
 };
 
