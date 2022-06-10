@@ -23,7 +23,7 @@
 
 <h1>Resident Dashboard</h1>
 
-<main>
+<div>
 	<p>
 		List Active Parking Permits
 		<a href="/resident/{user.id}/permits/active"><button>Submit</button></a>
@@ -43,11 +43,11 @@
 		Add a visitor:
 		<a href="/resident/{user.id}/visitors"><button>Submit</button></a>
 	</p>
-</main>
+</div>
 
 <style>
 	h1,
-	main {
+	div {
 		text-align: center;
 	}
 </style>
