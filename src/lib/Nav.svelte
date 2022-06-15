@@ -33,7 +33,6 @@
 			{/if}
 		{:else}
 			<li><a href="/login" class:active={$page.url.pathname === '/login'}>Login</a></li>
-			<li><a href="/register" class:active={$page.url.pathname === '/register'}>Register</a></li>
 		{/if}
 	</ul>
 </nav>
