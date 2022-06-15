@@ -20,7 +20,6 @@
 	import { isOk } from '$lib/functional';
 	import { goto } from '$app/navigation';
 	import { post } from '$lib/api';
-	import { Litepicker } from 'litepicker';
 
 	// props
 	export let residentId: string;
@@ -54,7 +53,8 @@
 	let bannerError = '';
 	let isException = false;
 
-	onMount(() => {
+	onMount(async () => {
+		const { Litepicker } = await import('litepicker');
 		const amtMilisInDay = 24 * 60 * 60 * 1000;
 		const litepicker = new Litepicker({
 			element: document.getElementById('litepicker') as HTMLElement,
