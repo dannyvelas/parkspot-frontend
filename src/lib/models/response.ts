@@ -1,9 +1,10 @@
-import * as decoders from 'decoders';
+import type { Decoder } from 'decoders';
+import { string, object } from 'decoders';
 
-export type EmptyResponse = {
-	ok: boolean;
+export type Message = {
+	message: string;
 };
 
-export const emptyResponseDecoder: decoders.Decoder<EmptyResponse> = decoders.object({
-	ok: decoders.boolean
+export const messageDecoder: Decoder<Message> = object({
+	message: string
 });

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { User } from '$lib/models';
 	import { getStores } from '$app/stores';
-	import { emptyResponseDecoder } from '$lib/models';
+	import { messageDecoder } from '$lib/models';
 	import { isOk } from '$lib/functional';
 	import { goto } from '$app/navigation';
 	import { post } from '$lib/api';
@@ -11,7 +11,7 @@
 
 	// events
 	async function logout() {
-		const postRes = await post(`api/logout`, {}, emptyResponseDecoder);
+		const postRes = await post(`api/logout`, {}, messageDecoder);
 		if (!isOk(postRes)) {
 			console.error('Error logging out');
 		}

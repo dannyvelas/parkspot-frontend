@@ -19,5 +19,5 @@ export { userDecoder } from './user';
 export type { Visitor } from './visitor';
 export { visitorDecoder } from './visitor';
 
-export type { EmptyResponse } from './response';
-export { emptyResponseDecoder } from './response';
+export type { Message } from './response';
+export { messageDecoder } from './response';
