@@ -1,7 +1,9 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
+	import { hydrateSession } from '$lib/hydrateSession';
 
-	export const load: Load = async ({ session }) => {
+	export const load: Load = async (loadInput) => {
+		const session = await hydrateSession(loadInput.session);
 		if (!session.user) {
 			return { status: 302, redirect: '/' };
 		} else if (session.user.role !== 'admin') {

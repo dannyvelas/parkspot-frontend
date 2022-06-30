@@ -1,12 +1,24 @@
 <script lang="ts">
 	import type { User } from '$lib/models';
+	import { hydrateSession } from '$lib/hydrateSession';
 	import { getStores } from '$app/stores';
 	import { messageDecoder } from '$lib/models';
 	import { isOk } from '$lib/functional';
 	import { goto } from '$app/navigation';
 	import { post } from '$lib/api';
+	import { onMount } from 'svelte';
 	const { session, page } = getStores();
 
+	const publicPages = ['/', '/login'];
+
+	// init
+	onMount(async () => {
+		if (!publicPages.includes($page.url.pathname)) {
+			$session = await hydrateSession($session);
+		}
+	});
+
+	// helpers
 	const dashboard = (user: User) => (user.role === 'resident' ? `/resident` : '/admin');
 
 	// events
