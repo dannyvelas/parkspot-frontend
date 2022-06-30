@@ -1,37 +1,20 @@
-<script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
-	import type { User } from '$lib/models';
-
-	const dashboard = (user: User) => (user.role === 'resident' ? `/resident` : '/admin');
-
-	export const load: Load = async ({ session }) => {
-		if (session.user) {
-			return { status: 302, redirect: dashboard(session.user) };
-		}
-
-		return {};
-	};
-</script>
-
 <script lang="ts">
+	import type { User } from '$lib/models';
 	import { userDecoder } from '$lib/models';
 	import { isOk } from '$lib/functional';
 	import { getStores } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { post } from '$lib/api';
-
-	type Credentials = {
-		id: string;
-		password: string;
-	};
 	const { session } = getStores();
 
+	// model
 	let id = '';
 	let password = '';
 	let error = '';
 
+	// events
 	const submit = async () => {
-		const result = await post<Credentials, User>('api/login', { id, password }, userDecoder);
+		const result = await post('api/login', { id, password }, userDecoder);
 		if (!isOk(result)) {
 			error = result.message;
 			return;
@@ -40,6 +23,9 @@
 		$session.user = result.data;
 		goto(dashboard($session.user));
 	};
+
+	// helpers
+	const dashboard = (user: User) => (user.role === 'resident' ? `/resident` : '/admin');
 </script>
 
 <svelte:head>
