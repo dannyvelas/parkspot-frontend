@@ -5,7 +5,7 @@ import { messageDecoder } from '$lib/models';
 import type { Decoder } from 'decoders';
 type Method = 'GET' | 'DELETE' | 'POST' | 'PUT';
 
-const HOSTNAME = import.meta.env.VITE_DEV_SERVER;
+const HOSTNAME = import.meta.env.VITE_SERVER;
 
 type FetchOpts = {
 	method: Method;
