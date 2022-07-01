@@ -3,7 +3,7 @@
 	import Nav from '$lib/Nav.svelte';
 	import { getStores } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { hydrateSession } from '$lib/hydrateSession';
+	import { getSession } from '$lib/getSession';
 	import { goto } from '$app/navigation';
 	const { session, page } = getStores();
 
@@ -13,10 +13,7 @@
 
 	// init
 	onMount(async () => {
-		const hydratedSession = await hydrateSession($session);
-		if ($session.user != hydratedSession.user) {
-			$session = hydratedSession;
-		}
+		$session = await getSession();
 
 		if ($session.user && publicPages.includes($page.url.pathname)) {
 			goto(dashboard($session.user));
