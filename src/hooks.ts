@@ -1,8 +1,8 @@
-import * as cookie from 'cookie';
+import { parse } from 'cookie';
 import jwt from 'jsonwebtoken';
 import { userDecoder } from '$lib/models';
 import { isOk, newErr, newOk } from '$lib/functional';
-import { TokenExpiredError } from 'jsonwebtoken';
+import * as jsonwebtoken from 'jsonwebtoken';
 import type { JwtPayload } from 'jsonwebtoken';
 import type { Result } from '$lib/functional';
 import type { Handle, GetSession } from '@sveltejs/kit';
@@ -10,7 +10,7 @@ import type { Handle, GetSession } from '@sveltejs/kit';
 const TOKEN_SECRET = import.meta.env.VITE_TOKEN_SECRET;
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
+	const cookies = parse(event.request.headers.get('cookie') || '');
 	if (!cookies.jwt) {
 		return await resolve(event);
 	}
@@ -41,7 +41,7 @@ const verifyJWT = (token: string): Result<{ user: string }> => {
 	try {
 		verifiedJWT = jwt.verify(token, TOKEN_SECRET);
 	} catch (error) {
-		if (error instanceof TokenExpiredError) {
+		if (error instanceof jsonwebtoken.TokenExpiredError) {
 			return newErr('JWT expired');
 		} else {
 			return newErr('Unhandled JWT verify error');
