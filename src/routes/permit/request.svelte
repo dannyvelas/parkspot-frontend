@@ -53,6 +53,7 @@
 	let bannerError = '';
 	let isException = false;
 
+	// init
 	onMount(async () => {
 		const { Litepicker } = await import('litepicker');
 		const litepicker = new Litepicker({
