@@ -55,11 +55,10 @@
 
 	onMount(async () => {
 		const { Litepicker } = await import('litepicker');
-		const amtMilisInDay = 24 * 60 * 60 * 1000;
 		const litepicker = new Litepicker({
 			element: document.getElementById('litepicker') as HTMLElement,
 			minDays: 2,
-			minDate: Date.now() - 15 * amtMilisInDay,
+			minDate: Date.now(),
 			singleMode: false,
 			format: 'MM-DD-YYYY'
 		});
