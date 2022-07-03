@@ -9,6 +9,7 @@ const HOSTNAME = import.meta.env.VITE_SERVER;
 
 type FetchOpts = {
 	method: Method;
+	mode: 'cors';
 	headers?: Headers;
 	body?: string;
 	credentials: 'include';
@@ -70,7 +71,7 @@ const sendReq = async <ReqBody, ResBody>(
 	request: ReqBody,
 	responseDecoder: Decoder<ResBody>
 ): Promise<Result<ResBody>> => {
-	const fetchOpts: FetchOpts = { method, credentials: 'include' };
+	const fetchOpts: FetchOpts = { method, mode: 'cors', credentials: 'include' };
 	if (request) {
 		fetchOpts.headers = new Headers({ 'Content-Type': 'application/json' });
 		fetchOpts.body = JSON.stringify(request);
