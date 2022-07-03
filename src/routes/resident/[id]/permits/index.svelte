@@ -1,13 +1,20 @@
 <script context="module" lang="ts">
 	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
-	import { getLoadFn } from '$lib/loadPermits';
+	import { permitDecoder } from '$lib/models';
+	import loadList from '$lib/loadList';
 	import type { Load } from '@sveltejs/kit';
 
 	const limit = DEFAULT_AMT_PER_PAGE;
 
 	export const load: Load = async (args) => {
 		const residentId = args.params.id;
-		const out = await getLoadFn(`api/resident/${residentId}/permits`, limit, false)(args);
+		const out = await loadList(
+			`api/resident/${residentId}/permits`,
+			permitDecoder,
+			limit,
+			false,
+			'resident'
+		)(args);
 		return {
 			props: {
 				residentId,

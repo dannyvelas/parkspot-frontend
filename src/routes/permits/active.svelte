@@ -1,10 +1,11 @@
 <script context="module" lang="ts">
 	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
-	import { getLoadFn } from '$lib/loadPermits';
+	import { permitDecoder } from '$lib/models';
+	import loadList from '$lib/loadList';
 
 	const limit = DEFAULT_AMT_PER_PAGE;
 
-	export const load = getLoadFn('api/permits/active', limit, false);
+	export const load = loadList('api/permits/active', permitDecoder, limit, false, 'admin');
 </script>
 
 <script lang="ts">
