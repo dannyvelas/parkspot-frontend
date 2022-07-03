@@ -1,7 +1,7 @@
 import type { Load } from '@sveltejs/kit';
 import type { Decoder } from 'decoders';
 import { listWithMetadataDecoder } from '$lib/models';
-import dashboard from '$lib/dashboard';
+import { dashboard } from '$lib/navigation';
 import { get } from '$lib/api';
 
 export default function loadList<T>(
