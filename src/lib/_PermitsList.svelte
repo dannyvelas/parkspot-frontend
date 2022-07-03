@@ -1,8 +1,6 @@
 <script lang="ts">
 	import type { Permit } from '$lib/models';
-	import { del, get } from '$lib/api';
-	import { afterNavigate } from '$app/navigation';
-	import { listWithMetadataDecoder, permitDecoder } from '$lib/models';
+	import { del } from '$lib/api';
 	import { isOk } from '$lib/functional';
 	import Pagination from '$lib/Pagination.svelte';
 
@@ -14,25 +12,15 @@
 	export let currPageNum: number; // pagination
 	export let limit: number; // pagination
 
-	// model
-	let initialPermits: Array<Permit>;
-	let searchVal = '';
-	let bannerError = '';
-
-	// initialize initialPermits
-	afterNavigate(() => {
-		initialPermits = permits;
-	});
-
 	// rendering
 	const renderDate = (date: Date): string => {
 		const dateStr = date.toISOString();
 		return dateStr.split('T')[0];
 	};
 	const tsToDate = (ts: number): string => {
-    if(ts === 0) {
-      return ''
-    }
+		if (ts === 0) {
+			return '';
+		}
 		const date = new Date(ts * 1000);
 		const offset = date.getTimezoneOffset();
 		const offset_date = new Date(date.getTime() - offset * 60 * 1000).toISOString();
@@ -53,55 +41,9 @@
 			alert(`Deleted permit ${permitId}`);
 		}
 	};
-	const onSearch = async () => {
-		// restore view when nothing is being searched
-		if (searchVal === '') {
-			permits = initialPermits;
-			bannerError = '';
-			return;
-		}
-
-		// these lists are usually so short, that all of the searchable permits are inside `initialPermits`
-		// so we can simply filter through `initialPermits`
-		if (listType === 'active' || listType === 'expired') {
-			permits = initialPermits.filter((permit) => {
-				const searchableFields = `
-        ${permit.id}
-        ${permit.residentId}
-        ${permit.car.licensePlate}
-        ${permit.car.color}
-        ${permit.car.make}
-        ${permit.car.model}`.toLowerCase();
-				return searchableFields.includes(searchVal.toLowerCase());
-			});
-			bannerError = '';
-			return;
-		}
-
-		// listType === 'all'|'exceptions', we need to use the endpoint to search across these
-		const getRes = await get(
-			'api/permits/search',
-			{ search: searchVal, listType: listType },
-			listWithMetadataDecoder(permitDecoder)
-		);
-		if (!isOk(getRes)) {
-			permits = initialPermits;
-			bannerError = getRes.message;
-			return;
-		}
-
-		permits = getRes.data.records;
-		bannerError = '';
-	};
 </script>
 
-<div class="stack-container">
-	{#if bannerError != ''}
-		<div>
-			<p>Error searching: {bannerError}. Please try again later.</p>
-		</div>
-	{/if}
-	<input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Permits" />
+<div>
 	<h2>Amount of Permits: {totalAmount}</h2>
 	<div>
 		<table>
@@ -136,7 +78,7 @@
 					{#if listType === 'exceptions'}
 						<td>{permit.exceptionReason}</td>
 					{/if}
-          <td><a href="/permit/{permit.id}">Reprint</a></td>
+					<td><a href="/permit/{permit.id}">Reprint</a></td>
 					<td><a href="car/{permit.car.id}">Edit</a></td>
 					<td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
 				</tr>
@@ -152,10 +94,7 @@
 		border: 1px solid black;
 	}
 
-	.stack-container {
-		margin: auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+	h2 {
+		text-align: center;
 	}
 </style>
