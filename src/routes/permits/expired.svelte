@@ -77,6 +77,13 @@
 {/if}
 
 <style>
+	.stack-container {
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
 	h1 {
 		text-align: center;
 	}
