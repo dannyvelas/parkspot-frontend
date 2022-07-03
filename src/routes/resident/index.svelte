@@ -2,7 +2,11 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ session }) => {
-		if (!session.user) return { status: 302, redirect: '/' };
+		if (!session.user) {
+			return { status: 302, redirect: '/' };
+		} else if (session.user.role !== 'resident') {
+			return { status: 302, redirect: '/admin' };
+		}
 
 		return {
 			props: {
