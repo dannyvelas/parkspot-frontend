@@ -114,10 +114,10 @@
 	<input required type="text" placeholder="Color" bind:value={fields.car.color} />
 	<input required type="text" placeholder="Make" bind:value={fields.car.make} />
 	<input required type="text" placeholder="Model" bind:value={fields.car.model} />
-	<input required type="text" placeholder="Choose Dates" id="litepicker" />
+	<input required type="text" id="litepicker" />
 	<div style="margin:20px;">
-		<label for="exception">Exception: </label>
-		<input type="checkbox" bind:checked={isException} />
+		<label for="isException">Exception: </label>
+		<input type="checkbox" id="isException" bind:checked={isException} />
 	</div>
 	{#if isException}
 		<textarea
