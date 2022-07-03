@@ -44,18 +44,27 @@
 {#if !isOk(result)}
 	{result.message}
 {:else}
-	<PermitsList
-		listType="all"
-		permits={result.data.records}
-		totalAmount={result.data.metadata.totalAmount}
-		pageToHref={(pageNum) => `/resident/${residentId}/permits?page=${pageNum}`}
-		{currPageNum}
-		{limit}
-	/>
+	<div class="stack-container">
+		<PermitsList
+			listType="all"
+			permits={result.data.records}
+			totalAmount={result.data.metadata.totalAmount}
+			pageToHref={(pageNum) => `/resident/${residentId}/permits?page=${pageNum}`}
+			{currPageNum}
+			{limit}
+		/>
+	</div>
 {/if}
 
 <style>
 	h1 {
 		text-align: center;
+	}
+
+	.stack-container {
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 </style>
