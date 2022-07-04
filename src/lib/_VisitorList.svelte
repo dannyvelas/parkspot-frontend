@@ -1,13 +1,9 @@
 <script lang="ts">
 	import type { Visitor } from '$lib/models';
-	import Pagination from '$lib/Pagination.svelte';
 
 	// props
 	export let visitors: Array<Visitor>;
 	export let totalAmount: number;
-	export let pageToHref: (a: number) => string; // pagination
-	export let currPageNum: number; // pagination
-	export let limit: number; // pagination
 
 	// rendering
 	const renderDate = (date: Date): string => {
@@ -44,7 +40,6 @@
 			{/each}
 		</table>
 	</div>
-	<Pagination {totalAmount} {pageToHref} {currPageNum} {limit} />
 </div>
 
 <style>
