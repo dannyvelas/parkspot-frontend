@@ -6,7 +6,7 @@
 
 	const limit = DEFAULT_AMT_PER_PAGE;
 
-	export const load = loadList('api/me/visitors', visitorDecoder, limit, true, 'resident');
+	export const load = loadList('api/me/visitors', visitorDecoder, limit, false, 'resident');
 </script>
 
 <script lang="ts">
