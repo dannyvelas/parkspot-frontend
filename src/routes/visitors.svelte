@@ -15,6 +15,7 @@
 	import { afterNavigate } from '$app/navigation';
 	import { searchVisitors } from '$lib/search';
 	import VisitorList from '$lib/_VisitorList.svelte';
+	import Pagination from '$lib/Pagination.svelte';
 
 	// props
 	export let result: Result<ListWithMetadata<Visitor>>;
@@ -64,8 +65,8 @@
 			</div>
 		{/if}
 		<input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Visitors" />
-		<VisitorList
-			visitors={result.data.records}
+		<VisitorList visitors={result.data.records} totalAmount={result.data.metadata.totalAmount} />
+		<Pagination
 			totalAmount={result.data.metadata.totalAmount}
 			pageToHref={(pageNum) => `visitors?page=${pageNum}`}
 			{currPageNum}
