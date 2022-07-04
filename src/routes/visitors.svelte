@@ -1,41 +1,20 @@
 <script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
-	import { listWithMetadataDecoder, visitorDecoder } from '$lib/models';
-	import { get } from '$lib/api';
 	import { DEFAULT_AMT_PER_PAGE } from '$lib/constants';
+	import { visitorDecoder } from '$lib/models';
+	import loadList from '$lib/loadList';
 
 	const limit = DEFAULT_AMT_PER_PAGE;
 
-	export const load: Load = async ({ session, url }) => {
-		if (!session.user) {
-			return { status: 302, redirect: '/' };
-		} else if (session.user.role !== 'admin') {
-			return { status: 302, redirect: '/resident' };
-		}
-
-		const currPageNum = Number(url.searchParams.get('page')) || 1;
-		const params = {
-			limit: `${limit}`,
-			page: `${currPageNum}`
-		};
-
-		const result = await get('api/visitors', params, listWithMetadataDecoder(visitorDecoder));
-
-		return {
-			props: {
-				result,
-				currPageNum
-			}
-		};
-	};
+	export const load = loadList('api/visitors', visitorDecoder, limit, true, 'admin');
 </script>
 
 <script lang="ts">
 	import type { Result } from '$lib/functional';
-	import type { ListWithMetadata, Visitor } from '$lib/models';
-	import { afterNavigate } from '$app/navigation';
+	import type { Visitor, ListWithMetadata } from '$lib/models';
 	import { isOk } from '$lib/functional';
-	import Pagination from '$lib/Pagination.svelte';
+	import { afterNavigate } from '$app/navigation';
+	import { searchVisitors } from '$lib/search';
+	import VisitorList from '$lib/_VisitorList.svelte';
 
 	// props
 	export let result: Result<ListWithMetadata<Visitor>>;
@@ -46,38 +25,25 @@
 	let searchVal = '';
 	let bannerError = '';
 
-	// initialize initialVisitors
+	// init
 	afterNavigate(() => {
 		initialVisitors = (result.data && result.data.records) || [];
 	});
 
-	// rendering
-	const renderDate = (date: Date): string => {
-		const dateStr = date.toISOString();
-		return dateStr.split('T')[0];
-	};
-
 	// events
 	const onSearch = async () => {
-		// restore view when nothing is being searched
-		if (searchVal === '') {
-			result.data!.records = initialVisitors;
-			bannerError = '';
-			return;
-		}
-
-		const getRes = await get(
-			'api/visitors/search',
-			{ search: searchVal },
-			listWithMetadataDecoder(visitorDecoder)
+		const visitorRes = await searchVisitors(
+			searchVal,
+			initialVisitors,
+			result.data!.metadata.totalAmount
 		);
-		if (!isOk(getRes)) {
+		if (!isOk(visitorRes)) {
 			result.data!.records = initialVisitors;
-			bannerError = getRes.message;
+			bannerError = visitorRes.message;
 			return;
 		}
 
-		result.data!.records = getRes.data.records;
+		result.data!.records = visitorRes.data;
 		bannerError = '';
 	};
 </script>
@@ -98,32 +64,10 @@
 			</div>
 		{/if}
 		<input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Visitors" />
-		<h2>Amount of Visitors: {result.data.metadata.totalAmount}</h2>
-		<div>
-			<table>
-				<tr>
-					<td>Resident ID</td>
-					<td>First Name</td>
-					<td>Last Name</td>
-					<td>Relationship</td>
-					<td>Access Start</td>
-					<td>Access End</td>
-				</tr>
-				{#each result.data.records as visitor}
-					<tr>
-						<td>{visitor.residentId}</td>
-						<td>{visitor.firstName}</td>
-						<td>{visitor.lastName}</td>
-						<td>{visitor.relationship}</td>
-						<td>{renderDate(visitor.accessStart)}</td>
-						<td>{renderDate(visitor.accessEnd)}</td>
-					</tr>
-				{/each}
-			</table>
-		</div>
-		<Pagination
+		<VisitorList
+			visitors={result.data.records}
 			totalAmount={result.data.metadata.totalAmount}
-			pageToHref={(page) => `visitors?page=${page}`}
+			pageToHref={(pageNum) => `visitors?page=${pageNum}`}
 			{currPageNum}
 			{limit}
 		/>
@@ -131,11 +75,6 @@
 {/if}
 
 <style>
-	table,
-	td {
-		border: 1px solid black;
-	}
-
 	.stack-container {
 		margin: auto;
 		display: flex;
