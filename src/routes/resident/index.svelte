@@ -1,57 +1,57 @@
 <script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
+  import type { Load } from "@sveltejs/kit";
 
-	export const load: Load = async ({ session }) => {
-		if (!session.user) {
-			return { status: 302, redirect: '/' };
-		} else if (session.user.role !== 'resident') {
-			return { status: 302, redirect: '/admin' };
-		}
+  export const load: Load = async ({ session }) => {
+    if (!session.user) {
+      return { status: 302, redirect: "/" };
+    } else if (session.user.role !== "resident") {
+      return { status: 302, redirect: "/admin" };
+    }
 
-		return {
-			props: {
-				user: session.user
-			}
-		};
-	};
+    return {
+      props: {
+        user: session.user,
+      },
+    };
+  };
 </script>
 
 <script lang="ts">
-	import type { User } from '$lib/models';
-	export let user: User;
+  import type { User } from "$lib/models";
+  export let user: User;
 </script>
 
 <svelte:head>
-	<title>Resident Dashboard</title>
+  <title>Resident Dashboard</title>
 </svelte:head>
 
 <h1>Resident Dashboard</h1>
 
 <div>
-	<p>
-		List Active Parking Permits
-		<a href="/resident/{user.id}/permits/active"><button>Submit</button></a>
-	</p>
-	<p>
-		List All Parking Permits:
-		<a href="/resident/{user.id}/permits"><button>Submit</button></a>
-	</p>
+  <p>
+    List Active Parking Permits
+    <a href="/resident/{user.id}/permits/active"><button>Submit</button></a>
+  </p>
+  <p>
+    List All Parking Permits:
+    <a href="/resident/{user.id}/permits"><button>Submit</button></a>
+  </p>
 
-	<hr />
+  <hr />
 
-	<p>
-		Request a Guest Parking Permit:
-		<a href="/permit/request"><button>Submit</button></a>
-	</p>
-	<p>
-		Add a visitor:
-		<a href="/resident/{user.id}/visitors"><button>Submit</button></a>
-	</p>
+  <p>
+    Request a Guest Parking Permit:
+    <a href="/permit/request"><button>Submit</button></a>
+  </p>
+  <p>
+    Add a visitor:
+    <a href="/resident/{user.id}/visitors"><button>Submit</button></a>
+  </p>
 </div>
 
 <style>
-	h1,
-	div {
-		text-align: center;
-	}
+  h1,
+  div {
+    text-align: center;
+  }
 </style>
