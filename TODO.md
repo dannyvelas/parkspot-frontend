@@ -12,35 +12,41 @@
 - [ ] (DEPLOY) make `credentials=true` in fetch options, only work in dev if it's not necessary in prod
 - [ ] (DEPLOY) test how different the user experience is without client side rendering works
 ## Major Missing From Spec
+### Admin
 - [x] show actual number of all permits instead of just the amount on the page
-- [x] edit and delete
-- [x] not signing out on re-fresh
+- [x] edit and delete permits
 - [x] search functionality permits page
 - [x] admin create parking permit
-- [x] resident page
-    - [x] resident create parking permit
-    - [x] see active and all parking permits
-    - [ ] create visitors
 - [x] visitors page
 - [x] re-print permit
 - [ ] create user account
 - [ ] edit resident parking days
+### Resident
+- [x] resident create parking permit
+- [x] see active and all parking permits
+- [ ] create visitors
 ## Minor Missing From Spec
 - [x] nav bar at top of admin page
 - [x] style logout button in navbar to be side-by-side with Go Back To Dashboard
-- [ ] remove unnecessary session checking in load funcs since now it's done in root component
 - [ ] sort residents by amt parking days
-- [ ] resident repo edit and delete
+- [ ] edit and delete residents
 - [ ] nav bar at bottom of list pages
 - [ ] add support for security accounts
 - [ ] search residents
 ## Low priority
-- [ ] remove all session checking in load fns
+- [x] right now, every permit page except for the all permits page will only query for the first page of permits, and when a user searches, it will only search that first page of permits. The permits on all other pages never get searched. Change the search on these pages such that if there's only one page, the behavior stays the same. If there's more than one page, have it perform the same type of API search the all permits page uses.
+- [x] move dashboard func to lib directory
+- [ ] use .scraps/permits/\_\_layout.svelte to inject all the boilerplate into src/routes/permits funcs
+- [ ] use dashboard func in lib directory instead of using ones that are defined on-the-spot
+- [ ] make sure all load funcs redirect to a users dashboard when that user accesses a page for which they do not have the right role.
 - [ ] make /permits/\* pages automatically re-route to the resident dashboard if it's a resident that is trying to access them
-- [ ] probably remove ability for residents to re-print all of their permits
-- [ ] make all permits for resident filter in place
 - [ ] move renderDate and tsToDate funcs to libs since both \_PermitsList and permit/[id] components use them
-- [ ] move dashboard func to lib directory
+- [ ] remove `src/routes/residents/\_load.ts` and make it use the `loadList` func instead
+- [ ] detach pagination and searching from PermitList and VisitorList
+- [ ] probably remove NewPermitReq type definition, it's only used once in one place
+- [ ] probably change the way that the choose-dates input bar is toggled visible by using event bubbling
+- [ ] probably remove ability for residents to re-print all of their permits
+- [ ] make all permits for resident filter in place when searching
 - [ ] organize lib directory by separating helper funcs and components
 - [ ] clean up to make sure that the order of `// props, // model, // init, // events, // helpers` is consistent
 - [ ] add check to redirect signed-in users to the correct dashboard
@@ -51,6 +57,8 @@
 - [ ] add `map` type to Status and Result
 - [ ] find some way to copy less logic between index.svelte and login.svelte (also maybe shorten nav.svelte)
 - [ ] add banner to parent component of nav when logout error happens
+## Probably not going to do
+- [ ] A search component? A component that you pass in the list or the api endpoint and it returns a search bar, and for every oninput event on that serach bar, it filters the current list? 
 ## Won't do
 - [✗] make params a `{}` argument or use generated types in index.svelte
     * little value
