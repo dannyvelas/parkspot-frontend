@@ -57,3 +57,6 @@
   </fieldset>
   <button type="submit"> Sign in </button>
 </form>
+<div>
+  <a href="/forgot-password">Forgot your Password?</a>
+</div>
