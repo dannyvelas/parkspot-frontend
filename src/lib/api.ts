@@ -68,13 +68,22 @@ const sendReq = async <ReqBody, ResBody>(
   method: Method,
   path: string,
   params: Record<string, string>,
-  request: ReqBody,
-  responseDecoder: Decoder<ResBody>
+  request: ReqBody | undefined,
+  responseDecoder: Decoder<ResBody>,
+  accessToken?: string
 ): Promise<Result<ResBody>> => {
   const fetchOpts: FetchOpts = { method, mode: "cors", credentials: "include" };
   if (request) {
     fetchOpts.headers = new Headers({ "Content-Type": "application/json" });
     fetchOpts.body = JSON.stringify(request);
+  }
+
+  if (accessToken) {
+    if (fetchOpts.headers) {
+      fetchOpts.headers.append("Authorization", `Bearer ${accessToken}`);
+    } else {
+      fetchOpts.headers = new Headers({ Authorization: `Bearer ${accessToken}` });
+    }
   }
 
   const paramStr = new URLSearchParams(params).toString();
@@ -99,20 +108,23 @@ const sendReq = async <ReqBody, ResBody>(
 export const get = <ResBody>(
   path: string,
   params: Record<string, string>,
-  responseDecoder: Decoder<ResBody>
-) => sendReq<undefined, ResBody>("GET", path, params, undefined, responseDecoder);
+  responseDecoder: Decoder<ResBody>,
+  accessToken?: string
+) => sendReq<undefined, ResBody>("GET", path, params, undefined, responseDecoder, accessToken);
 
-export const del = async (path: string): Promise<Result<Message>> =>
-  sendReq<undefined, Message>("DELETE", path, {}, undefined, messageDecoder);
+export const del = async (path: string, accessToken?: string): Promise<Result<Message>> =>
+  sendReq<undefined, Message>("DELETE", path, {}, undefined, messageDecoder, accessToken);
 
 export const post = <ReqBody, ResBody>(
   path: string,
   request: ReqBody,
-  responseDecoder: Decoder<ResBody>
-) => sendReq<ReqBody, ResBody>("POST", path, {}, request, responseDecoder);
+  responseDecoder: Decoder<ResBody>,
+  accessToken?: string
+) => sendReq<ReqBody, ResBody>("POST", path, {}, request, responseDecoder, accessToken);
 
 export const put = <ReqBody, ResBody>(
   path: string,
   request: ReqBody,
-  responseDecoder: Decoder<ResBody>
-) => sendReq<ReqBody, ResBody>("PUT", path, {}, request, responseDecoder);
+  responseDecoder: Decoder<ResBody>,
+  accessToken?: string
+) => sendReq<ReqBody, ResBody>("PUT", path, {}, request, responseDecoder, accessToken);
