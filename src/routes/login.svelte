@@ -45,10 +45,10 @@
 {/if}
 <form on:submit|preventDefault={submit}>
   <fieldset class="form-group">
-    <input type="username" required placeholder="Username" bind:value={id} />
+    <input required type="username" placeholder="Username" bind:value={id} />
   </fieldset>
   <fieldset class="form-group">
-    <input type="password" required placeholder="Password" bind:value={password} />
+    <input required type="password" placeholder="Password" bind:value={password} />
   </fieldset>
   <button type="submit"> Sign in </button>
 </form>
