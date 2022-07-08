@@ -1,8 +1,6 @@
 <script context="module" lang="ts">
   import type { Load } from "@sveltejs/kit";
-  import type { User } from "$lib/models";
-
-  const dashboard = (user: User) => (user.role === "resident" ? `/resident` : "/admin");
+  import { dashboard } from "$lib/navigation";
 
   export const load: Load = async ({ session }) => {
     if (session.user) {
@@ -37,9 +35,6 @@
     $session.user = result.data;
     goto(dashboard($session.user));
   };
-
-  // helpers
-  const dashboard = (user: User) => (user.role === "resident" ? `/resident` : "/admin");
 </script>
 
 <svelte:head>
