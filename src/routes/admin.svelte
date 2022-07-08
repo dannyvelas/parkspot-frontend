@@ -1,11 +1,12 @@
 <script context="module" lang="ts">
   import type { Load } from "@sveltejs/kit";
+  import { dashboard } from "$lib/navigation";
 
   export const load: Load = async ({ session }) => {
     if (!session.user) {
       return { status: 302, redirect: "/" };
     } else if (session.user.role !== "admin") {
-      return { status: 302, redirect: "/resident" };
+      return { status: 302, redirect: dashboard(session.user) };
     }
 
     return {};
