@@ -45,9 +45,6 @@
     if (password !== confirmPassword) {
       banner = "Error: passwords do not match";
       return;
-    } else if (password === "") {
-      banner = "Error: password cannot be empty";
-      return;
     }
 
     const payload = { password };
@@ -68,8 +65,13 @@
   </div>
 {/if}
 <form on:submit|preventDefault={submit}>
-  <input type={passwordType} placeholder="Password" on:input={inputPassword} />
-  <input type={passwordType} placeholder="Confirm your Password" on:input={inputConfirmPassword} />
+  <input required type={passwordType} placeholder="Password" on:input={inputPassword} />
+  <input
+    required
+    type={passwordType}
+    placeholder="Confirm your Password"
+    on:input={inputConfirmPassword}
+  />
   <div style="margin:20px;">
     <label for="showPasswords">Show Passwords: </label>
     <input type="checkbox" id="showPasswords" bind:checked={passwordsShown} />
