@@ -1,10 +1,13 @@
 <script context="module" lang="ts">
   import type { Load } from "@sveltejs/kit";
+  import { dashboard } from "$lib/navigation";
 
   export const load: Load = (loadInput) => {
     const accessToken = loadInput.url.searchParams.get("token");
     if (accessToken === null) {
       return { status: 302, redirect: "/" };
+    } else if (loadInput.session.user) {
+      return { status: 302, redirect: dashboard(loadInput.session.user) };
     }
 
     return {
@@ -42,6 +45,9 @@
     if (password !== confirmPassword) {
       banner = "Error: passwords do not match";
       return;
+    } else if (password === "") {
+      banner = "Error: password cannot be empty";
+      return;
     }
 
     const payload = { password };
@@ -57,7 +63,7 @@
 
 <h1>Password Reset</h1>
 {#if banner != ""}
-  <div>
+  <div style="text-align: center">
     <p>{banner}</p>
   </div>
 {/if}
