@@ -15,12 +15,31 @@
   const pageNums = Array.from({ length: amountPages }, (_, i) => i + 1);
 </script>
 
+<h3>Pages:</h3>
 <nav>
   <ul class="pagination">
     {#each pageNums as pageNum}
       <li class="page-item" class:active={currPageNum == pageNum}>
-        <a class="page-link" href={pageToHref(pageNum)}>{pageNum}</a>
+        <a href={pageToHref(pageNum)}>{pageNum}</a>
       </li>
     {/each}
   </ul>
 </nav>
+
+<style>
+  .pagination {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .page-item {
+    margin: 5px;
+  }
+
+  h3 {
+    text-align: center;
+  }
+</style>
