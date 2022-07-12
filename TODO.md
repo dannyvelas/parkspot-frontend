@@ -5,12 +5,12 @@
 - [x] find a way to make exceptions list shorter (just make the list have the same amt of cols as other lists, use PermitList.svelte)
 - [x] don't allow signed-in users to click login/register buttons
 - [x] make the parameters to Pagination more similarly named to the parameters to PermitList
-- [ ] removed `reversed` parameter from anywhere that is not a permit endpoint.
-- [ ] (NOT NECESSARY) make error messages more abstracted and user friendly in login page
+- [x] (NOT NECESSARY) make error messages more abstracted and user friendly in login page
+- [x] (DEPLOY) make `credentials=true` in fetch options, only work in dev if it's not necessary in prod. (it is necessary in prod)
+- [ ] remove `reversed` parameter from anywhere that is not a permit endpoint.
 - [ ] (HARD) logout when token expires
 - [ ] (NEW JS LIB) find a way to only define list styles once
-- [ ] (DEPLOY) make `credentials=true` in fetch options, only work in dev if it's not necessary in prod
-- [ ] (DEPLOY) test how different the user experience is without client side rendering works
+- [ ] (DEPLOY) test how different the user experience is without client side rendering
 ## Major Missing From Spec
 ### Admin
 - [x] show actual number of all permits instead of just the amount on the page
@@ -19,12 +19,13 @@
 - [x] admin create parking permit
 - [x] visitors page
 - [x] re-print permit
-- [ ] create user account
+- [x] create user account
 - [ ] edit resident parking days
 ### Resident
 - [x] resident create parking permit
 - [x] see active and all parking permits
-- [ ] create visitors
+- [x] create visitors
+- [ ] delete visitor
 ## Minor Missing From Spec
 - [x] nav bar at top of admin page
 - [x] style logout button in navbar to be side-by-side with Go Back To Dashboard
