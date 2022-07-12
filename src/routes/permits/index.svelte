@@ -64,7 +64,8 @@
         <p>Error searching: {bannerError}. Please try again later.</p>
       </div>
     {/if}
-    <input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Permits" />
+    <input type="text" bind:value={searchVal} placeholder="Search Permits" />
+    <button on:click={onSearch}>Search</button>
     <PermitsList
       listType="all"
       permits={result.data.records}
