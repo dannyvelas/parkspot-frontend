@@ -4,7 +4,6 @@
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
-  import { goto } from "$app/navigation";
   const { session, page } = getStores();
 
   // helpers
@@ -18,15 +17,13 @@
         console.error("Error logging out");
       }
       $session.user = undefined;
-    } else {
-      goto("/");
     }
   }
 </script>
 
 <nav>
   <ul>
-    <li><button on:click={logout}>Home</button></li>
+    <li><a href="/" on:click={logout}>Home</a></li>
     <li>
       {#if $session.user}
         {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
@@ -55,13 +52,6 @@
 
   li {
     margin: 10px;
-  }
-
-  button {
-    background: none;
-    border: none;
-    font-weight: bold;
-    color: #636363;
   }
 
   a {
