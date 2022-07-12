@@ -3,7 +3,6 @@
   import { getStores } from "$app/stores";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
-  import { goto } from "$app/navigation";
   import { post } from "$lib/api";
   const { session, page } = getStores();
 
@@ -18,7 +17,6 @@
     }
 
     $session.user = undefined;
-    goto("/");
   }
 </script>
 
