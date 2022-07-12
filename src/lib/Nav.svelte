@@ -30,6 +30,8 @@
       {:else}
         <button on:click={logout}>Go Back To Start Page</button>
       {/if}
+    {:else if $page.url.pathname === "/login"}
+      <li><a href="/">Home</a></li>
     {:else}
       <li><a href="/login" class:active={$page.url.pathname === "/login"}>Login</a></li>
     {/if}
