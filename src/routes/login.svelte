@@ -33,7 +33,13 @@
   const submit = async () => {
     const result = await post("api/login", { id, password }, userDecoder);
     if (!isOk(result)) {
-      error = result.message;
+      if (result.message.includes("Unauthorized")) {
+        error = "Wrong username or password. Please try again.";
+      } else if (result.message.includes("Failed to fetch")) {
+        error = "Couldn't connect to server. Please notify the administration or try again later.";
+      } else if (result.message.includes("500")) {
+        error = "Server error. Please notify the administration or try again later.";
+      }
       return;
     }
 
@@ -45,7 +51,9 @@
   <title>Login</title>
 </svelte:head>
 {#if error}
-  <p>{error}</p>
+  <div style="text-align: center">
+    <p>{error}</p>
+  </div>
 {/if}
 <form on:submit|preventDefault={submit}>
   <input required type="username" placeholder="Username" bind:value={id} />
@@ -54,7 +62,7 @@
     <label for="showPasswords">Show Passwords: </label>
     <input type="checkbox" id="showPasswords" bind:checked={passwordsShown} />
   </div>
-  <button type="submit"> Sign in </button>
+  <button type="submit">Sign in</button>
 </form>
 <div style="text-align: center; margin:20px">
   <a href="/forgot-password">Forgot your Password?</a>
