@@ -1,13 +1,10 @@
 <script lang="ts">
-  import type { User } from "$lib/models";
+  import { dashboard } from "$lib/navigation";
   import { getStores } from "$app/stores";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
   const { session, page } = getStores();
-
-  // helpers
-  const dashboard = (user: User) => (user.role === "resident" ? `/resident` : "/admin");
 
   // events
   async function logout() {
