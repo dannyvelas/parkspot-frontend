@@ -49,7 +49,7 @@
 
 <style>
   header {
-    background-image: url("./static/miami.jpg");
+    background-image: url("/static/miami.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
