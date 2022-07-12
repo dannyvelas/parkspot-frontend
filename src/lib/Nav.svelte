@@ -4,6 +4,7 @@
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
+  import { goto } from "$app/navigation";
   const { session, page } = getStores();
 
   // helpers
@@ -11,35 +12,61 @@
 
   // events
   async function logout() {
-    const postRes = await post(`api/logout`, {}, messageDecoder);
-    if (!isOk(postRes)) {
-      console.error("Error logging out");
+    if ($session.user) {
+      const postRes = await post(`api/logout`, {}, messageDecoder);
+      if (!isOk(postRes)) {
+        console.error("Error logging out");
+      }
+      $session.user = undefined;
+    } else {
+      goto("/");
     }
-
-    $session.user = undefined;
   }
 </script>
 
 <nav>
   <ul>
-    {#if $session.user}
-      {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
-        <div style="text-align:center;">
+    <li><button on:click={logout}>Home</button></li>
+    <li>
+      {#if $session.user}
+        {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
           <a href={dashboard($session.user)}>Go Back To Dashboard</a>
-        </div>
+        {/if}
       {:else}
-        <button on:click={logout}>Go Back To Start Page</button>
+        <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
       {/if}
-    {:else if $page.url.pathname === "/login"}
-      <li><a href="/">Home</a></li>
-    {:else}
-      <li><a href="/login" class:active={$page.url.pathname === "/login"}>Login</a></li>
-    {/if}
+    </li>
   </ul>
 </nav>
 
 <style>
+  nav {
+    border-radius: 5px;
+  }
+
   ul {
+    display: flex;
+    list-style: none;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     padding-inline-start: 0px;
+  }
+
+  li {
+    margin: 10px;
+  }
+
+  button {
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: #636363;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #636363;
   }
 </style>
