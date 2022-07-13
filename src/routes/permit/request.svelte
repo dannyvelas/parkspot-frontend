@@ -115,17 +115,19 @@
   <input required type="text" placeholder="Make" bind:value={fields.car.make} />
   <input required type="text" placeholder="Model" bind:value={fields.car.model} />
   <input required type="text" id="litepicker" />
-  <div style="margin:20px;">
-    <label for="isException">Exception: </label>
-    <input type="checkbox" id="isException" bind:checked={isException} />
-  </div>
-  {#if isException}
-    <textarea
-      bind:value={fields.exceptionReason}
-      placeholder="Reason for exception"
-      rows="5"
-      cols="30"
-    />
+  {#if residentId === ""}
+    <div style="margin:20px;">
+      <label for="isException">Exception: </label>
+      <input type="checkbox" id="isException" bind:checked={isException} />
+    </div>
+    {#if isException}
+      <textarea
+        bind:value={fields.exceptionReason}
+        placeholder="Reason for exception"
+        rows="5"
+        cols="30"
+      />
+    {/if}
   {/if}
   <button type="submit" style="margin:10px;">Submit</button>
 </form>
