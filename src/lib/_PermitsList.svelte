@@ -59,8 +59,10 @@
       <td>Exception Reason</td>
     {/if}
     <td>Reprint</td>
-    <td>Edit</td>
-    <td>Delete</td>
+    {#if !pageToHref(1).includes("resident")}
+      <td>Edit</td>
+      <td>Delete</td>
+    {/if}
   </tr>
   {#each permits as permit, i (permit.id)}
     <tr>
@@ -77,8 +79,10 @@
         <td>{permit.exceptionReason}</td>
       {/if}
       <td><a href="/permit/{permit.id}">Reprint</a></td>
-      <td><a href="car/{permit.car.id}">Edit</a></td>
-      <td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
+      {#if !pageToHref(1).includes("resident")}
+        <td><a href="car/{permit.car.id}">Edit</a></td>
+        <td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
+      {/if}
     </tr>
   {/each}
 </table>
