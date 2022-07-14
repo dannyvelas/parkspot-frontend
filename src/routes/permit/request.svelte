@@ -80,6 +80,11 @@
 
   // events
   const submit = async () => {
+    if (isException && fields.exceptionReason === "") {
+      alert("If this permit is an exception, please put a reason for the exception");
+      return;
+    }
+
     const result = await post("api/permit", fields, permitDecoder);
     if (!isOk(result)) {
       if (result.message.includes("400")) {
