@@ -3,6 +3,8 @@
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
   import Pagination from "$lib/Pagination.svelte";
+  import { getStores } from "$app/stores";
+  const { session } = getStores();
 
   // props
   export let listType: "all" | "expired" | "active" | "exceptions";
@@ -59,7 +61,7 @@
       <td>Exception Reason</td>
     {/if}
     <td>Reprint</td>
-    {#if !pageToHref(1).includes("resident")}
+    {#if $session.user && $session.user.role === "admin"}
       <td>Edit</td>
       <td>Delete</td>
     {/if}
@@ -79,7 +81,7 @@
         <td>{permit.exceptionReason}</td>
       {/if}
       <td><a href="/permit/{permit.id}">Reprint</a></td>
-      {#if !pageToHref(1).includes("resident")}
+      {#if $session.user && $session.user.role === "admin"}
         <td><a href="car/{permit.car.id}">Edit</a></td>
         <td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
       {/if}
