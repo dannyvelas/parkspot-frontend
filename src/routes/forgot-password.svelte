@@ -20,6 +20,7 @@
 </script>
 
 <h1>Request a Password Reset Email</h1>
+<h2>Enter your Account ID</h2>
 {#if banner != ""}
   <div>
     <p>{banner}</p>
@@ -31,7 +32,8 @@
 </form>
 
 <style>
-  h1 {
+  h1,
+  h2 {
     text-align: center;
   }
 
