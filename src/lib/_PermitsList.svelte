@@ -2,6 +2,7 @@
   import type { Permit } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
+  import { dateToYmd } from "$lib/convert";
   import Pagination from "$lib/Pagination.svelte";
   import { getStores } from "$app/stores";
   const { session } = getStores();
@@ -15,10 +16,6 @@
   export let limit: number; // pagination
 
   // rendering
-  const renderDate = (date: Date): string => {
-    const dateStr = date.toISOString();
-    return dateStr.split("T")[0];
-  };
   const tsToDate = (ts: number): string => {
     if (ts === 0) {
       return "";
@@ -74,8 +71,8 @@
       <td>{permit.car.color}</td>
       <td>{permit.car.make}</td>
       <td>{permit.car.model}</td>
-      <td>{renderDate(permit.startDate)}</td>
-      <td>{renderDate(permit.endDate)}</td>
+      <td>{dateToYmd(permit.startDate)}</td>
+      <td>{dateToYmd(permit.endDate)}</td>
       <td>{tsToDate(permit.requestTS)}</td>
       {#if listType === "exceptions"}
         <td>{permit.exceptionReason}</td>

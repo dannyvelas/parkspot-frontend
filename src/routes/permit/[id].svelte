@@ -22,13 +22,10 @@
   import type { Result } from "$lib/functional";
   import type { Permit } from "$lib/models";
   import { isOk } from "$lib/functional";
+  import { dateToYmd } from "$lib/convert";
 
   export let result: Result<Permit>;
 
-  const renderDate = (date: Date): string => {
-    const dateStr = date.toISOString();
-    return dateStr.split("T")[0];
-  };
   const tsToDate = (ts: number): string => {
     if (ts === 0) {
       return "";
@@ -57,8 +54,8 @@
       <p style="font-size:40px">Resident ID: {result.data.residentId}</p>
     </div>
     <div class="section">
-      <p style="font-size:40px">Start Date: {renderDate(result.data.startDate)}</p>
-      <p style="font-size:40px">End Date: {renderDate(result.data.endDate)}</p>
+      <p style="font-size:40px">Start Date: {dateToYmd(result.data.startDate)}</p>
+      <p style="font-size:40px">End Date: {dateToYmd(result.data.endDate)}</p>
       <p style="font-size:40px">
         {result.data.car.color}
         {result.data.car.make}

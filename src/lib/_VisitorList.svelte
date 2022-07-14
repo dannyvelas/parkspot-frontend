@@ -3,17 +3,12 @@
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
   import { getStores } from "$app/stores";
+  import { dateToYmd } from "$lib/convert";
   const { session } = getStores();
 
   // props
   export let visitors: Array<Visitor>;
   export let totalAmount: number;
-
-  // rendering
-  const renderDate = (date: Date): string => {
-    const dateStr = date.toISOString();
-    return dateStr.split("T")[0];
-  };
 
   // events
   const deleteVisitor = async (i: number, visitorId: string, fullName: string) => {
@@ -56,8 +51,8 @@
           <td>{visitor.firstName}</td>
           <td>{visitor.lastName}</td>
           <td>{visitor.relationship}</td>
-          <td>{renderDate(visitor.accessStart)}</td>
-          <td>{renderDate(visitor.accessEnd)}</td>
+          <td>{dateToYmd(visitor.accessStart)}</td>
+          <td>{dateToYmd(visitor.accessEnd)}</td>
           {#if $session.user && $session.user.role === "resident"}
             <td
               ><button

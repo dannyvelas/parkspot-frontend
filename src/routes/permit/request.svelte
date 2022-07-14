@@ -35,7 +35,7 @@
   const dateTomorrow = (() => {
     const tempDate = new Date();
     tempDate.setDate(tempDate.getDate() + 1);
-    tempDate.setHours(0, 0, 0, 0);
+    tempDate.setHours(23, 59, 59, 0);
     return tempDate;
   })();
 
@@ -76,6 +76,9 @@
         date2: import("litepicker/dist/types/datetime").DateTime
       ) => {
         fields.startDate = date1.toJSDate().toISOString();
+
+        // make permit valid for the entirety of date2
+        date2.setHours(23, 59, 59);
         fields.endDate = date2.toJSDate().toISOString();
       }
     );
