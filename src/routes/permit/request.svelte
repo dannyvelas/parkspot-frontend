@@ -20,6 +20,8 @@
   import { isOk } from "$lib/functional";
   import { goto } from "$app/navigation";
   import { post } from "$lib/api";
+  import { getStores } from "$app/stores";
+  const { session } = getStores();
 
   // props
   export let residentId: string;
@@ -52,6 +54,7 @@
   };
   let bannerError = "";
   let isException = false;
+  $: fields.exceptionReason = isException ? fields.exceptionReason : ""; // clear when unchecked
 
   // init
   onMount(async () => {
@@ -59,7 +62,7 @@
     const litepicker = new Litepicker({
       element: document.getElementById("litepicker") as HTMLElement,
       minDays: 2,
-      minDate: Date.now(),
+      minDate: dateToday,
       singleMode: false,
       format: "MM-DD-YYYY",
     });
@@ -120,7 +123,7 @@
   <input required type="text" placeholder="Make" bind:value={fields.car.make} />
   <input required type="text" placeholder="Model" bind:value={fields.car.model} />
   <input required type="text" id="litepicker" />
-  {#if residentId === ""}
+  {#if $session.user && $session.user.role === "admin"}
     <div style="margin:20px;">
       <label for="isException">Exception: </label>
       <input type="checkbox" id="isException" bind:checked={isException} />
