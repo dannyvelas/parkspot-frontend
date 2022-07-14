@@ -28,7 +28,7 @@
   const dateTomorrow = (() => {
     const tempDate = new Date();
     tempDate.setDate(tempDate.getDate() + 1);
-    tempDate.setHours(0, 0, 0, 0);
+    tempDate.setHours(23, 59, 59, 0);
     return tempDate;
   })();
 
@@ -63,16 +63,17 @@
         date2: import("litepicker/dist/types/datetime").DateTime
       ) => {
         fields.accessStart = date1.toJSDate().toISOString();
+
+        // let visitor access for the entirety of date2
+        date2.setHours(23, 59, 59);
         fields.accessEnd = date2.toJSDate().toISOString();
       }
     );
   });
 
   // events
-  $: {
-    if (fields.relationship === "contractor") {
-      fields.isForever = false;
-    }
+  $: if (fields.relationship === "contractor") {
+    fields.isForever = false;
   }
 
   const submit = async () => {
