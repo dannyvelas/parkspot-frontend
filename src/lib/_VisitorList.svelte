@@ -2,6 +2,8 @@
   import type { Visitor } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
+  import { getStores } from "$app/stores";
+  const { session } = getStores();
 
   // props
   export let visitors: Array<Visitor>;
@@ -44,7 +46,9 @@
         <td>Relationship</td>
         <td>Access Start</td>
         <td>Access End</td>
-        <td>Delete</td>
+        {#if $session.user && $session.user.role === "resident"}
+          <td>Delete</td>
+        {/if}
       </tr>
       {#each visitors as visitor, i (visitor.id)}
         <tr>
@@ -54,13 +58,15 @@
           <td>{visitor.relationship}</td>
           <td>{renderDate(visitor.accessStart)}</td>
           <td>{renderDate(visitor.accessEnd)}</td>
-          <td
-            ><button
-              on:click={() =>
-                deleteVisitor(i, visitor.id, visitor.firstName + " " + visitor.lastName)}
-              >Delete</button
-            ></td
-          >
+          {#if $session.user && $session.user.role === "resident"}
+            <td
+              ><button
+                on:click={() =>
+                  deleteVisitor(i, visitor.id, visitor.firstName + " " + visitor.lastName)}
+                >Delete</button
+              ></td
+            >
+          {/if}
         </tr>
       {/each}
     </table>
