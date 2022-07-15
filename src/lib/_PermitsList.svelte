@@ -79,7 +79,7 @@
       {/if}
       <td><a href="/permit/{permit.id}">Reprint</a></td>
       {#if $session.user && $session.user.role === "admin"}
-        <td><a href="car/{permit.car.id}">Edit</a></td>
+        <td><a href="/car/{permit.car.id}">Edit</a></td>
         <td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
       {/if}
     </tr>
