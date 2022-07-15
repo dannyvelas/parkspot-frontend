@@ -25,18 +25,24 @@
 - [x] resident create parking permit
 - [x] see active and all parking permits
 - [x] create visitors
-- [ ] delete visitor
+- [x] delete visitor
 ## Minor Missing From Spec
 - [x] nav bar at top of admin page
 - [x] style logout button in navbar to be side-by-side with Go Back To Dashboard
 - [ ] sort residents by amt parking days
 - [ ] edit and delete residents
+- [ ] isException column
 - [ ] nav bar at bottom of list pages
 - [ ] add support for security accounts
 - [ ] search residents
+- [ ] ability for admin to see all visitors (not just active)
+- [ ] ability for admin to search all visitors (not just active)
 ## Low priority
 - [x] right now, every permit page except for the all permits page will only query for the first page of permits, and when a user searches, it will only search that first page of permits. The permits on all other pages never get searched. Change the search on these pages such that if there's only one page, the behavior stays the same. If there's more than one page, have it perform the same type of API search the all permits page uses.
 - [x] move dashboard func to lib directory
+- [x] fix the cheap way that permit list checks whether its a resident list or admin list (by using `pageToHref.includes`)
+- [ ] make counts update when permits are deleted
+- [ ] remove /request suffix from page that creates permits
 - [ ] use .scraps/permits/\_\_layout.svelte to inject all the boilerplate into src/routes/permits funcs
 - [ ] use dashboard func in lib directory instead of using ones that are defined on-the-spot
 - [ ] make sure all load funcs redirect to a users dashboard when that user accesses a page for which they do not have the right role.
