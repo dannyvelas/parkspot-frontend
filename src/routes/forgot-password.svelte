@@ -22,7 +22,7 @@
 <h1>Request a Password Reset Email</h1>
 <h2>Enter your Account ID</h2>
 {#if banner != ""}
-  <div>
+  <div style="text-align: center">
     <p>{banner}</p>
   </div>
 {/if}
