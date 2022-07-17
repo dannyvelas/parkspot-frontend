@@ -91,6 +91,8 @@
       return;
     }
 
+    fields.car.licensePlate = fields.car.licensePlate.toLocaleUpperCase();
+
     const result = await post("api/permit", fields, permitDecoder);
     if (!isOk(result)) {
       if (result.message.includes("400")) {
