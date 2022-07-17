@@ -20,7 +20,15 @@
 
 <nav>
   <ul>
-    <li><a href="/" on:click={logout}>Home</a></li>
+    {#if $session.user}
+      <li>
+        <a class:logout={$page.url.pathname !== "/login"} href="/" on:click={logout}>Logout</a>
+      </li>
+    {:else}
+      <li>
+        <a href="/">Home</a>
+      </li>
+    {/if}
     <li>
       {#if $session.user}
         {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
@@ -55,5 +63,9 @@
     text-decoration: none;
     font-weight: bold;
     color: #636363;
+  }
+
+  a.logout {
+    color: #ff2d00;
   }
 </style>
