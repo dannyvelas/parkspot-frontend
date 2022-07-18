@@ -11,10 +11,30 @@
   import type { Result } from "$lib/functional";
   import type { ListWithMetadata, Resident } from "$lib/models";
   import { isOk } from "$lib/functional";
+  import { del } from "$lib/api";
   import Pagination from "$lib/Pagination.svelte";
 
+  // props
   export let result: Result<ListWithMetadata<Resident>>;
   export let currPageNum: number;
+
+  // events
+  const deleteResident = async (i: number, residentId: string) => {
+    if (confirm(`Are you sure you want to delete ${residentId}?`)) {
+      const delRes = await del(`api/resident/${residentId}`);
+      if (!isOk(delRes)) {
+        alert(`Error deleting resident ${residentId}. Please try again later`);
+        return;
+      }
+
+      result.data!.records = [
+        ...result.data!.records.slice(0, i),
+        ...result.data!.records.slice(i + 1),
+      ];
+
+      alert(`Deleted resident ${residentId}`);
+    }
+  };
 </script>
 
 <svelte:head>
@@ -40,7 +60,7 @@
           <td>Edit</td>
           <td>Delete</td>
         </tr>
-        {#each result.data.records as resident}
+        {#each result.data.records as resident, i (resident.id)}
           <tr>
             <td>{resident.id}</td>
             <td>{resident.firstName}</td>
@@ -49,7 +69,7 @@
             <td>{resident.email}</td>
             <td>{resident.unlimDays}</td>
             <td><a href="resident/{resident.id}">Edit</a></td>
-            <td><button>Delete</button></td>
+            <td><button on:click={() => deleteResident(i, resident.id)}>Delete</button></td>
           </tr>
         {/each}
       </table>
