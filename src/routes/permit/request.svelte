@@ -97,6 +97,8 @@
     if (!isOk(result)) {
       if (result.message.includes("400")) {
         alert(result.message);
+      } else if (result.message.includes("401")) {
+        alert("Your session has expired. Please logout and log back in again.");
       } else {
         bannerError = result.message;
       }
