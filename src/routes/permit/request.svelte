@@ -2,7 +2,7 @@
   import type { Load } from "@sveltejs/kit";
 
   export const load: Load = async ({ session }) => {
-    if (!session.user) return { status: 302, redirect: "/" };
+    if (!session.user) return { status: 302, redirect: "/login" };
 
     const residentId = session.user.role === "admin" ? "" : session.user.id;
     return {
@@ -98,7 +98,8 @@
       if (result.message.includes("400")) {
         alert(result.message);
       } else if (result.message.includes("401")) {
-        alert("Your session has expired. Please logout and log back in again.");
+        alert("Your session has expired. Please log in again to create a permit.");
+        $session.user = undefined;
       } else {
         bannerError = result.message;
       }
