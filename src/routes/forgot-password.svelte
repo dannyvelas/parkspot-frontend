@@ -1,3 +1,16 @@
+<script context="module" lang="ts">
+  import type { Load } from "@sveltejs/kit";
+  import { dashboard } from "$lib/navigation";
+
+  export const load: Load = async ({ session }) => {
+    if (session.user) {
+      return { status: 302, redirect: dashboard(session.user) };
+    }
+
+    return {};
+  };
+</script>
+
 <script lang="ts">
   import { post } from "$lib/api";
   import { messageDecoder } from "$lib/models";
