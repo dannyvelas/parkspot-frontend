@@ -58,18 +58,18 @@
   };
 </script>
 
-<h1>Password Reset</h1>
+<h1>Enter Your New Password</h1>
 {#if banner != ""}
   <div style="text-align: center">
     <p>{banner}</p>
   </div>
 {/if}
 <form on:submit|preventDefault={submit}>
-  <input required type={passwordType} placeholder="Password" on:input={inputPassword} />
+  <input required type={passwordType} placeholder="New Password" on:input={inputPassword} />
   <input
     required
     type={passwordType}
-    placeholder="Confirm your Password"
+    placeholder="New Password Again"
     on:input={inputConfirmPassword}
   />
   <div style="margin:20px;">
