@@ -3,7 +3,7 @@
 
   export const load: Load = async ({ session }) => {
     if (!session.user) {
-      return { status: 302, redirect: "/" };
+      return { status: 302, redirect: "/login" };
     } else if (session.user.role !== "resident") {
       return { status: 302, redirect: "/admin" };
     }

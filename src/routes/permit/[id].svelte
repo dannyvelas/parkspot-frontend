@@ -5,7 +5,7 @@
 
   export const load: Load = async ({ session, params }) => {
     if (!session.user) {
-      return { status: 302, redirect: "/" };
+      return { status: 302, redirect: "/login" };
     }
 
     const result = await get(`api/permit/${params.id}`, {}, permitDecoder);

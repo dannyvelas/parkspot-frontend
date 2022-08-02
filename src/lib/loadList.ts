@@ -13,7 +13,7 @@ export default function loadList<T>(
 ): Load {
   const load: Load = async (loadInput) => {
     if (!loadInput.session.user) {
-      return { status: 302, redirect: "/" };
+      return { status: 302, redirect: "/login" };
     } else if (loadInput.session.user.role !== roleNeeded) {
       return { status: 302, redirect: dashboard(loadInput.session.user) };
     }

@@ -5,7 +5,7 @@ import { get } from "$lib/api";
 export const getLoadFn = (endpoint: string, limit: number, reversed: boolean): Load => {
   const load: Load = async ({ session, url }) => {
     if (!session.user) {
-      return { status: 302, redirect: "/" };
+      return { status: 302, redirect: "/login" };
     } else if (session.user.role !== "admin") {
       return { status: 302, redirect: "/resident" };
     }
