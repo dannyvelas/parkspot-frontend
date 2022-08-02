@@ -20,15 +20,13 @@
 
 <nav>
   <ul>
-    {#if $session.user}
-      <li>
+    <li>
+      {#if $session.user}
         <a class:logout={$page.url.pathname !== "/login"} href="/" on:click={logout}>Logout</a>
-      </li>
-    {:else}
-      <li>
+      {:else}
         <a href="/">Home</a>
-      </li>
-    {/if}
+      {/if}
+    </li>
     <li>
       {#if $session.user}
         {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
