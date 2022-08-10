@@ -25,34 +25,25 @@
     <ol>
       <li>
         <b>A permit request can last from 1 day to 15 days.</b> If a resident wants their guest to park
-        for longer than 15 days, they must submit another request after their first 15 day request expires.
+        for longer than 15 days, they must submit another request.
       </li>
       <li>
         <b>Each resident can give out max 20 days worth of parking permits per year.</b>
-        In order to park for 20 days continously, a resident must apply for two consecutive permits of
-        15 days.
       </li>
       <li>
         <b>Each guest car can park max 20 days with temporary parking permits per year.</b>
-        If a guest car has already parked 20 days using parking permits, this car does not qualify for
-        further parking.
       </li>
       <li>
-        <b>A resident can have max 2 active permits at a given time.</b>
-        If a resident requests a permit to start at a future date, this is considered an "active" request
-        even if the future date has not yet arrived. A permit request stops being active once the expiration
-        date of the permit arrives.
+        <b>A resident can have at most two active permits at a given time.</b>
+        Residents can have allow two guests to park for the same days, but no more than two.
       </li>
       <li>
-        <b>Passes must be displayed visibly on the dashboard.</b>
-        A car without a visible parking visitor pass may be towed.
+        <b>Permits must be displayed visibly on the dashboard.</b>
+        A car without a visible parking visitor permit may be towed.
       </li>
       <li>
-        <b>
-          Residents that are caught faking permits will no longer be allowed guest parking
-          privileges.
-        </b>
-        We do not support faking passes, as it is unfair to other residents and their parking rights.
+        <b>Residents that are caught faking permits will lose their guest parking privileges.</b>
+        We do not support faking permits, as it is unfair to other residents and their parking rights.
       </li>
     </ol>
   </section>
