@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Visitor } from "$lib/models";
   import type { PageData } from "./$types";
-  import { DEFAULT_AMT_PER_PAGE } from "$lib/constants";
   import { isOk } from "$lib/functional";
   import { afterNavigate } from "$app/navigation";
   import { searchVisitors } from "$lib/search";
@@ -10,12 +9,11 @@
   import { page } from "$app/stores";
 
   // config
-  const limit = DEFAULT_AMT_PER_PAGE;
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // props
   export let data: PageData;
-  const { visitorsResult, userRole } = data;
+  const { visitorsResult, userRole, limit } = data;
 
   // model
   let initialVisitors: Array<Visitor>;
