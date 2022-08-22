@@ -1,5 +1,6 @@
 import type { Permit, Visitor } from "$lib/models";
 import type { Result } from "$lib/functional";
+import type { permitList } from "$lib/models";
 import { listWithMetadataDecoder, permitDecoder, visitorDecoder } from "$lib/models";
 import { get } from "$lib/api";
 import { isOk, newOk, newErr } from "$lib/functional";
@@ -8,7 +9,7 @@ export async function searchPermits(
   searchVal: string,
   initialPermits: Array<Permit>,
   totalAmtPermits: number,
-  listType: "all" | "expired" | "active" | "exceptions"
+  listName: permitList
 ): Promise<Result<Array<Permit>>> {
   if (searchVal === "") {
     return newOk(initialPermits);
@@ -31,7 +32,7 @@ export async function searchPermits(
 
   const getRes = await get(
     "api/permits/search",
-    { search: searchVal, listType: listType },
+    { search: searchVal, listName: listName },
     listWithMetadataDecoder(permitDecoder)
   );
   if (!isOk(getRes)) {
