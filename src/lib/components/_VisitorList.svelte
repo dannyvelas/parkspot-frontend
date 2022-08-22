@@ -2,11 +2,10 @@
   import type { Visitor } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
-  import { getStores } from "$app/stores";
   import { dateToYmd } from "$lib/convert";
-  const { session } = getStores();
 
   // props
+  export let userRole: string;
   export let visitors: Array<Visitor>;
   export let totalAmount: number;
 
@@ -41,7 +40,7 @@
         <td>Relationship</td>
         <td>Access Start</td>
         <td>Access End</td>
-        {#if $session.user && $session.user.role === "resident"}
+        {#if userRole === "resident"}
           <td>Delete</td>
         {/if}
       </tr>
@@ -53,7 +52,7 @@
           <td>{visitor.relationship}</td>
           <td>{dateToYmd(visitor.accessStart)}</td>
           <td>{dateToYmd(visitor.accessEnd)}</td>
-          {#if $session.user && $session.user.role === "resident"}
+          {#if userRole === "resident"}
             <td
               ><button
                 on:click={() =>
