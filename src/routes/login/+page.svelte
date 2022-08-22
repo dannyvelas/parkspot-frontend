@@ -2,6 +2,8 @@
   import { userDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
+  import { goto } from "$app/navigation";
+  import { dashboard } from "$lib/navigation";
 
   // model
   let id = "";
@@ -27,6 +29,8 @@
       }
       return;
     }
+
+    goto(dashboard(result.data));
   };
 </script>
 
