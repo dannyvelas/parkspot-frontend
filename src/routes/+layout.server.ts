@@ -32,7 +32,7 @@ const verifyJWT = (token: string): Result<{ user: string }> => {
 };
 
 export const load: LayoutServerLoad = async ({ request }) => {
-  let ctxt: { user?: User | undefined } = {};
+  let ctxt: { user?: User } = {};
 
   const cookies = parse(request.headers.get("cookie") || "");
   if (!cookies.jwt) {
