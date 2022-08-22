@@ -6,7 +6,6 @@ import * as jsonwebtoken from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 import type { Result } from "$lib/functional";
 import type { LayoutServerLoad } from "./$types";
-import type { User } from "$lib/models";
 
 const TOKEN_SECRET = import.meta.env.VITE_TOKEN_SECRET;
 
@@ -32,21 +31,19 @@ const verifyJWT = (token: string): Result<{ user: string }> => {
 };
 
 export const load: LayoutServerLoad = async ({ request }) => {
-  let ctxt: { user?: User } = {};
-
   const cookies = parse(request.headers.get("cookie") || "");
   if (!cookies.jwt) {
-    return ctxt;
+    return {};
   }
 
   const verifiedJWT = verifyJWT(cookies.jwt);
   if (!isOk(verifiedJWT)) {
-    return ctxt;
+    return {};
   }
 
   const decodedJWT = userDecoder.decode(verifiedJWT.data.user);
   if (!decodedJWT.ok) {
-    return ctxt;
+    return {};
   }
 
   return {
