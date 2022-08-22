@@ -15,8 +15,7 @@
 
   // props
   export let data: PageData;
-  const visitorsResult = data.visitorsResult;
-  const userRole = data.userRole;
+  const { visitorsResult, userRole } = data;
 
   // model
   let initialVisitors: Array<Visitor>;
