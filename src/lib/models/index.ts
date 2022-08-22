@@ -21,3 +21,5 @@ export { visitorDecoder } from "./visitor";
 
 export type { Message } from "./response";
 export { messageDecoder } from "./response";
+
+export type { permitList } from "./permitList";
