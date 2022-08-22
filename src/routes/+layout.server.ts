@@ -5,36 +5,10 @@ import { isOk, newErr, newOk } from "$lib/functional";
 import * as jsonwebtoken from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 import type { Result } from "$lib/functional";
-import type { Handle, GetSession } from "@sveltejs/kit";
+import type { LayoutServerLoad } from "./$types";
+import type { User } from "$lib/models";
 
 const TOKEN_SECRET = import.meta.env.VITE_TOKEN_SECRET;
-
-export const handle: Handle = async ({ event, resolve }) => {
-  const cookies = parse(event.request.headers.get("cookie") || "");
-  if (!cookies.jwt) {
-    return await resolve(event);
-  }
-
-  const verifiedJWT = verifyJWT(cookies.jwt);
-  if (!isOk(verifiedJWT)) {
-    return await resolve(event);
-  }
-
-  const decodedJWT = userDecoder.decode(verifiedJWT.data.user);
-  if (!decodedJWT.ok) {
-    return await resolve(event);
-  }
-
-  event.locals.user = decodedJWT.value;
-
-  return await resolve(event);
-};
-
-export const getSession: GetSession = (event) => {
-  return {
-    user: event.locals && event.locals.user,
-  };
-};
 
 const verifyJWT = (token: string): Result<{ user: string }> => {
   let verifiedJWT: string | JwtPayload;
@@ -55,4 +29,27 @@ const verifyJWT = (token: string): Result<{ user: string }> => {
   }
 
   return newOk({ user: verifiedJWT.user });
+};
+
+export const load: LayoutServerLoad = async ({ request }) => {
+  let ctxt: { user?: User | undefined } = {};
+
+  const cookies = parse(request.headers.get("cookie") || "");
+  if (!cookies.jwt) {
+    return ctxt;
+  }
+
+  const verifiedJWT = verifyJWT(cookies.jwt);
+  if (!isOk(verifiedJWT)) {
+    return ctxt;
+  }
+
+  const decodedJWT = userDecoder.decode(verifiedJWT.data.user);
+  if (!decodedJWT.ok) {
+    return ctxt;
+  }
+
+  return {
+    user: decodedJWT.value,
+  };
 };

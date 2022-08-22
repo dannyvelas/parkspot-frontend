@@ -1,19 +1,21 @@
 <script lang="ts">
   import { dashboard } from "$lib/navigation";
-  import { getStores } from "$app/stores";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
-  const { session, page } = getStores();
+  import { getStores } from "$app/stores";
+  import type { PageData } from "./$types";
+  const { page } = getStores();
+
+  export let data: PageData;
 
   // events
   async function logout() {
-    if ($session.user) {
+    if (data.user) {
       const postRes = await post(`api/logout`, {}, messageDecoder);
       if (!isOk(postRes)) {
         console.error("Error logging out");
       }
-      $session.user = undefined;
     }
   }
 </script>
@@ -21,16 +23,16 @@
 <nav>
   <ul>
     <li>
-      {#if $session.user}
+      {#if data.user}
         <a class:logout={$page.url.pathname !== "/login"} href="/" on:click={logout}>Logout</a>
       {:else}
         <a href="/">Home</a>
       {/if}
     </li>
     <li>
-      {#if $session.user}
+      {#if data.user}
         {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
-          <a href={dashboard($session.user)}>Go Back To Dashboard</a>
+          <a href={dashboard(data.user)}>Go Back To Dashboard</a>
         {/if}
       {:else}
         <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
