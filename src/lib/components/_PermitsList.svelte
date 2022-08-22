@@ -1,19 +1,14 @@
 <script lang="ts">
-  import type { Permit } from "$lib/models";
+  import type { Permit, permitList } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
   import { dateToYmd } from "$lib/convert";
-  import Pagination from "$lib/Pagination.svelte";
-  import { getStores } from "$app/stores";
-  const { session } = getStores();
 
   // props
-  export let listType: "all" | "expired" | "active" | "exceptions";
+  export let userRole: string;
+  export let listName: permitList;
   export let permits: Array<Permit>;
   export let totalAmount: number;
-  export let pageToHref: (a: number) => string; // pagination
-  export let currPageNum: number; // pagination
-  export let limit: number; // pagination
 
   // rendering
   const tsToDate = (ts: number): string => {
@@ -54,11 +49,11 @@
     <td>Start Date</td>
     <td>End Date</td>
     <td>Request Date</td>
-    {#if listType === "exceptions"}
+    {#if listName === "exceptions"}
       <td>Exception Reason</td>
     {/if}
     <td>Reprint</td>
-    {#if $session.user && $session.user.role === "admin"}
+    {#if userRole === "admin"}
       <td>Edit</td>
       <td>Delete</td>
     {/if}
@@ -74,18 +69,17 @@
       <td>{dateToYmd(permit.startDate)}</td>
       <td>{dateToYmd(permit.endDate)}</td>
       <td>{tsToDate(permit.requestTS)}</td>
-      {#if listType === "exceptions"}
+      {#if listName === "exceptions"}
         <td>{permit.exceptionReason}</td>
       {/if}
       <td><a href="/permit/{permit.id}">Reprint</a></td>
-      {#if $session.user && $session.user.role === "admin"}
+      {#if userRole === "admin"}
         <td><a href="/car/{permit.car.id}">Edit</a></td>
         <td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
       {/if}
     </tr>
   {/each}
 </table>
-<Pagination {totalAmount} {pageToHref} {currPageNum} {limit} />
 
 <style>
   table,
