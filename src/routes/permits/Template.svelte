@@ -68,7 +68,7 @@
     />
     <Pagination
       totalAmount={result.data.metadata.totalAmount}
-      pageToHref={(pageNum) => `permits/${listName}?page=${pageNum}`}
+      pageToHref={(pageNum) => `/permits/${listName}?page=${pageNum}`}
       {currPageNum}
       {limit}
     />
