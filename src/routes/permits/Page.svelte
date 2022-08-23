@@ -56,7 +56,6 @@
       {initialPermits}
       {listName}
       totalAmount={result.data.metadata.totalAmount}
-      onInput={true}
       on:result={updateRecords}
     />
     <List

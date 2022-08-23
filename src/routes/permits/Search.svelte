@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { Permit, permitList } from "$lib/models";
   import { createEventDispatcher } from "svelte";
+  import { MAX_AMT_PER_PAGE } from "$lib/constants";
   import { searchPermits } from "$lib/search";
 
   // config
   const dispatch = createEventDispatcher();
 
   // props
-  export let onInput: boolean;
   export let initialPermits: Array<Permit>;
   export let totalAmount: number;
   export let listName: permitList;
@@ -17,13 +17,12 @@
 
   // events
   const onSearch = async () => {
-    console.log(searchVal);
     const permitRes = await searchPermits(searchVal, initialPermits, totalAmount, listName);
     dispatch("result", permitRes);
   };
 </script>
 
-{#if onInput}
+{#if totalAmount < MAX_AMT_PER_PAGE}
   <input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Permits" />
 {:else}
   <input type="text" bind:value={searchVal} placeholder="Search Permits" />
