@@ -1,23 +1,3 @@
-<script context="module" lang="ts">
-  import type { Load } from "@sveltejs/kit";
-  import { dashboard } from "$lib/navigation";
-
-  export const load: Load = (loadInput) => {
-    const accessToken = loadInput.url.searchParams.get("token");
-    if (accessToken === null) {
-      return { status: 302, redirect: "/login" };
-    } else if (loadInput.session.user) {
-      return { status: 302, redirect: dashboard(loadInput.session.user) };
-    }
-
-    return {
-      props: {
-        accessToken,
-      },
-    };
-  };
-</script>
-
 <script lang="ts">
   import { put } from "$lib/api";
   import { messageDecoder } from "$lib/models";
