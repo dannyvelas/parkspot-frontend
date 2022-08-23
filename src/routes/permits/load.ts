@@ -11,7 +11,11 @@ type OutputData = {
   limit: number;
 };
 
-export const loadPermits = (endpoint: string, limit: number): PageLoad<OutputData> => {
+export const loadPermits = (
+  endpoint: string,
+  limit: number,
+  reversed: boolean
+): PageLoad<OutputData> => {
   const loadFn: PageLoad<OutputData> = async (loadInput) => {
     const parentData = await loadInput.parent();
     const user = onlyRole("admin", parentData.user);
@@ -21,7 +25,7 @@ export const loadPermits = (endpoint: string, limit: number): PageLoad<OutputDat
       endpoint,
       decoder: permitDecoder,
       limit,
-      reversed: false,
+      reversed,
       page,
     });
 
