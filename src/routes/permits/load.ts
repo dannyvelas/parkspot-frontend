@@ -1,15 +1,23 @@
-import type { Load } from "@sveltejs/kit";
+import type { PageLoad } from "./all/$types";
+import type { Result } from "$lib/functional";
+import type { ListWithMetadata, Permit } from "$lib/models";
 import { onlyRole } from "$lib/load";
 import { permitDecoder } from "$lib/models";
 import { loadList } from "$lib/load";
 
-export const loadPermits = (endpoint: string, limit: number): Load => {
-  const loadFn: Load = async (loadInput) => {
+type OutputData = {
+  result: Result<ListWithMetadata<Permit>>;
+  userRole: string;
+  limit: number;
+};
+
+export const loadPermits = (endpoint: string, limit: number): PageLoad<OutputData> => {
+  const loadFn: PageLoad<OutputData> = async (loadInput) => {
     const parentData = await loadInput.parent();
     const user = onlyRole("admin", parentData.user);
     const page = Number(loadInput.url.searchParams.get("page")) || 1;
 
-    const permitsResult = await loadList({
+    const result = await loadList({
       endpoint,
       decoder: permitDecoder,
       limit,
@@ -18,7 +26,7 @@ export const loadPermits = (endpoint: string, limit: number): Load => {
     });
 
     return {
-      permitsResult,
+      result,
       userRole: user.role,
       limit,
     };
