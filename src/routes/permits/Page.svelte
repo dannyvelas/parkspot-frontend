@@ -2,6 +2,7 @@
   import type { Result } from "$lib/functional";
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
   import { isOk } from "$lib/functional";
+  import { capitalize } from "$lib/convert";
   import { afterNavigate } from "$app/navigation";
   import List from "./List.svelte";
   import Search from "./Search.svelte";
@@ -38,10 +39,10 @@
 </script>
 
 <svelte:head>
-  <title>{listName} Permits</title>
+  <title>{capitalize(listName)} Permits</title>
 </svelte:head>
 
-<h1>{listName} Permits</h1>
+<h1>{capitalize(listName)} Permits</h1>
 
 {#if !isOk(result)}
   {result.message}
