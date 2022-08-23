@@ -19,6 +19,12 @@
   // model
   let initialPermits: Array<Permit>; // holds permits before any searching happened
   let bannerError = "";
+  let listTitle = (() => {
+    if (listName === "exceptions") {
+      return "Exception";
+    }
+    return capitalize(listName);
+  })();
 
   // init
   afterNavigate(() => {
@@ -39,10 +45,10 @@
 </script>
 
 <svelte:head>
-  <title>{capitalize(listName)} Permits</title>
+  <title>{listTitle} Permits</title>
 </svelte:head>
 
-<h1>{capitalize(listName)} Permits</h1>
+<h1>{listTitle} Permits</h1>
 
 {#if !isOk(result)}
   {result.message}
