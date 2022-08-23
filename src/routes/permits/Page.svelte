@@ -4,7 +4,7 @@
   import { isOk } from "$lib/functional";
   import { afterNavigate } from "$app/navigation";
   import { searchPermits } from "$lib/search";
-  import PermitsList from "$lib/components/_PermitsList.svelte";
+  import List from "./List.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { page } from "$app/stores";
 
@@ -60,7 +60,7 @@
       </div>
     {/if}
     <input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Permits" />
-    <PermitsList
+    <List
       {listName}
       permits={result.data.records}
       totalAmount={result.data.metadata.totalAmount}

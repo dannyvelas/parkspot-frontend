@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { PageData } from "./$types";
-  import Template from "../Template.svelte";
+  import Page from "../Page.svelte";
 
   export let data: PageData;
 </script>
 
-<Template listName="all" result={data.result} userRole={data.userRole} limit={data.limit} />
+<Page listName="all" result={data.result} userRole={data.userRole} limit={data.limit} />
