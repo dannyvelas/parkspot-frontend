@@ -16,7 +16,7 @@
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
-  let initialPermits: Array<Permit>;
+  let initialPermits: Array<Permit>; // holds permits before any searching happened
   let bannerError = "";
 
   // init
