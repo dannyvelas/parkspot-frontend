@@ -5,7 +5,7 @@
   export let data: PageData;
 </script>
 
-<Nav {data} />
+<Nav user={data.user} />
 
 <main>
   <slot />
