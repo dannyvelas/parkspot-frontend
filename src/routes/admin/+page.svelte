@@ -56,7 +56,7 @@
 </p>
 <p>
   List All Parking Permits:
-  <a href="/permits"><button>Submit</button></a>
+  <a href="/permits/all"><button>Submit</button></a>
 </p>
 <p>
   List Expired Parking Permits:
