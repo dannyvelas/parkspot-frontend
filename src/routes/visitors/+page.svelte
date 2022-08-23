@@ -4,7 +4,7 @@
   import { isOk } from "$lib/functional";
   import { afterNavigate } from "$app/navigation";
   import { searchVisitors } from "$lib/search";
-  import VisitorList from "$lib/components/_VisitorList.svelte";
+  import List from "./List.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { page } from "$app/stores";
 
@@ -59,7 +59,7 @@
       </div>
     {/if}
     <input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Visitors" />
-    <VisitorList
+    <List
       {userRole}
       visitors={result.data.records}
       totalAmount={result.data.metadata.totalAmount}
