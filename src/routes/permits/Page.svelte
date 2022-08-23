@@ -3,8 +3,8 @@
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { afterNavigate } from "$app/navigation";
-  import { searchPermits } from "$lib/search";
   import List from "./List.svelte";
+  import Search from "./Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { page } from "$app/stores";
 
@@ -17,7 +17,6 @@
 
   // model
   let initialPermits: Array<Permit>;
-  let searchVal = "";
   let bannerError = "";
 
   // init
@@ -26,20 +25,14 @@
   });
 
   // events
-  const onSearch = async () => {
-    const permitRes = await searchPermits(
-      searchVal,
-      initialPermits,
-      result.data!.metadata.totalAmount,
-      listName
-    );
-    if (!isOk(permitRes)) {
+  const updateRecords = async (event: CustomEvent<Result<Permit[]>>) => {
+    if (!isOk(event.detail)) {
       result.data!.records = initialPermits;
-      bannerError = permitRes.message;
+      bannerError = event.detail.message;
       return;
     }
 
-    result.data!.records = permitRes.data;
+    result.data!.records = event.detail.data;
     bannerError = "";
   };
 </script>
@@ -59,7 +52,13 @@
         <p>Error searching: {bannerError}. Please try again later.</p>
       </div>
     {/if}
-    <input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Permits" />
+    <Search
+      {initialPermits}
+      {listName}
+      totalAmount={result.data.metadata.totalAmount}
+      onInput={true}
+      on:result={updateRecords}
+    />
     <List
       {listName}
       permits={result.data.records}
