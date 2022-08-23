@@ -10,7 +10,7 @@ export const load: PageLoad = async (loadInput) => {
   const page = Number(loadInput.url.searchParams.get("page")) || 1;
   const limit = DEFAULT_AMT_PER_PAGE;
 
-  const visitorsResult = await loadList({
+  const result = await loadList({
     endpoint: "api/visitors",
     decoder: visitorDecoder,
     limit,
@@ -19,7 +19,7 @@ export const load: PageLoad = async (loadInput) => {
   });
 
   return {
-    visitorsResult,
+    result,
     userRole: user.role,
     limit,
   };

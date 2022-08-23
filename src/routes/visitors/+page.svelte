@@ -13,7 +13,7 @@
 
   // props
   export let data: PageData;
-  const { visitorsResult, userRole, limit } = data;
+  const { result, userRole, limit } = data;
 
   // model
   let initialVisitors: Array<Visitor>;
@@ -22,7 +22,7 @@
 
   // init
   afterNavigate(() => {
-    initialVisitors = (visitorsResult.data && visitorsResult.data.records) || [];
+    initialVisitors = (result.data && result.data.records) || [];
   });
 
   // events
@@ -30,15 +30,15 @@
     const visitorRes = await searchVisitors(
       searchVal,
       initialVisitors,
-      visitorsResult.data!.metadata.totalAmount
+      result.data!.metadata.totalAmount
     );
     if (!isOk(visitorRes)) {
-      visitorsResult.data!.records = initialVisitors;
+      result.data!.records = initialVisitors;
       bannerError = visitorRes.message;
       return;
     }
 
-    visitorsResult.data!.records = visitorRes.data;
+    result.data!.records = visitorRes.data;
     bannerError = "";
   };
 </script>
@@ -49,8 +49,8 @@
 
 <h1>All Visitors</h1>
 
-{#if !isOk(visitorsResult)}
-  {visitorsResult.message}
+{#if !isOk(result)}
+  {result.message}
 {:else}
   <div class="stack-container">
     {#if bannerError != ""}
@@ -61,11 +61,11 @@
     <input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Visitors" />
     <VisitorList
       {userRole}
-      visitors={visitorsResult.data.records}
-      totalAmount={visitorsResult.data.metadata.totalAmount}
+      visitors={result.data.records}
+      totalAmount={result.data.metadata.totalAmount}
     />
     <Pagination
-      totalAmount={visitorsResult.data.metadata.totalAmount}
+      totalAmount={result.data.metadata.totalAmount}
       pageToHref={(pageNum) => `visitors?page=${pageNum}`}
       {currPageNum}
       {limit}
