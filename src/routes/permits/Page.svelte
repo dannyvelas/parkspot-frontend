@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { Result } from "$lib/functional";
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
+  import { permitDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/convert";
   import { afterNavigate } from "$app/navigation";
   import List from "./List.svelte";
-  import Search from "./Search.svelte";
+  import Search from "$lib/components/Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { page } from "$app/stores";
 
@@ -35,7 +36,7 @@
   const updateRecords = async (event: CustomEvent<Result<Permit[]>>) => {
     if (!isOk(event.detail)) {
       result.data!.records = initialPermits;
-      bannerError = event.detail.message;
+      bannerError = `Error searching: ${event.detail.message}`;
       return;
     }
 
@@ -56,13 +57,14 @@
   <div class="stack-container">
     {#if bannerError != ""}
       <div>
-        <p>Error searching: {bannerError}. Please try again later.</p>
+        <p>{bannerError}. Please try again later.</p>
       </div>
     {/if}
     <Search
-      {initialPermits}
-      {listName}
+      initialList={initialPermits}
+      decoder={permitDecoder}
       totalAmount={result.data.metadata.totalAmount}
+      endpoint={`api/permits/${listName}`}
       on:result={updateRecords}
     />
     <List

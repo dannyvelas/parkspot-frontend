@@ -1,10 +1,12 @@
 <script lang="ts">
   import type { Visitor } from "$lib/models";
   import type { PageData } from "./$types";
+  import type { Result } from "$lib/functional";
+  import { visitorDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { afterNavigate } from "$app/navigation";
-  import { searchVisitors } from "$lib/search";
   import List from "./List.svelte";
+  import Search from "$lib/components/Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { page } from "$app/stores";
 
@@ -17,7 +19,6 @@
 
   // model
   let initialVisitors: Array<Visitor>;
-  let searchVal = "";
   let bannerError = "";
 
   // init
@@ -26,19 +27,14 @@
   });
 
   // events
-  const onSearch = async () => {
-    const visitorRes = await searchVisitors(
-      searchVal,
-      initialVisitors,
-      result.data!.metadata.totalAmount
-    );
-    if (!isOk(visitorRes)) {
+  const updateRecords = async (event: CustomEvent<Result<Visitor[]>>) => {
+    if (!isOk(event.detail)) {
       result.data!.records = initialVisitors;
-      bannerError = visitorRes.message;
+      bannerError = `Error searching: ${event.detail.message}`;
       return;
     }
 
-    result.data!.records = visitorRes.data;
+    result.data!.records = event.detail.data;
     bannerError = "";
   };
 </script>
@@ -58,7 +54,13 @@
         <p>Error searching: {bannerError}. Please try again later.</p>
       </div>
     {/if}
-    <input type="text" bind:value={searchVal} on:input={onSearch} placeholder="Search Visitors" />
+    <Search
+      initialList={initialVisitors}
+      decoder={visitorDecoder}
+      totalAmount={result.data.metadata.totalAmount}
+      endpoint={`api/visitors`}
+      on:result={updateRecords}
+    />
     <List
       {userRole}
       visitors={result.data.records}
