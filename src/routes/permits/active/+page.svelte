@@ -5,4 +5,4 @@
   export let data: PageData;
 </script>
 
-<Page listName="active" result={data.result} userRole={data.userRole} limit={data.limit} />
+<Page listName="active" result={data.result} userRole={data.userRole} />

@@ -15,7 +15,7 @@
 
   // props
   export let data: PageData;
-  const { result, userRole, limit } = data;
+  const { result, userRole } = data;
 
   // model
   let initialVisitors: Array<Visitor>;
@@ -71,7 +71,6 @@
       totalAmount={result.data.metadata.totalAmount}
       pageToHref={(pageNum) => `visitors?page=${pageNum}`}
       {currPageNum}
-      {limit}
     />
   </div>
 {/if}

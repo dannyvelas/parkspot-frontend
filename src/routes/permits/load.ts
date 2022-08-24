@@ -8,14 +8,9 @@ import { loadList } from "$lib/load";
 type OutputData = {
   result: Result<ListWithMetadata<Permit>>;
   userRole: string;
-  limit: number;
 };
 
-export const loadPermits = (
-  endpoint: string,
-  limit: number,
-  reversed: boolean
-): PageLoad<OutputData> => {
+export const loadPermits = (endpoint: string, reversed: boolean): PageLoad<OutputData> => {
   const loadFn: PageLoad<OutputData> = async (loadInput) => {
     const parentData = await loadInput.parent();
     const user = onlyRole("admin", parentData.user);
@@ -24,7 +19,6 @@ export const loadPermits = (
     const result = await loadList({
       endpoint,
       decoder: permitDecoder,
-      limit,
       reversed,
       page,
     });
@@ -32,7 +26,6 @@ export const loadPermits = (
     return {
       result,
       userRole: user.role,
-      limit,
     };
   };
 

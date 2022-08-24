@@ -1,12 +1,14 @@
 <script lang="ts">
+  import { MAX_AMT_PER_PAGE } from "$lib/constants";
+
+  // props
   export let totalAmount: number;
   export let pageToHref: (a: number) => string;
   export let currPageNum: number;
-  export let limit: number;
 
   const amountPages = (() => {
-    const int_div = totalAmount / limit;
-    if (totalAmount % limit !== 0) {
+    const int_div = totalAmount / MAX_AMT_PER_PAGE;
+    if (totalAmount % MAX_AMT_PER_PAGE !== 0) {
       return int_div + 1;
     } else {
       return int_div;

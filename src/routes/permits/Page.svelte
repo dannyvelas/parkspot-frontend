@@ -14,7 +14,6 @@
   export let listName: permitList;
   export let result: Result<ListWithMetadata<Permit>>;
   export let userRole: string;
-  export let limit: number;
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
@@ -78,7 +77,6 @@
       totalAmount={result.data.metadata.totalAmount}
       pageToHref={(pageNum) => `/permits/${listName}?page=${pageNum}`}
       {currPageNum}
-      {limit}
     />
   </div>
 {/if}
