@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Stringable } from "$lib/models";
   import type { Result } from "$lib/functional";
   import type { Decoder } from "decoders";
   import { createEventDispatcher } from "svelte";
@@ -12,9 +11,10 @@
   const dispatch = createEventDispatcher();
 
   // props
-  type T = $$Generic<Stringable>;
+  type T = $$Generic;
   export let initialList: Array<T>;
   export let decoder: Decoder<T>;
+  export let preview: (a: T) => string;
   export let totalAmount: number;
   export let endpoint: string;
 
@@ -23,17 +23,11 @@
 
   // events
   const onSearch = async () => {
-    const listRes = await search(searchVal, initialList, decoder, totalAmount, endpoint);
+    const listRes = await search();
     dispatch("result", listRes);
   };
 
-  const search = async (
-    searchVal: string,
-    initialList: Array<T>,
-    decoder: Decoder<T>,
-    totalAmount: number,
-    endpoint: string
-  ): Promise<Result<T[]>> => {
+  const search = async (): Promise<Result<T[]>> => {
     if (searchVal === "") {
       return newOk(initialList);
     }
@@ -41,8 +35,7 @@
     if (totalAmount === initialList.length) {
       return newOk(
         initialList.filter((single) => {
-          const asString = single.toString().toLowerCase();
-          console.log(asString);
+          const asString = preview(single).toLowerCase();
           return asString.includes(searchVal.toLowerCase());
         })
       );
