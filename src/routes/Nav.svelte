@@ -16,6 +16,8 @@
       if (!isOk(postRes)) {
         console.error("Error logging out");
       }
+
+      user = undefined;
     }
   }
 </script>
