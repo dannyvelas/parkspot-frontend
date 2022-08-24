@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Result } from "$lib/functional";
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
-  import { permitDecoder } from "$lib/models";
+  import { permitDecoder, previewPermit } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/convert";
   import { afterNavigate } from "$app/navigation";
@@ -63,6 +63,7 @@
     <Search
       initialList={initialPermits}
       decoder={permitDecoder}
+      preview={previewPermit}
       totalAmount={result.data.metadata.totalAmount}
       endpoint={`api/permits/${listName}`}
       on:result={updateRecords}

@@ -2,7 +2,7 @@
   import type { Visitor } from "$lib/models";
   import type { PageData } from "./$types";
   import type { Result } from "$lib/functional";
-  import { visitorDecoder } from "$lib/models";
+  import { visitorDecoder, previewVisitor } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { afterNavigate } from "$app/navigation";
   import List from "./List.svelte";
@@ -57,6 +57,7 @@
     <Search
       initialList={initialVisitors}
       decoder={visitorDecoder}
+      preview={previewVisitor}
       totalAmount={result.data.metadata.totalAmount}
       endpoint={`api/visitors`}
       on:result={updateRecords}

@@ -24,6 +24,16 @@ export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
   exceptionReason: decoders.maybe(decoders.string),
 });
 
+export const preview = (permit: Permit) => {
+  return `
+    ${permit.id}
+    ${permit.residentId}
+    ${permit.car.licensePlate}
+    ${permit.car.color}
+    ${permit.car.make}
+    ${permit.car.model}`;
+};
+
 export type NewPermitReq = {
   residentId: string;
   car: NewCarReq;
