@@ -1,4 +1,4 @@
 import type { PageLoad } from "./$types";
 import { loadPermits } from "../load";
 
-export const load: PageLoad = loadPermits("api/permits", true);
+export const load: PageLoad = loadPermits("api/permits/all", true);
