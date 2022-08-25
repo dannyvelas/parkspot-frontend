@@ -4,6 +4,7 @@
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
   import { getStores } from "$app/stores";
+  import { goto } from "$app/navigation";
   import type { User } from "$lib/models";
   const { page } = getStores();
 
@@ -18,6 +19,7 @@
       }
 
       user = undefined;
+      goto("/login");
     }
   }
 </script>
@@ -26,7 +28,7 @@
   <ul>
     <li>
       {#if user}
-        <a class:logout={$page.url.pathname !== "/login"} href="/" on:click={logout}>Logout</a>
+        <button on:click={logout}>Logout</button>
       {:else}
         <a href="/">Home</a>
       {/if}
@@ -61,13 +63,19 @@
     margin: 10px;
   }
 
-  a {
+  a,
+  button {
     text-decoration: none;
     font-weight: bold;
+    background-color: transparent;
+    border: none;
+  }
+
+  a {
     color: #636363;
   }
 
-  a.logout {
+  button {
     color: #ff2d00;
   }
 </style>
