@@ -26,22 +26,23 @@
 
 <nav>
   <ul>
-    <li>
-      {#if user}
+    {#if user}
+      <li>
         <button on:click={logout}>Logout</button>
-      {:else}
-        <a href="/">Home</a>
-      {/if}
-    </li>
-    <li>
-      {#if user}
+      </li>
+      <li>
         {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
           <a href={dashboard(user)}>Go Back To Dashboard</a>
         {/if}
-      {:else}
+      </li>
+    {:else}
+      <li>
+        <a href="/">Home</a>
+      </li>
+      <li>
         <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
-      {/if}
-    </li>
+      </li>
+    {/if}
   </ul>
 </nav>
 
