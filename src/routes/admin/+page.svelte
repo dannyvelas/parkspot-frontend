@@ -81,7 +81,7 @@
 <hr />
 <p>
   Request a Guest Parking Permit for Resident:
-  <a href="/permit/request"><button>Submit</button></a>
+  <a href="/permit"><button>Submit</button></a>
 </p>
 <hr />
 <h2>Create User Account</h2>
