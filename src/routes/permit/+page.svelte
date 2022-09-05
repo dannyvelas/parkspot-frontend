@@ -5,7 +5,7 @@
   import { permitDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { goto } from "$app/navigation";
-  import { post } from "$lib/api";
+  import { post } from "$lib/api/send";
 
   // props
   export let data: PageData;

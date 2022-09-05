@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { userDecoder } from "$lib/models";
+  import { sessionDecoder } from "$lib/api/session";
   import { isOk } from "$lib/functional";
-  import { post } from "$lib/api";
+  import { post } from "$lib/api/send";
   import { goto } from "$app/navigation";
   import { dashboard } from "$lib/navigation";
 
@@ -18,7 +18,7 @@
   };
 
   const submit = async () => {
-    const result = await post("api/login", { id, password }, userDecoder);
+    const result = await post("api/login", { id, password }, sessionDecoder);
     if (!isOk(result)) {
       if (result.message.includes("Unauthorized")) {
         error = "Wrong username or password. Please try again.";
@@ -30,7 +30,7 @@
       return;
     }
 
-    goto(dashboard(result.data));
+    goto(dashboard(result.data.user));
   };
 </script>
 

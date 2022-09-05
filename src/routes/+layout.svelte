@@ -6,7 +6,7 @@
   export let data: PageData;
 </script>
 
-<Nav user={data.user} />
+<Nav user={data.user} tokenStore={data.tokenStore} />
 
 <main>
   <slot />

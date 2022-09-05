@@ -3,10 +3,11 @@ import type { Result } from "$lib/functional";
 import type { ListWithMetadata } from "$lib/models";
 import { listWithMetadataDecoder } from "$lib/models";
 import { MAX_AMT_PER_PAGE } from "$lib/constants";
-import { get } from "$lib/api";
+import { get } from "$lib/api/send";
 
 export type listConfig<T> = {
   endpoint: string;
+  accessToken: string;
   decoder: Decoder<T>;
   reversed: boolean;
   page: number;
@@ -19,5 +20,5 @@ export async function loadList<T>(args: listConfig<T>): Promise<Result<ListWithM
     page: `${args.page}`,
   };
 
-  return await get(args.endpoint, params, listWithMetadataDecoder(args.decoder));
+  return await get(args.endpoint, params, listWithMetadataDecoder(args.decoder), args.accessToken);
 }

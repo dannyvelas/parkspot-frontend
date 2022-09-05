@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { post } from "$lib/api";
+  import { post } from "$lib/api/send";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
+  import { tokenStore } from '$lib/api/store';
 
   const fields = {
     residentId: "",
@@ -34,7 +35,7 @@
       return;
     }
 
-    const postRes = await post(`api/account`, fields, messageDecoder);
+    const postRes = await post(`api/account`, fields, messageDecoder, $tokenStore);
     if (!isOk(postRes)) {
       banner = postRes.message;
       return;

@@ -1,5 +1,6 @@
 import type { PageLoad } from "./$types";
 import { onlyRole } from "$lib/load";
+import { get } from 'svelte/store';
 import { visitorDecoder } from "$lib/models";
 import { loadList } from "$lib/load";
 
@@ -13,6 +14,7 @@ export const load: PageLoad = async (loadInput) => {
     decoder: visitorDecoder,
     reversed: false,
     page,
+    accessToken: get(parentData.tokenStore)
   });
 
   return {

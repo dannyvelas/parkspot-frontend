@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { put } from "$lib/api";
+  import { put } from "$lib/api/send";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
 

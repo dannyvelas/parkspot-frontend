@@ -2,12 +2,14 @@
   import { dashboard } from "$lib/navigation";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
-  import { post } from "$lib/api";
+  import { post } from "$lib/api/send";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import type { User } from "$lib/models";
+  import type { Writable } from "svelte/store";
 
   export let user: User | undefined;
+  export let tokenStore: Writable<string>;
 
   // events
   async function logout() {
@@ -23,6 +25,7 @@
   }
 </script>
 
+<p>AT: {$tokenStore}. END</p>
 <nav>
   <ul>
     {#if user}

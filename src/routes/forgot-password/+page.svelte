@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { post } from "$lib/api";
+  import { post } from "$lib/api/send";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
 

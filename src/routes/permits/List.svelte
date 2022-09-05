@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Permit, permitList } from "$lib/models";
-  import { del } from "$lib/api";
+  import { del } from "$lib/api/send";
   import { isOk } from "$lib/functional";
   import { dateToYmd } from "$lib/convert";
 

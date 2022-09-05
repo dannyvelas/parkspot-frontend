@@ -2,6 +2,7 @@ import type { PageLoad } from "./all/$types";
 import type { Result } from "$lib/functional";
 import type { ListWithMetadata, Permit } from "$lib/models";
 import { onlyRole } from "$lib/load";
+import { get } from 'svelte/store';
 import { permitDecoder } from "$lib/models";
 import { loadList } from "$lib/load";
 
@@ -16,12 +17,16 @@ export const loadPermits = (endpoint: string, reversed: boolean): PageLoad<Outpu
     const user = onlyRole("admin", parentData.user);
     const page = Number(loadInput.url.searchParams.get("page")) || 1;
 
+    console.log(`IN SERVER: ${Math.round(new Date().getTime() / 1000)}`)
     const result = await loadList({
       endpoint,
       decoder: permitDecoder,
       reversed,
       page,
+      accessToken: get(parentData.tokenStore)
     });
+    console.log(result)
+    console.log(`END IN SERVER: ${Math.round(new Date().getTime() / 1000)}`)
 
     return {
       result,

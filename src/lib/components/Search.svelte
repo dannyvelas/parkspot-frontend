@@ -4,7 +4,7 @@
   import { createEventDispatcher } from "svelte";
   import { MAX_AMT_PER_PAGE } from "$lib/constants";
   import { listWithMetadataDecoder } from "$lib/models";
-  import { get } from "$lib/api";
+  import { get } from "$lib/api/send";
   import { isOk, newOk, newErr } from "$lib/functional";
 
   // config

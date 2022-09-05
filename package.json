@@ -34,9 +34,10 @@
   },
   "type": "module",
   "dependencies": {
+    "buffer": "^6.0.3",
     "cookie": "^0.5.0",
     "decoders": "^2.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jose": "^4.9.2",
     "litepicker": "^2.0.12",
     "normalize.css": "^8.0.1"
   }
