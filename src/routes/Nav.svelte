@@ -3,10 +3,9 @@
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
-  import { getStores } from "$app/stores";
+  import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import type { User } from "$lib/models";
-  const { page } = getStores();
 
   export let user: User | undefined;
 
