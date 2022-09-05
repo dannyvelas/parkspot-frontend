@@ -1,7 +1,7 @@
 import type { PageLoad } from "./all/$types";
 import type { Result } from "$lib/functional";
 import type { ListWithMetadata, Permit } from "$lib/models";
-import { onlyRole } from "$lib/load";
+import { onlyRole } from "$lib/auth";
 import { permitDecoder } from "$lib/models";
 import { loadList } from "$lib/load";
 

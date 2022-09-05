@@ -1,5 +1,5 @@
 import type { PageLoad } from "./$types";
-import { onlyRole } from "$lib/load";
+import { onlyRole } from "$lib/auth";
 import { visitorDecoder } from "$lib/models";
 import { loadList } from "$lib/load";
 
