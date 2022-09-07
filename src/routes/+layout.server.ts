@@ -1,8 +1,8 @@
+import type { LayoutServerLoad } from "./$types";
 import { parse } from "cookie";
 import { userDecoder } from "$lib/models";
 import { isOk } from "$lib/functional";
-import { verifyJWT } from "$lib/auth";
-import type { LayoutServerLoad } from "./$types";
+import { verifyRefresh } from "$lib/auth";
 
 export const load: LayoutServerLoad = async ({ request }) => {
   const cookies = parse(request.headers.get("cookie") || "");
@@ -10,7 +10,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
     return {};
   }
 
-  const verifiedJWT = await verifyJWT(cookies.refresh);
+  const verifiedJWT = await verifyRefresh(cookies.refresh);
   if (!isOk(verifiedJWT)) {
     return {};
   }
@@ -20,6 +20,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
     return {};
   }
 
+  // TODO: return accessToken
   return {
     user: decodedJWT.value,
   };
