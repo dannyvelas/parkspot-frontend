@@ -3,27 +3,9 @@
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
 
-  const fields = {
-    residentId: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    password: "",
-  };
-
-  let confirmPassword = "";
   let passwordsShown = false;
   $: passwordType = passwordsShown ? "text" : "password";
   let banner = "";
-
-  // events
-  const inputPassword = (e: any) => {
-    fields.password = e.target.value;
-  };
-  const inputConfirmPassword = (e: any) => {
-    confirmPassword = e.target.value;
-  };
 
   const submit = async () => {
     if (fields.password !== confirmPassword) {
@@ -91,18 +73,13 @@
   </div>
 {/if}
 <form on:submit|preventDefault={submit}>
-  <input required type="text" placeholder="Resident ID" bind:value={fields.residentId} />
-  <input required type="text" placeholder="First Name" bind:value={fields.firstName} />
-  <input required type="text" placeholder="Last Name" bind:value={fields.lastName} />
-  <input required type="text" placeholder="Phone" bind:value={fields.phone} />
-  <input required type="text" placeholder="Email" bind:value={fields.email} />
-  <input required type={passwordType} placeholder="Password" on:input={inputPassword} />
-  <input
-    required
-    type={passwordType}
-    placeholder="Confirm Password"
-    on:input={inputConfirmPassword}
-  />
+  <input required type="text" name="residentID" placeholder="Resident ID" />
+  <input required type="text" name="firstName" placeholder="First Name" />
+  <input required type="text" name="lastName" placeholder="Last Name" />
+  <input required type="text" name="phone" placeholder="Phone" />
+  <input required type="text" name="email" placeholder="Email" />
+  <input required type={passwordType} name="password" placeholder="Password" />
+  <input required type={passwordType} name="confirmPassword" placeholder="Confirm Password" />
   <div style="margin:20px;">
     <label for="showPasswords">Show Passwords: </label>
     <input type="checkbox" id="showPasswords" bind:checked={passwordsShown} />

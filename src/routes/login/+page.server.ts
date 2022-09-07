@@ -16,7 +16,7 @@ export const actions: Actions = {
     ];
     const missing = fields.filter(([_, v]) => v === "" || v === undefined).map(([k, _]) => k);
     if (missing.length !== 0) {
-      return invalid(400, { missing });
+      return invalid(400, { error: `Missing fields: ${missing.join(", ")}` });
     }
 
     const result = await post("api/login", { id, password }, sessionDecoder);
@@ -30,7 +30,7 @@ export const actions: Actions = {
       } else if (result.message.includes("500")) {
         response = "Server error. Please notify the administration or try again later.";
       }
-      return invalid(400, { response });
+      return invalid(400, { error: response });
     }
 
     const refreshToken = await newRefresh(result.data.user);
