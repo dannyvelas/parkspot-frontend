@@ -1,12 +1,13 @@
+import type { User } from "$lib/models";
 import * as jose from "jose";
 import { newErr, newOk } from "$lib/functional";
 
-const TOKEN_SECRET: string = import.meta.env.VITE_TOKEN_REFRESHSECRET;
+const REFRESH_SECRET: string = import.meta.env.VITE_TOKEN_REFRESHSECRET;
 
-export const verifyJWT = async (token: string) => {
+export const verifyRefresh = async (token: string) => {
   let verifiedJWT: jose.JWTVerifyResult;
   try {
-    verifiedJWT = await jose.jwtVerify(token, Buffer.from(TOKEN_SECRET));
+    verifiedJWT = await jose.jwtVerify(token, Buffer.from(REFRESH_SECRET));
   } catch (err) {
     if (err instanceof jose.errors.JWTExpired) {
       return newErr("jwt expired");
@@ -18,4 +19,12 @@ export const verifyJWT = async (token: string) => {
   }
 
   return newOk(verifiedJWT);
+};
+
+export const newRefresh = async (user: User) => {
+  return await new jose.SignJWT({ user })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(Buffer.from(REFRESH_SECRET));
 };
