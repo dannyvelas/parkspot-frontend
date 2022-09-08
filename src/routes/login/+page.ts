@@ -4,8 +4,8 @@ import { dashboard } from "$lib/navigation";
 
 export const load: PageLoad = async ({ parent }) => {
   const parentData = await parent();
-  if (parentData.user) {
-    throw redirect(307, dashboard(parentData.user));
+  if (parentData.session) {
+    throw redirect(307, dashboard(parentData.session.user));
   }
 
   return {};

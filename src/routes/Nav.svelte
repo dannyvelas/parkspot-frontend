@@ -4,34 +4,33 @@
   import { isOk } from "$lib/functional";
   import { post } from "$lib/api";
   import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
-  import type { User } from "$lib/models";
+  import { invalidateAll } from "$app/navigation";
+  import type { Session } from "$lib/auth";
 
-  export let user: User | undefined;
+  export let session: Session | undefined;
 
   // events
   async function logout() {
-    if (user) {
+    if (session) {
       const postRes = await post(`api/logout`, {}, messageDecoder);
       if (!isOk(postRes)) {
         console.error("Error logging out");
       }
 
-      user = undefined;
-      goto("/login");
+      invalidateAll();
     }
   }
 </script>
 
 <nav>
   <ul>
-    {#if user}
+    {#if session}
       <li>
         <button on:click={logout}>Logout</button>
       </li>
       <li>
         {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
-          <a href={dashboard(user)}>Go Back To Dashboard</a>
+          <a href={dashboard(session.user)}>Go Back To Dashboard</a>
         {/if}
       </li>
     {:else}
