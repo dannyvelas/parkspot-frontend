@@ -1,28 +1,34 @@
 <script lang="ts">
-  import { post } from "$lib/api";
-  import { messageDecoder } from "$lib/models";
-  import { isOk } from "$lib/functional";
+  import type { PageData } from "./$types";
+  import type { ActionResult } from "@sveltejs/kit";
+  import { invalidateAll } from "$app/navigation";
+  import { applyAction } from "$app/forms";
+  import { enhance } from "$app/forms";
 
+  // props
+  export let data: PageData;
+  export let form: Record<string, any> | undefined;
+
+  // model
   let passwordsShown = false;
   $: passwordType = passwordsShown ? "text" : "password";
-  let banner = "";
+  $: banner = form?.error || "";
 
-  const submit = async () => {
-    if (fields.password !== confirmPassword) {
-      banner = "Error: passwords do not match";
-      return;
-    } else if (fields.password === "") {
-      banner = "Error: password cannot be empty";
-      return;
+  const handleSubmit = async () => {
+    const formData = new FormData(this);
+
+    const response = await fetch(this.action, {
+      method: "POST",
+      body: formData,
+      headers: new Headers({ Authorization: `Bearer ${data.session.accessToken}` }),
+    });
+    const result: ActionResult = await response.json();
+
+    if (result.type === "success") {
+      await invalidateAll();
     }
 
-    const postRes = await post(`api/account`, fields, messageDecoder);
-    if (!isOk(postRes)) {
-      banner = postRes.message;
-      return;
-    }
-
-    banner = postRes.data.message;
+    applyAction(result);
   };
 </script>
 
@@ -67,12 +73,12 @@
 </p>
 <hr />
 <h2>Create User Account</h2>
-{#if banner != ""}
+{#if banner}
   <div style="text-align: center">
     <p>{banner}</p>
   </div>
 {/if}
-<form on:submit|preventDefault={submit}>
+<form method="POST" action="?/register" on:submit|preventDefault={handleSubmit}>
   <input required type="text" name="residentID" placeholder="Resident ID" />
   <input required type="text" name="firstName" placeholder="First Name" />
   <input required type="text" name="lastName" placeholder="Last Name" />
