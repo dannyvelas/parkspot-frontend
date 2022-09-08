@@ -29,23 +29,29 @@ export const actions: Actions = {
     ];
     const missing = fields.filter(([_, v]) => v === "" || v === undefined).map(([k, _]) => k);
     if (missing.length !== 0) {
-      return invalid(400, { error: `Missing fields: ${missing.join(", ")}` });
+      return invalid(400, { response: `Missing fields: ${missing.join(", ")}` });
     } else if (formVals.password !== confirmPassword) {
-      return invalid(400, { error: "Passwords do not match" });
+      return invalid(400, { response: "Passwords do not match" });
     }
 
-    const result = await post(`api/account`, formVals, messageDecoder, "asd");
+    const prefix = "Bearer ";
+    const authHeader = event.request.headers.get("Authorization");
+    const wellFormed = authHeader && authHeader.startsWith(prefix);
+    const accessToken = wellFormed ? authHeader.slice(prefix.length) : "";
+    if (!accessToken) {
+      return invalid(400, { response: "Error: your session has expired." });
+    }
+
+    const result = await post(`api/account`, formVals, messageDecoder, accessToken);
     if (!isOk(result)) {
-      let response = "Unhandled error. Please file an issue with our team and try again later.";
-      if (result.message.includes("Failed to fetch")) {
-        response =
-          "Couldn't connect to server. Please notify the administration or try again later.";
-      } else if (result.message.includes("500")) {
-        response = "Server error. Please file an issue with our team and try again later.";
-      }
-      return invalid(400, { error: response });
+      const response = result.message.includes("Failed to fetch")
+        ? "Couldn't connect to server. Please notify the administration or try again later."
+        : result.message.includes("500")
+        ? "Server error. Please file an issue with our team and try again later."
+        : result.message;
+      return invalid(400, { response });
     }
 
-    return { message: result.data.message };
+    return { response: result.data.message };
   },
 };

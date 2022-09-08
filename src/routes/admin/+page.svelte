@@ -3,7 +3,6 @@
   import type { ActionResult } from "@sveltejs/kit";
   import { invalidateAll } from "$app/navigation";
   import { applyAction } from "$app/forms";
-  import { enhance } from "$app/forms";
 
   // props
   export let data: PageData;
@@ -12,9 +11,9 @@
   // model
   let passwordsShown = false;
   $: passwordType = passwordsShown ? "text" : "password";
-  $: banner = form?.error || "";
+  $: banner = form?.response || "";
 
-  const handleSubmit = async () => {
+  async function handleSubmit() {
     const formData = new FormData(this);
 
     const response = await fetch(this.action, {
@@ -26,10 +25,11 @@
 
     if (result.type === "success") {
       await invalidateAll();
+      this.reset();
     }
 
     applyAction(result);
-  };
+  }
 </script>
 
 <svelte:head>
