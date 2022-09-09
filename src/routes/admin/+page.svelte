@@ -1,8 +1,6 @@
 <script lang="ts">
   import type { PageData } from "./$types";
-  import type { ActionResult } from "@sveltejs/kit";
-  import { invalidateAll } from "$app/navigation";
-  import { applyAction } from "$app/forms";
+  import { submitWithToken } from "$lib/form";
 
   // props
   export let data: PageData;
@@ -14,21 +12,7 @@
   $: banner = form?.response || "";
 
   async function handleSubmit() {
-    const formData = new FormData(this);
-
-    const response = await fetch(this.action, {
-      method: "POST",
-      body: formData,
-      headers: new Headers({ Authorization: `Bearer ${data.session.accessToken}` }),
-    });
-    const result: ActionResult = await response.json();
-
-    if (result.type === "success") {
-      await invalidateAll();
-      this.reset();
-    }
-
-    applyAction(result);
+    submitWithToken(this, data.session.accessToken);
   }
 </script>
 
