@@ -88,7 +88,9 @@ const sendReq = async <ReqBody, ResBody>(
   if (!response.data.ok) {
     // non-200 status code
     const statusText = `${response.data.status}: ${response.data.statusText}`;
-    return newErr(statusText);
+    const responseText = await response.data.text();
+    const fullError = responseText ? `${statusText}. ${responseText}` : statusText;
+    return newErr(fullError);
   }
 
   const jsonResponse = await getJson(response.data);
