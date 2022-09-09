@@ -11,7 +11,7 @@
   $: passwordType = passwordsShown ? "text" : "password";
 
   async function handleSubmit() {
-    submitWithToken(new FormData(this), this.action, data.session.accessToken);
+    submitWithToken(this, data.session.accessToken);
   }
 </script>
 
