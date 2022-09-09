@@ -35,7 +35,7 @@ export const actions: Actions = {
     }
 
     const refreshToken = await newRefresh(result.data.user);
-    event.cookies.set("refresh", refreshToken);
+    event.cookies.set("refresh", refreshToken); // causes +layout.server.ts to re-run, thereby redirecting
 
     return { user: result.data.user, accessToken: result.data.accessToken };
   },
