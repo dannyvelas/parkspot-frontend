@@ -63,6 +63,6 @@ export const actions: Actions = {
       return invalid(400, { error: result.message });
     }
 
-    throw redirect(302, "/permit/5");
+    throw redirect(302, `/permit/${result.data.id}`);
   },
 };
