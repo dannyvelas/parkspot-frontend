@@ -1,7 +1,7 @@
 import type { Actions } from "./$types";
 import * as decoders from "decoders";
 import { sessionDecoder, newRefresh } from "$lib/auth";
-import { decodeAndCheckEmpty } from "$lib/validation";
+import { decodeAndCheckEmpty } from "$lib/form";
 import { invalid } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";

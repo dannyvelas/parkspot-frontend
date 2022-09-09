@@ -1,7 +1,7 @@
 import type { Actions } from "./$types";
 import * as decoders from "decoders";
 import { messageDecoder } from "$lib/models";
-import { decodeAndCheckEmpty } from '$lib/validation';
+import { decodeAndCheckEmpty } from "$lib/form";
 import { invalid } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
@@ -20,10 +20,9 @@ export const actions: Actions = {
   register: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-
     const residentRes = decodeAndCheckEmpty(formDecoder, formObject);
     if (!isOk(residentRes)) {
-      return invalid(400, { response: residentRes.message})
+      return invalid(400, { response: residentRes.message });
     }
 
     if (residentRes.data.password !== residentRes.data.confirmPassword) {
