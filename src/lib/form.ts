@@ -21,10 +21,8 @@ export function decodeAndCheckEmpty<T>(decoder: Decoder<T>, obj: unknown): Resul
   return newOk(decodeRes.value);
 }
 
-export async function submitWithToken(form: HTMLFormElement, accessToken: string) {
-  const formData = new FormData(form);
-
-  const response = await fetch(form.action, {
+export async function submitWithToken(formData: FormData, action: string, accessToken: string) {
+  const response = await fetch(action, {
     method: "POST",
     body: formData,
     headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
