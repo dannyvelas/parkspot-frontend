@@ -1,36 +1,40 @@
 import type { Actions } from "./$types";
+import * as decoders from "decoders";
 import { messageDecoder } from "$lib/models";
 import { invalid } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
 
+const formDecoder = decoders.object({
+  residentID: decoders.string,
+  firstName: decoders.string,
+  lastName: decoders.string,
+  phone: decoders.string,
+  email: decoders.string,
+  password: decoders.string,
+  confirmPassword: decoders.string,
+});
+
 export const actions: Actions = {
   register: async (event) => {
-    const data = await event.request.formData();
+    const formData = await event.request.formData();
+    const formObject = Object.fromEntries(formData.entries());
 
-    const formVals = {
-      residentID: data.get("residentID")?.toString(),
-      firstName: data.get("firstName")?.toString(),
-      lastName: data.get("lastName")?.toString(),
-      phone: data.get("phone")?.toString(),
-      email: data.get("email")?.toString(),
-      password: data.get("password")?.toString(),
-    };
-    const confirmPassword = data.get("confirmPassword")?.toString();
+    const residentRes = formDecoder.decode(formObject);
+    if (!residentRes.ok) {
+      return invalid(400, {
+        response: "Program error, please notify the administration to fix this.",
+      });
+    }
 
-    const fields = [
-      ["residentID", formVals.residentID],
-      ["firstName", formVals.firstName],
-      ["lastName", formVals.lastName],
-      ["phone", formVals.phone],
-      ["email", formVals.email],
-      ["password", formVals.password],
-      ["confirmPassword", confirmPassword],
-    ];
-    const missing = fields.filter(([_, v]) => v === "" || v === undefined).map(([k, _]) => k);
-    if (missing.length !== 0) {
+    const missing = Object.entries(residentRes.value)
+      .filter(([_, v]) => !v)
+      .map(([k, _]) => k);
+    if (missing.length > 0) {
       return invalid(400, { response: `Missing fields: ${missing.join(", ")}` });
-    } else if (formVals.password !== confirmPassword) {
+    }
+
+    if (residentRes.value.password !== residentRes.value.confirmPassword) {
       return invalid(400, { response: "Passwords do not match" });
     }
 
@@ -42,7 +46,7 @@ export const actions: Actions = {
       return invalid(400, { response: "Error: your session has expired." });
     }
 
-    const result = await post(`api/account`, formVals, messageDecoder, accessToken);
+    const result = await post(`api/account`, residentRes.value, messageDecoder, accessToken);
     if (!isOk(result)) {
       const response = result.message.includes("Failed to fetch")
         ? "Couldn't connect to server. Please notify the administration or try again later."
