@@ -1,33 +1,19 @@
 <script lang="ts">
-  import { post } from "$lib/api";
-  import { messageDecoder } from "$lib/models";
-  import { isOk } from "$lib/functional";
+  import { enhance } from '$app/forms';
 
-  let id = "";
-  let banner = "";
-
-  const submit = async () => {
-    const payload = { id };
-
-    const postRes = await post(`api/password-reset-email`, payload, messageDecoder);
-    if (!isOk(postRes)) {
-      banner = postRes.message;
-      return;
-    }
-
-    banner = postRes.data.message;
-  };
+  // props
+  export let form: Record<string, any> | undefined;
 </script>
 
 <h1>Request a Password Reset Email</h1>
 <h2>Enter your Account ID</h2>
-{#if banner != ""}
+{#if form?.error}
   <div style="text-align: center">
-    <p>{banner}</p>
+    <p>{form.error}</p>
   </div>
 {/if}
-<form on:submit|preventDefault={submit}>
-  <input required type="text" placeholder="T8100123" bind:value={id} />
+<form method="POST" use:enhance>
+  <input required name="id" type="text" placeholder="T8100123" />
   <button type="submit" style="margin:10px;">Send Email To Reset Password</button>
 </form>
 
