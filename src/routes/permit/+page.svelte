@@ -1,15 +1,11 @@
 <script lang="ts">
-  import type { NewPermitReq } from "$lib/models";
   import type { PageData } from "./$types";
   import { onMount } from "svelte";
-  import { permitDecoder } from "$lib/models";
-  import { isOk } from "$lib/functional";
-  import { goto } from "$app/navigation";
-  import { post } from "$lib/api";
+  import { submitWithToken } from "$lib/form";
 
   // props
   export let data: PageData;
-  const { residentId, user } = data;
+  export let form: Record<string, any> | undefined;
 
   // helpers
   const dateToday = (() => {
@@ -25,21 +21,11 @@
   })();
 
   // model
-  const fields: NewPermitReq = {
-    residentId,
-    car: {
-      licensePlate: "",
-      color: "",
-      make: "",
-      model: "",
-    },
-    startDate: dateToday.toISOString(),
-    endDate: dateTomorrow.toISOString(),
-    exceptionReason: "",
-  };
-  let bannerError = "";
+  const residentId = data.session.user.role === "resident" ? data.session.user.id : "";
   let isException = false;
-  $: fields.exceptionReason = isException ? fields.exceptionReason : ""; // clear when unchecked
+  $: exceptionReason = isException ? "" : ""; // clear when checked/unchecked
+  let startDate = dateToday.toISOString();
+  let endDate = dateTomorrow.toISOString();
 
   // init
   onMount(async () => {
@@ -54,79 +40,64 @@
     litepicker.setStartDate(dateToday);
     litepicker.setEndDate(dateTomorrow);
 
-    litepicker.on(
-      "selected",
-      (
-        date1: import("litepicker/dist/types/datetime").DateTime,
-        date2: import("litepicker/dist/types/datetime").DateTime
-      ) => {
-        fields.startDate = date1.toJSDate().toISOString();
-
-        // make permit valid for the entirety of date2
-        date2.setHours(23, 59, 59);
-        fields.endDate = date2.toJSDate().toISOString();
-      }
-    );
+    litepicker.on("selected", (date1, date2) => {
+      startDate = date1.toJSDate().toISOString();
+      // make permit valid for the entirety of date2
+      date2.setHours(23, 59, 59);
+      endDate = date2.toJSDate().toISOString();
+    });
   });
 
   // events
-  const submit = async () => {
-    if (isException && fields.exceptionReason === "") {
-      alert("If this permit is an exception, please put a reason for the exception");
-      return;
-    }
-
-    fields.car.licensePlate = fields.car.licensePlate.toLocaleUpperCase();
-
-    const result = await post("api/permit", fields, permitDecoder);
-    if (!isOk(result)) {
-      if (result.message.includes("400")) {
-        alert(result.message);
-      } else if (result.message.includes("401")) {
-        alert("Your session has expired. Please log in again to create a permit.");
-        goto("/login"); // logs out because layout.server.ts re-runs
-      } else {
-        bannerError = result.message;
-      }
-      return;
-    }
-    goto(`/permit/${result.data.id}`);
-  };
+  async function handleSubmit() {
+    const formData = new FormData(this);
+    formData.set("startDate", startDate);
+    formData.set("endDate", endDate);
+    submitWithToken(formData, this.action, data.session.accessToken);
+  }
 </script>
 
 <svelte:head>
   <title>New Permit</title>
 </svelte:head>
 
-{#if bannerError != ""}
-  <div>
-    <p>Error creating permit: {bannerError}. Please try again later.</p>
+{#if form?.error}
+  <div style="text-align: center">
+    <p>{form.error}</p>
   </div>
 {/if}
-<form on:submit|preventDefault={submit}>
+<form method="POST" on:submit|preventDefault={handleSubmit}>
   <input
     required
     type="text"
+    name="residentID"
     placeholder="Resident ID"
     readonly={residentId !== ""}
-    bind:value={fields.residentId}
+    value={residentId}
   />
-  <input required type="text" placeholder="License Plate" bind:value={fields.car.licensePlate} />
-  <input required type="text" placeholder="Color" bind:value={fields.car.color} />
-  <input required type="text" placeholder="Make" bind:value={fields.car.make} />
-  <input required type="text" placeholder="Model" bind:value={fields.car.model} />
-  <input required type="text" id="litepicker" />
-  {#if user.role === "admin"}
+  <input required type="text" name="licensePlate" placeholder="License Plate" />
+  <input required type="text" name="color" placeholder="Color" />
+  <input required type="text" name="make" placeholder="Make" />
+  <input required type="text" name="model" placeholder="Model" />
+  <input required type="text" name="dates" id="litepicker" />
+  {#if data.session.user.role === "admin"}
     <div style="margin:20px;">
       <label for="isException">Exception: </label>
-      <input type="checkbox" id="isException" bind:checked={isException} />
+      <input
+        type="checkbox"
+        name="isException"
+        id="isException"
+        value="true"
+        bind:checked={isException}
+      />
     </div>
     {#if isException}
       <textarea
-        bind:value={fields.exceptionReason}
+        name="exceptionReason"
         placeholder="Reason for exception"
         rows="5"
         cols="30"
+        bind:value={exceptionReason}
       />
     {/if}
   {/if}
