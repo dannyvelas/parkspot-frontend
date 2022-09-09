@@ -32,8 +32,7 @@ export const newRefresh = async (user: User) => {
 
 export const newAccess = async (id: string, role: string) => {
   return await new jose.SignJWT({ payload: { id, role } })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
+    .setProtectedHeader({ alg: "HS256", typ: "JWT" })
     .setExpirationTime("7d")
     .sign(Buffer.from(ACCESS_SECRET));
 };
