@@ -9,7 +9,6 @@
   // model
   let passwordsShown = false;
   $: passwordType = passwordsShown ? "text" : "password";
-  $: banner = form?.response || "";
 
   async function handleSubmit() {
     submitWithToken(this, data.session.accessToken);
@@ -57,9 +56,9 @@
 </p>
 <hr />
 <h2>Create User Account</h2>
-{#if banner}
+{#if form?.response}
   <div style="text-align: center">
-    <p>{banner}</p>
+    <p>{form.response}</p>
   </div>
 {/if}
 <form method="POST" action="?/register" on:submit|preventDefault={handleSubmit}>
