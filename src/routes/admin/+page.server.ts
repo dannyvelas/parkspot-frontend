@@ -1,6 +1,7 @@
 import type { Actions } from "./$types";
 import * as decoders from "decoders";
 import { messageDecoder } from "$lib/models";
+import { decodeAndCheckEmpty } from '$lib/validation';
 import { invalid } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
@@ -20,21 +21,12 @@ export const actions: Actions = {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
 
-    const residentRes = formDecoder.decode(formObject);
-    if (!residentRes.ok) {
-      return invalid(400, {
-        response: "Program error, please notify the administration to fix this.",
-      });
+    const residentRes = decodeAndCheckEmpty(formDecoder, formObject);
+    if (!isOk(residentRes)) {
+      return invalid(400, { response: residentRes.message})
     }
 
-    const missing = Object.entries(residentRes.value)
-      .filter(([_, v]) => !v)
-      .map(([k, _]) => k);
-    if (missing.length > 0) {
-      return invalid(400, { response: `Missing fields: ${missing.join(", ")}` });
-    }
-
-    if (residentRes.value.password !== residentRes.value.confirmPassword) {
+    if (residentRes.data.password !== residentRes.data.confirmPassword) {
       return invalid(400, { response: "Passwords do not match" });
     }
 
@@ -46,7 +38,7 @@ export const actions: Actions = {
       return invalid(400, { response: "Error: your session has expired." });
     }
 
-    const result = await post(`api/account`, residentRes.value, messageDecoder, accessToken);
+    const result = await post(`api/account`, residentRes.data, messageDecoder, accessToken);
     if (!isOk(result)) {
       const response = result.message.includes("Failed to fetch")
         ? "Couldn't connect to server. Please notify the administration or try again later."
