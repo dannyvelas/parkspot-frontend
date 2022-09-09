@@ -31,7 +31,19 @@ export const actions: Actions = {
       });
     }
 
-    permitRes.data.licensePlate = permitRes.data.licensePlate.toLocaleUpperCase();
+    // cast to form that backend requests
+    const permitReq = {
+      residentID: permitRes.data.residentID,
+      car: {
+        licensePlate: permitRes.data.licensePlate.toLocaleUpperCase(),
+        color: permitRes.data.color,
+        make: permitRes.data.make,
+        model: permitRes.data.model,
+      },
+      startDate: permitRes.data.startDate,
+      endDate: permitRes.data.endDate,
+      exceptionReason: permitRes.data.exceptionReason || "",
+    };
 
     const prefix = "Bearer ";
     const authHeader = event.request.headers.get("Authorization");
@@ -41,7 +53,7 @@ export const actions: Actions = {
       return invalid(400, { error: "Error: your session has expired." });
     }
 
-    const result = await post("api/permit", permitRes.data, permitDecoder, accessToken);
+    const result = await post("api/permit", permitReq, permitDecoder, accessToken);
     if (!isOk(result)) {
       if (result.message.includes("401")) {
         return invalid(400, {
