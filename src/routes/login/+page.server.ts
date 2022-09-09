@@ -17,21 +17,20 @@ export const actions: Actions = {
     const formObject = Object.fromEntries(formData.entries());
     const credsRes = decodeAndCheckEmpty(formDecoder, formObject);
     if (!isOk(credsRes)) {
-      return invalid(400, { response: credsRes.message });
+      return invalid(400, { error: credsRes.message });
     }
 
     const result = await post("api/login", credsRes.data, sessionDecoder);
     if (!isOk(result)) {
-      let response = "Unhandled error. Please notify the administration or try again later.";
+      let error = "Unhandled error. Please notify the administration or try again later.";
       if (result.message.includes("Unauthorized")) {
-        response = "Wrong username or password. Please try again.";
+        error = "Wrong username or password. Please try again.";
       } else if (result.message.includes("Failed to fetch")) {
-        response =
-          "Couldn't connect to server. Please notify the administration or try again later.";
+        error = "Couldn't connect to server. Please notify the administration or try again later.";
       } else if (result.message.includes("500")) {
-        response = "Server error. Please notify the administration or try again later.";
+        error = "Server error. Please notify the administration or try again later.";
       }
-      return invalid(400, { response });
+      return invalid(400, { error });
     }
 
     const refreshToken = await newRefresh(result.data.user);

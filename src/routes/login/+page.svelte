@@ -12,9 +12,9 @@
 <svelte:head>
   <title>Login</title>
 </svelte:head>
-{#if form?.response}
+{#if form?.error}
   <div style="text-align: center">
-    <p>{form.response}</p>
+    <p>{form.error}</p>
   </div>
 {/if}
 <form method="POST" use:enhance>
