@@ -1,25 +1,26 @@
 import type { Actions } from "./$types";
+import * as decoders from "decoders";
 import { sessionDecoder, newRefresh } from "$lib/auth";
+import { decodeAndCheckEmpty } from "$lib/validation";
 import { invalid } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
 
+const formDecoder = decoders.object({
+  id: decoders.string,
+  password: decoders.string,
+});
+
 export const actions: Actions = {
   default: async (event) => {
-    const data = await event.request.formData();
-    const id = data.get("id")?.toString();
-    const password = data.get("password")?.toString();
-
-    const fields = [
-      ["id", id],
-      ["password", password],
-    ];
-    const missing = fields.filter(([_, v]) => v === "" || v === undefined).map(([k, _]) => k);
-    if (missing.length !== 0) {
-      return invalid(400, { error: `Missing fields: ${missing.join(", ")}` });
+    const formData = await event.request.formData();
+    const formObject = Object.fromEntries(formData.entries());
+    const credsRes = decodeAndCheckEmpty(formDecoder, formObject);
+    if (!isOk(credsRes)) {
+      return invalid(400, { response: credsRes.message });
     }
 
-    const result = await post("api/login", { id, password }, sessionDecoder);
+    const result = await post("api/login", credsRes.data, sessionDecoder);
     if (!isOk(result)) {
       let response = "Unhandled error. Please notify the administration or try again later.";
       if (result.message.includes("Unauthorized")) {
@@ -30,7 +31,7 @@ export const actions: Actions = {
       } else if (result.message.includes("500")) {
         response = "Server error. Please notify the administration or try again later.";
       }
-      return invalid(400, { error: response });
+      return invalid(400, { response });
     }
 
     const refreshToken = await newRefresh(result.data.user);
