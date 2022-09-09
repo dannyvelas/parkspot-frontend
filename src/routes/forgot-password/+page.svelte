@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
+  import { enhance } from "$app/forms";
 
   // props
   export let form: Record<string, any> | undefined;
@@ -7,9 +7,9 @@
 
 <h1>Request a Password Reset Email</h1>
 <h2>Enter your Account ID</h2>
-{#if form?.error}
+{#if form?.response}
   <div style="text-align: center">
-    <p>{form.error}</p>
+    <p>{form.response}</p>
   </div>
 {/if}
 <form method="POST" use:enhance>

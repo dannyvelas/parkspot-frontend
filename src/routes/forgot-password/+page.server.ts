@@ -6,20 +6,17 @@ import { post } from "$lib/api";
 
 export const actions: Actions = {
   default: async (event) => {
-    const data = await event.request.formData();
-    const id = data.get("id")?.toString();
-
-    const fields = [["id", id]];
-    const missing = fields.filter(([_, v]) => v === "" || v === undefined).map(([k, _]) => k);
-    if (missing.length !== 0) {
-      return invalid(400, { error: `Missing fields: ${missing.join(", ")}` });
+    const formData = await event.request.formData();
+    const formObject = Object.fromEntries(formData.entries());
+    if (!formObject.id) {
+      return invalid(400, { response: `Missing "id" field` });
     }
 
-    const postRes = await post(`api/password-reset-email`, { id }, messageDecoder);
+    const postRes = await post(`api/password-reset-email`, { id: formObject.id }, messageDecoder);
     if (!isOk(postRes)) {
-      return invalid(400, { error: postRes.message });
+      return invalid(400, { response: postRes.message });
     }
 
-    return postRes.data;
+    return { response: postRes.data.message };
   },
 };
