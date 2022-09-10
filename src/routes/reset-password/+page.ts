@@ -5,8 +5,8 @@ import { dashboard } from "$lib/navigation";
 export const load: PageLoad = async (loadInput) => {
   const parentData = await loadInput.parent();
   const accessToken = loadInput.url.searchParams.get("token");
-  if (parentData.user) {
-    throw redirect(307, dashboard(parentData.user));
+  if (parentData.session) {
+    throw redirect(307, dashboard(parentData.session.user));
   } else if (accessToken == "" || accessToken == null) {
     throw redirect(307, "/login");
   }
