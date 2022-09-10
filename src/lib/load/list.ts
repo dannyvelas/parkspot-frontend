@@ -10,6 +10,7 @@ export type listConfig<T> = {
   decoder: Decoder<T>;
   reversed: boolean;
   page: number;
+  accessToken: string;
 };
 
 export async function loadList<T>(args: listConfig<T>): Promise<Result<ListWithMetadata<T>>> {
@@ -19,5 +20,5 @@ export async function loadList<T>(args: listConfig<T>): Promise<Result<ListWithM
     page: `${args.page}`,
   };
 
-  return await get(args.endpoint, params, listWithMetadataDecoder(args.decoder));
+  return await get(args.endpoint, params, listWithMetadataDecoder(args.decoder), args.accessToken);
 }

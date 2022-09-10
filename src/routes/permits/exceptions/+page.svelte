@@ -5,4 +5,4 @@
   export let data: PageData;
 </script>
 
-<Page listName="exceptions" result={data.result} userRole={data.userRole} />
+<Page listName="exceptions" {...data} />

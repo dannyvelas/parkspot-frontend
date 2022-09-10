@@ -5,4 +5,4 @@
   export let data: PageData;
 </script>
 
-<Page listName="expired" result={data.result} userRole={data.userRole} />
+<Page listName="expired" {...data} />

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Result } from "$lib/functional";
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
+  import type { Session } from "$lib/auth";
   import { permitDecoder, previewPermit } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/convert";
@@ -13,7 +14,7 @@
   // props
   export let listName: permitList;
   export let result: Result<ListWithMetadata<Permit>>;
-  export let userRole: string;
+  export let session: Session;
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
@@ -32,7 +33,7 @@
   });
 
   // events
-  const updateRecords = async (event: CustomEvent<Result<Permit[]>>) => {
+  const handleSearch = async (event: CustomEvent<Result<Permit[]>>) => {
     if (!isOk(event.detail)) {
       result.data!.records = initialPermits;
       bannerError = `Error searching: ${event.detail.message}`;
@@ -65,13 +66,13 @@
       preview={previewPermit}
       totalAmount={result.data.metadata.totalAmount}
       endpoint={`api/permits/${listName}`}
-      on:result={updateRecords}
+      on:result={handleSearch}
     />
     <List
       {listName}
       permits={result.data.records}
       totalAmount={result.data.metadata.totalAmount}
-      {userRole}
+      {session}
     />
     <Pagination
       totalAmount={result.data.metadata.totalAmount}
