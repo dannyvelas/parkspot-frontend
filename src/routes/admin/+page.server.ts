@@ -5,6 +5,7 @@ import { decodeAndCheckEmpty } from "$lib/form";
 import { invalid } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
+import { getHeaderToken } from "$lib/auth";
 
 const formDecoder = decoders.object({
   residentID: decoders.string,
@@ -29,10 +30,7 @@ export const actions: Actions = {
       return invalid(400, { response: "Passwords do not match" });
     }
 
-    const prefix = "Bearer ";
-    const authHeader = event.request.headers.get("Authorization");
-    const wellFormed = authHeader && authHeader.startsWith(prefix);
-    const accessToken = wellFormed ? authHeader.slice(prefix.length) : "";
+    const accessToken = getHeaderToken(event.request.headers);
     if (!accessToken) {
       return invalid(400, { response: "Error: your session has expired." });
     }

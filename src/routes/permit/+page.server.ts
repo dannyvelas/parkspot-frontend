@@ -5,6 +5,7 @@ import { decodeAndCheckEmpty } from "$lib/form";
 import { invalid, redirect } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
+import { getHeaderToken } from "$lib/auth";
 
 const formDecoder = object({
   residentID: string,
@@ -45,10 +46,7 @@ export const actions: Actions = {
       exceptionReason: permitRes.data.exceptionReason || "",
     };
 
-    const prefix = "Bearer ";
-    const authHeader = event.request.headers.get("Authorization");
-    const wellFormed = authHeader && authHeader.startsWith(prefix);
-    const accessToken = wellFormed ? authHeader.slice(prefix.length) : "";
+    const accessToken = getHeaderToken(event.request.headers);
     if (!accessToken) {
       return invalid(400, { error: "Error: your session has expired." });
     }
