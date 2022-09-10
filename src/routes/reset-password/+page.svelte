@@ -1,57 +1,30 @@
 <script lang="ts">
-  import { put } from "$lib/api";
-  import { messageDecoder } from "$lib/models";
-  import { isOk } from "$lib/functional";
+  import { submitWithToken } from "$lib/form";
+  import type { PageData } from "./$types";
 
   // props
-  export let accessToken: string;
+  export let data: PageData;
+  export let form: Record<string, any> | undefined;
 
   // model
-  let password = "";
-  let confirmPassword = "";
   let passwordsShown = false;
   $: passwordType = passwordsShown ? "text" : "password";
-  let banner = "";
 
   // events
-  const inputPassword = (e: any) => {
-    password = e.target.value;
-  };
-  const inputConfirmPassword = (e: any) => {
-    confirmPassword = e.target.value;
-  };
-
-  const submit = async () => {
-    if (password !== confirmPassword) {
-      banner = "Error: passwords do not match";
-      return;
-    }
-
-    const payload = { password };
-    const putRes = await put(`api/account/password`, payload, messageDecoder, accessToken);
-    if (!isOk(putRes)) {
-      banner = putRes.message;
-      return;
-    }
-
-    banner = putRes.data.message;
-  };
+  function handleSubmit() {
+    submitWithToken(this, data.accessToken);
+  }
 </script>
 
 <h1>Enter Your New Password</h1>
-{#if banner != ""}
+{#if form?.response}
   <div style="text-align: center">
-    <p>{banner}</p>
+    <p>{form.response}</p>
   </div>
 {/if}
-<form on:submit|preventDefault={submit}>
-  <input required type={passwordType} placeholder="New Password" on:input={inputPassword} />
-  <input
-    required
-    type={passwordType}
-    placeholder="New Password Again"
-    on:input={inputConfirmPassword}
-  />
+<form method="POST" on:submit|preventDefault={handleSubmit}>
+  <input required type={passwordType} name="password" placeholder="New Password" />
+  <input required type={passwordType} name="confirmPassword" placeholder="New Password Again" />
   <div style="margin:20px;">
     <label for="showPasswords">Show Passwords: </label>
     <input type="checkbox" id="showPasswords" bind:checked={passwordsShown} />
