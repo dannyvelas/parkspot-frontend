@@ -7,7 +7,7 @@ export const load: PageLoad = async (loadInput) => {
   const accessToken = loadInput.url.searchParams.get("token");
   if (parentData.session) {
     throw redirect(307, dashboard(parentData.session.user));
-  } else if (accessToken == "" || accessToken == null) {
+  } else if (!accessToken) {
     throw redirect(307, "/login");
   }
 
