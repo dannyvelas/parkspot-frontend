@@ -10,7 +10,7 @@
   let passwordsShown = false;
   $: passwordType = passwordsShown ? "text" : "password";
 
-  async function handleSubmit() {
+  function handleSubmit() {
     submitWithToken(this, data.session.accessToken);
   }
 </script>

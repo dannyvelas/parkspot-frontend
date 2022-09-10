@@ -49,7 +49,7 @@
   });
 
   // events
-  async function handleSubmit() {
+  function handleSubmit() {
     const formData = new FormData(this);
     formData.set("startDate", startDate);
     formData.set("endDate", endDate);
