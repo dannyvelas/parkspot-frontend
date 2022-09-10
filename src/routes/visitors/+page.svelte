@@ -15,7 +15,7 @@
 
   // props
   export let data: PageData;
-  const { result, userRole } = data;
+  const { result, session } = data;
 
   // model
   let initialVisitors: Array<Visitor>;
@@ -27,7 +27,7 @@
   });
 
   // events
-  const updateRecords = async (event: CustomEvent<Result<Visitor[]>>) => {
+  const handleSearch = async (event: CustomEvent<Result<Visitor[]>>) => {
     if (!isOk(event.detail)) {
       result.data!.records = initialVisitors;
       bannerError = `Error searching: ${event.detail.message}`;
@@ -60,13 +60,9 @@
       preview={previewVisitor}
       totalAmount={result.data.metadata.totalAmount}
       endpoint={`api/visitors`}
-      on:result={updateRecords}
+      on:result={handleSearch}
     />
-    <List
-      {userRole}
-      visitors={result.data.records}
-      totalAmount={result.data.metadata.totalAmount}
-    />
+    <List {session} visitors={result.data.records} totalAmount={result.data.metadata.totalAmount} />
     <Pagination
       totalAmount={result.data.metadata.totalAmount}
       pageToHref={(pageNum) => `visitors?page=${pageNum}`}

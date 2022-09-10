@@ -5,7 +5,7 @@ import { loadList } from "$lib/load";
 
 export const load: PageLoad = async (loadInput) => {
   const parentData = await loadInput.parent();
-  const user = onlyRole("admin", parentData.user);
+  const session = onlyRole("admin", parentData.session);
   const page = Number(loadInput.url.searchParams.get("page")) || 1;
 
   const result = await loadList({
@@ -13,10 +13,11 @@ export const load: PageLoad = async (loadInput) => {
     decoder: visitorDecoder,
     reversed: false,
     page,
+    accessToken: session.accessToken,
   });
 
   return {
     result,
-    userRole: user.role,
+    session,
   };
 };
