@@ -24,9 +24,7 @@ export const actions: Actions = {
     const residentRes = decodeAndCheckEmpty(formDecoder, formObject);
     if (!isOk(residentRes)) {
       return invalid(400, { response: residentRes.message });
-    }
-
-    if (residentRes.data.password !== residentRes.data.confirmPassword) {
+    } else if (residentRes.data.password !== residentRes.data.confirmPassword) {
       return invalid(400, { response: "Passwords do not match" });
     }
 
