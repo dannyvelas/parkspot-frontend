@@ -5,7 +5,7 @@ import { newOk, newErr } from "$lib/functional";
 import { applyAction } from "$app/forms";
 import { invalidateAll } from "$app/navigation";
 
-export function decodeAndCheckEmpty<T>(decoder: Decoder<T>, obj: unknown): Result<T> {
+export function validate<T>(decoder: Decoder<T>, obj: unknown): Result<T> {
   const decodeRes = decoder.decode(obj);
   if (!decodeRes.ok) {
     return newErr("Program error, please notify the administration to fix this.");

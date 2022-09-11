@@ -1,7 +1,7 @@
 import type { Actions } from "./$types";
 import * as decoders from "decoders";
 import { sessionDecoder, newRefresh } from "$lib/auth";
-import { decodeAndCheckEmpty } from "$lib/form";
+import { validate } from "$lib/form";
 import { invalid } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
@@ -15,7 +15,7 @@ export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    const credsRes = decodeAndCheckEmpty(formDecoder, formObject);
+    const credsRes = validate(formDecoder, formObject);
     if (!isOk(credsRes)) {
       return invalid(400, { error: credsRes.message });
     }
