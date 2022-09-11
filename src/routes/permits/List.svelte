@@ -3,24 +3,13 @@
   import type { Session } from "$lib/auth";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
-  import { dateToYmd } from "$lib/convert";
+  import { dateToYmd, tsToDate } from "$lib/convert";
 
   // props
   export let session: Session;
   export let listName: permitList;
   export let permits: Array<Permit>;
   export let totalAmount: number;
-
-  // rendering
-  const tsToDate = (ts: number): string => {
-    if (ts === 0) {
-      return "";
-    }
-    const date = new Date(ts * 1000);
-    const offset = date.getTimezoneOffset();
-    const offset_date = new Date(date.getTime() - offset * 60 * 1000).toISOString();
-    return offset_date.replace("T", " ").split(".")[0];
-  };
 
   // events
   const deletePermit = async (i: number, permitId: number) => {
