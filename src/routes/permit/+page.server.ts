@@ -48,7 +48,7 @@ export const actions: Actions = {
 
     const accessToken = getHeaderToken(event.request.headers);
     if (!accessToken) {
-      return invalid(400, { error: "Error: your session has expired." });
+      return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
     }
 
     const result = await post("api/permit", permitReq, permitDecoder, accessToken);
