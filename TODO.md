@@ -42,6 +42,7 @@
 - [x] right now, every permit page except for the all permits page will only query for the first page of permits, and when a user searches, it will only search that first page of permits. The permits on all other pages never get searched. Change the search on these pages such that if there's only one page, the behavior stays the same. If there's more than one page, have it perform the same type of API search the all permits page uses.
 - [x] move dashboard func to lib directory
 - [x] fix the cheap way that permit list checks whether its a resident list or admin list (by using `pageToHref.includes`)
+- [ ] check if `PageData.session` will still be available in a component, even if you don't return it explicitly in the load function
 - [ ] make color be a dropdown
 - [ ] make counts update when permits are deleted
 - [ ] remove /request suffix from page that creates permits
