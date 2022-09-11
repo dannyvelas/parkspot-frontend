@@ -12,7 +12,7 @@ export const actions: Actions = {
       return invalid(400, {
         response: "Program error, please notify the administration to fix this.",
       });
-    } else if (formObject.id === "") {
+    } else if (!formObject.id) {
       return invalid(400, { response: "Missing fields: id" });
     }
 
