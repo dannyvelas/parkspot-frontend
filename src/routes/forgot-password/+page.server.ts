@@ -16,7 +16,12 @@ export const actions: Actions = {
       return invalid(400, { response: "Missing fields: id" });
     }
 
-    const postRes = await post(`api/password-reset-email`, { id: formObject.id }, messageDecoder);
+    const postRes = await post(
+      `api/password-reset-email`,
+      { id: formObject.id },
+      messageDecoder,
+      ""
+    );
     if (!isOk(postRes)) {
       return invalid(400, { response: postRes.message });
     }

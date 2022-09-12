@@ -10,7 +10,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
     return {};
   }
 
-  const sessionRes = await post("api/refresh-tokens", {}, sessionDecoder, undefined, [
+  const sessionRes = await post("api/refresh-tokens", {}, sessionDecoder, "", [
     ["cookie", `refresh=${cookies.refresh}`],
   ]);
   if (!isOk(sessionRes)) {

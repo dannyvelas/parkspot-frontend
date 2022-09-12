@@ -20,7 +20,7 @@ export const actions: Actions = {
       return invalid(400, { error: credsRes.message });
     }
 
-    const result = await post("api/login", credsRes.data, sessionDecoder);
+    const result = await post("api/login", credsRes.data, sessionDecoder, "");
     if (!isOk(result)) {
       let error = "Unhandled error. Please notify the administration or try again later.";
       if (result.message.includes("Unauthorized")) {

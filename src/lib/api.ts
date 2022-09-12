@@ -18,7 +18,7 @@ type FetchOpts = {
 const getFetchOpts = <ReqBody>(
   method: Method,
   request: ReqBody | undefined,
-  accessToken?: string,
+  accessToken: string,
   headers?: Array<[string, string]>
 ) => {
   const fetchOpts: FetchOpts = {
@@ -87,7 +87,7 @@ const sendReq = async <ReqBody, ResBody>(
   params: Record<string, string>,
   request: ReqBody | undefined,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string,
+  accessToken: string,
   headers?: Array<[string, string]>
 ): Promise<Result<ResBody>> => {
   const fetchOpts = getFetchOpts(method, request, accessToken, headers);
@@ -122,7 +122,7 @@ export const get = <ResBody>(
   path: string,
   params: Record<string, string>,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string,
+  accessToken: string,
   headers?: Array<[string, string]>
 ) =>
   sendReq<undefined, ResBody>(
@@ -137,7 +137,7 @@ export const get = <ResBody>(
 
 export const del = async (
   path: string,
-  accessToken?: string,
+  accessToken: string,
   headers?: Array<[string, string]>
 ): Promise<Result<Message>> =>
   sendReq<undefined, Message>("DELETE", path, {}, undefined, messageDecoder, accessToken, headers);
@@ -146,7 +146,7 @@ export const post = <ReqBody, ResBody>(
   path: string,
   request: ReqBody,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string,
+  accessToken: string,
   headers?: Array<[string, string]>
 ) => sendReq<ReqBody, ResBody>("POST", path, {}, request, responseDecoder, accessToken, headers);
 
@@ -154,6 +154,6 @@ export const put = <ReqBody, ResBody>(
   path: string,
   request: ReqBody,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string,
+  accessToken: string,
   headers?: Array<[string, string]>
 ) => sendReq<ReqBody, ResBody>("PUT", path, {}, request, responseDecoder, accessToken, headers);

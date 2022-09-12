@@ -12,7 +12,7 @@
   // events
   async function logout() {
     if (session) {
-      const postRes = await post(`api/logout`, {}, messageDecoder);
+      const postRes = await post(`api/logout`, {}, messageDecoder, "");
       if (!isOk(postRes)) {
         console.error("Error logging out");
       }
