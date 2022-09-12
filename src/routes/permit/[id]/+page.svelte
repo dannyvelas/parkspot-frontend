@@ -4,7 +4,7 @@
   import { dateToYmd, tsToDate } from "$lib/convert";
 
   export let data: PageData;
-  const { result } = data;
+  $: result = data.result;
 </script>
 
 <svelte:head>

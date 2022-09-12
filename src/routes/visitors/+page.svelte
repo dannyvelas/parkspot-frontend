@@ -15,7 +15,8 @@
 
   // props
   export let data: PageData;
-  const { result, session } = data;
+  $: result = data.result;
+  $: session = data.session;
 
   // model
   let initialVisitors: Array<Visitor>;
