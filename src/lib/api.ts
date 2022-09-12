@@ -10,24 +10,35 @@ const HOSTNAME = import.meta.env.VITE_SERVER;
 type FetchOpts = {
   method: Method;
   mode: "cors";
-  headers?: Headers;
+  headers: Headers;
   body?: string;
   credentials: "include";
 };
 
-const getFetchOpts = <ReqBody>(method: Method, request?: ReqBody, accessToken?: string) => {
-  const fetchOpts: FetchOpts = { method, mode: "cors", credentials: "include" };
+const getFetchOpts = <ReqBody>(
+  method: Method,
+  request: ReqBody | undefined,
+  accessToken?: string,
+  headers?: Array<[string, string]>
+) => {
+  const fetchOpts: FetchOpts = {
+    method,
+    mode: "cors",
+    credentials: "include",
+    headers: new Headers(),
+  };
   if (request) {
-    fetchOpts.headers = new Headers({ "Content-Type": "application/json" });
+    fetchOpts.headers.append("Content-Type", "application/json");
     fetchOpts.body = JSON.stringify(request);
   }
 
   if (accessToken) {
-    if (fetchOpts.headers) {
-      fetchOpts.headers.append("Authorization", `Bearer ${accessToken}`);
-    } else {
-      fetchOpts.headers = new Headers({ Authorization: `Bearer ${accessToken}` });
-    }
+    fetchOpts.headers.append("Authorization", `Bearer ${accessToken}`);
+  }
+
+  const justHeaders = headers !== undefined ? headers : [];
+  for (const [k, v] of justHeaders) {
+    fetchOpts.headers.append(k, v);
   }
 
   return fetchOpts;
@@ -76,9 +87,10 @@ const sendReq = async <ReqBody, ResBody>(
   params: Record<string, string>,
   request: ReqBody | undefined,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string
+  accessToken?: string,
+  headers?: Array<[string, string]>
 ): Promise<Result<ResBody>> => {
-  const fetchOpts = getFetchOpts(method, request, accessToken);
+  const fetchOpts = getFetchOpts(method, request, accessToken, headers);
   const paramStr = new URLSearchParams(params).toString();
   const response = await getResponse(`${path}?${paramStr}`, fetchOpts);
   if (!isOk(response)) {
@@ -110,22 +122,38 @@ export const get = <ResBody>(
   path: string,
   params: Record<string, string>,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string
-) => sendReq<undefined, ResBody>("GET", path, params, undefined, responseDecoder, accessToken);
+  accessToken?: string,
+  headers?: Array<[string, string]>
+) =>
+  sendReq<undefined, ResBody>(
+    "GET",
+    path,
+    params,
+    undefined,
+    responseDecoder,
+    accessToken,
+    headers
+  );
 
-export const del = async (path: string, accessToken?: string): Promise<Result<Message>> =>
-  sendReq<undefined, Message>("DELETE", path, {}, undefined, messageDecoder, accessToken);
+export const del = async (
+  path: string,
+  accessToken?: string,
+  headers?: Array<[string, string]>
+): Promise<Result<Message>> =>
+  sendReq<undefined, Message>("DELETE", path, {}, undefined, messageDecoder, accessToken, headers);
 
 export const post = <ReqBody, ResBody>(
   path: string,
   request: ReqBody,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string
-) => sendReq<ReqBody, ResBody>("POST", path, {}, request, responseDecoder, accessToken);
+  accessToken?: string,
+  headers?: Array<[string, string]>
+) => sendReq<ReqBody, ResBody>("POST", path, {}, request, responseDecoder, accessToken, headers);
 
 export const put = <ReqBody, ResBody>(
   path: string,
   request: ReqBody,
   responseDecoder: Decoder<ResBody>,
-  accessToken?: string
-) => sendReq<ReqBody, ResBody>("PUT", path, {}, request, responseDecoder, accessToken);
+  accessToken?: string,
+  headers?: Array<[string, string]>
+) => sendReq<ReqBody, ResBody>("PUT", path, {}, request, responseDecoder, accessToken, headers);
