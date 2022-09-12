@@ -27,7 +27,7 @@
   // events
   const deleteResident = async (i: number, residentId: string) => {
     if (confirm(`Are you sure you want to delete ${residentId}?`)) {
-      const delRes = await del(`api/resident/${residentId}`);
+      const delRes = await del(`api/resident/${residentId}`, session.accessToken);
       if (!isOk(delRes)) {
         alert(`Error deleting resident ${residentId}. Please try again later`);
         return;
@@ -37,6 +37,7 @@
         ...result.data!.records.slice(0, i),
         ...result.data!.records.slice(i + 1),
       ];
+      result.data!.metadata.totalAmount = result.data!.metadata.totalAmount - 1;
 
       alert(`Deleted resident ${residentId}`);
     }
