@@ -61,6 +61,7 @@
       preview={previewVisitor}
       totalAmount={result.data.metadata.totalAmount}
       endpoint={`api/visitors`}
+      accessToken={session.accessToken}
       on:result={handleSearch}
     />
     <List {session} visitors={result.data.records} totalAmount={result.data.metadata.totalAmount} />

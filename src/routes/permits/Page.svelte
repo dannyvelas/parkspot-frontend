@@ -66,6 +66,7 @@
       preview={previewPermit}
       totalAmount={result.data.metadata.totalAmount}
       endpoint={`api/permits/${listName}`}
+      accessToken={session.accessToken}
       on:result={handleSearch}
     />
     <List
