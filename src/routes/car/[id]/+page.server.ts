@@ -17,7 +17,6 @@ export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    console.log(formObject);
     const formRes = validate(formDecoder, formObject, true);
     if (!isOk(formRes)) {
       return invalid(400, { response: formRes.message });
