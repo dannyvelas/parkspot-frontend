@@ -42,15 +42,15 @@
 - [x] right now, every permit page except for the all permits page will only query for the first page of permits, and when a user searches, it will only search that first page of permits. The permits on all other pages never get searched. Change the search on these pages such that if there's only one page, the behavior stays the same. If there's more than one page, have it perform the same type of API search the all permits page uses.
 - [x] move dashboard func to lib directory
 - [x] fix the cheap way that permit list checks whether its a resident list or admin list (by using `pageToHref.includes`)
-- [ ] check if `PageData.session` will still be available in a component, even if you don't return it explicitly in the load function
+- [x] check if `PageData.session` will still be available in a component, even if you don't return it explicitly in the load function. ANS: it will be available, but as possibly undefined. so it's best to return it explicitly in the load func if you need it
+- [x] move renderDate and tsToDate funcs to libs since both \_PermitsList and permit/[id] components use them
 - [ ] make color be a dropdown
-- [ ] make counts update when permits are deleted
+- [ ] make counts update when permits are deleted. also when permits are searched
 - [ ] remove /request suffix from page that creates permits
 - [ ] use .scraps/permits/\_\_layout.svelte to inject all the boilerplate into src/routes/permits funcs
 - [ ] use dashboard func in lib directory instead of using ones that are defined on-the-spot
 - [ ] make sure all load funcs redirect to a users dashboard when that user accesses a page for which they do not have the right role.
 - [ ] make /permits/\* pages automatically re-route to the resident dashboard if it's a resident that is trying to access them
-- [ ] move renderDate and tsToDate funcs to libs since both \_PermitsList and permit/[id] components use them
 - [ ] remove `src/routes/residents/\_load.ts` and make it use the `loadList` func instead
 - [ ] detach pagination and searching from PermitList and VisitorList
 - [ ] probably remove NewPermitReq type definition, it's only used once in one place
