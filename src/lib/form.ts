@@ -5,10 +5,18 @@ import { newOk, newErr } from "$lib/functional";
 import { applyAction } from "$app/forms";
 import { invalidateAll } from "$app/navigation";
 
-export function validate<T>(decoder: Decoder<T>, obj: unknown): Result<T> {
+export function validate<T>(
+  decoder: Decoder<T>,
+  obj: unknown,
+  emptyOk: boolean = false
+): Result<T> {
   const decodeRes = decoder.decode(obj);
   if (!decodeRes.ok) {
-    return newErr("Program error, please notify the administration to fix this.");
+    return newErr("Program error, please notify the administration to fix this");
+  }
+
+  if (emptyOk) {
+    return newOk(decodeRes.value);
   }
 
   const missing = Object.entries(decodeRes.value)
@@ -21,12 +29,13 @@ export function validate<T>(decoder: Decoder<T>, obj: unknown): Result<T> {
   return newOk(decodeRes.value);
 }
 
-export async function submitWithToken(
-  form: HTMLFormElement,
-  accessToken: string,
-  formData?: FormData // optionally override default formdata
-) {
-  const justFormData = formData ?? new FormData(form);
+type opts = {
+  formData?: FormData; // optionally override default formdata
+  resetForm?: boolean; // optionally reset form values after submit
+};
+
+export async function submitWithToken(form: HTMLFormElement, accessToken: string, opts?: opts) {
+  const justFormData = opts?.formData ?? new FormData(form);
 
   const response = await fetch(form.action, {
     method: "POST",
@@ -37,7 +46,9 @@ export async function submitWithToken(
 
   if (result.type === "success") {
     await invalidateAll();
-    form.reset();
+    if (opts?.resetForm === undefined || opts.resetForm === true) {
+      form.reset();
+    }
   }
 
   applyAction(result);
