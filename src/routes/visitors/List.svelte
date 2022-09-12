@@ -20,6 +20,7 @@
       }
 
       visitors = [...visitors.slice(0, i), ...visitors.slice(i + 1)];
+      totalAmount = totalAmount - 1;
 
       alert(`Deleted visitor ${fullName}`);
     }
