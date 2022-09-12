@@ -1,11 +1,9 @@
 import type { PageLoad } from "./$types";
-import { redirect } from "@sveltejs/kit";
+import { onlyRole } from "$lib/auth";
 
 export const load: PageLoad = async ({ parent }) => {
   const parentData = await parent();
-  if (!parentData.session) {
-    throw redirect(307, "/login");
-  }
+  const session = onlyRole("admin", parentData.session);
 
-  return { session: parentData.session };
+  return { session };
 };
