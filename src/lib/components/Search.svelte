@@ -17,6 +17,7 @@
   export let preview: (a: T) => string;
   export let totalAmount: number;
   export let endpoint: string;
+  export let accessToken: string;
 
   // model
   let searchVal = "";
@@ -41,7 +42,12 @@
       );
     }
 
-    const getRes = await get(endpoint, { search: searchVal }, listWithMetadataDecoder(decoder));
+    const getRes = await get(
+      endpoint,
+      { search: searchVal },
+      listWithMetadataDecoder(decoder),
+      accessToken
+    );
     if (!isOk(getRes)) {
       return newErr(getRes.message);
     }
