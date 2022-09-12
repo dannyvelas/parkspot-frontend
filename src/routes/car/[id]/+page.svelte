@@ -6,11 +6,11 @@
   // props
   export let data: PageData;
   export let form: Record<string, any> | undefined;
-  const { result } = data;
+  $: result = data.result;
 
   // events
   function handleSubmit() {
-    submitWithToken(this, data.session.accessToken);
+    submitWithToken(this, data.session.accessToken, { resetForm: false });
   }
 </script>
 
@@ -24,17 +24,17 @@
   <h1>Edit Car</h1>
   {#if form?.response}
     <div>
-      <p>Error editing car: {form.response}. Please try again later.</p>
+      <p>{form.response}</p>
     </div>
   {/if}
   <p>License Plate: {result.data.licensePlate}</p>
   <form on:submit|preventDefault={handleSubmit}>
     Color:
-    <input type="text" placeholder={result.data.color} value={result.data.color} />
+    <input type="text" name="color" placeholder={result.data.color} />
     Make:
-    <input type="text" placeholder={result.data.make} value={result.data.make} />
+    <input type="text" name="make" placeholder={result.data.make} />
     Model:
-    <input type="text" placeholder={result.data.model} value={result.data.model} />
+    <input type="text" name="model" placeholder={result.data.model} />
     <button type="submit">Submit</button>
   </form>
 {/if}
