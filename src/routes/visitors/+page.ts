@@ -1,11 +1,11 @@
 import type { PageLoad } from "./$types";
-import { onlyRole } from "$lib/auth";
+import { redirect } from "@sveltejs/kit";
 import { visitorDecoder } from "$lib/models";
 import { loadList } from "$lib/load";
 
 export const load: PageLoad = async (loadInput) => {
   const parentData = await loadInput.parent();
-  const session = onlyRole("admin", parentData.session);
+  if (!parentData.session) throw redirect(307, "/login");
   const page = Number(loadInput.url.searchParams.get("page")) || 1;
 
   const result = await loadList({
@@ -13,11 +13,11 @@ export const load: PageLoad = async (loadInput) => {
     decoder: visitorDecoder,
     reversed: false,
     page,
-    accessToken: session.accessToken,
+    accessToken: parentData.session.accessToken,
   });
 
   return {
     result,
-    session,
+    session: parentData.session,
   };
 };
