@@ -31,6 +31,7 @@ export function validate<T>(
 
 type opts = {
   formData?: FormData; // optionally override default formdata
+  resetForm?: boolean; // optionally reset form values after submit
 };
 
 export async function submitWithToken(form: HTMLFormElement, accessToken: string, opts?: opts) {
@@ -45,7 +46,9 @@ export async function submitWithToken(form: HTMLFormElement, accessToken: string
 
   if (result.type === "success") {
     await invalidateAll();
-    form.reset();
+    if (opts?.resetForm === undefined || opts.resetForm === true) {
+      form.reset();
+    }
   }
 
   applyAction(result);
