@@ -21,10 +21,10 @@ export const actions: Actions = {
   register: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    const residentRes = validate(formDecoder, formObject);
-    if (!isOk(residentRes)) {
-      return invalid(400, { response: residentRes.message });
-    } else if (residentRes.data.password !== residentRes.data.confirmPassword) {
+    const formRes = validate(formDecoder, formObject);
+    if (!isOk(formRes)) {
+      return invalid(400, { response: formRes.message });
+    } else if (formRes.data.password !== formRes.data.confirmPassword) {
       return invalid(400, { response: "Passwords do not match" });
     }
 
@@ -33,7 +33,7 @@ export const actions: Actions = {
       return invalid(400, { response: tokenRes.message });
     }
 
-    const result = await post(`api/account`, residentRes.data, messageDecoder, tokenRes.data);
+    const result = await post(`api/account`, formRes.data, messageDecoder, tokenRes.data);
     if (!isOk(result)) {
       if (result.message.includes("401")) {
         return invalid(400, {

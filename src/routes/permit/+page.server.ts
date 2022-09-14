@@ -23,10 +23,10 @@ export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    const permitRes = validate(formDecoder, formObject);
-    if (!isOk(permitRes)) {
-      return invalid(400, { error: permitRes.message });
-    } else if (permitRes.data.isException === "true" && permitRes.data.exceptionReason === "") {
+    const formRes = validate(formDecoder, formObject);
+    if (!isOk(formRes)) {
+      return invalid(400, { error: formRes.message });
+    } else if (formRes.data.isException === "true" && formRes.data.exceptionReason === "") {
       return invalid(400, {
         error: "If this permit is an exception, please put a reason for the exception",
       });
@@ -34,16 +34,16 @@ export const actions: Actions = {
 
     // cast to form that backend requests
     const permitReq = {
-      residentID: permitRes.data.residentID,
+      residentID: formRes.data.residentID,
       car: {
-        licensePlate: permitRes.data.licensePlate.toLocaleUpperCase(),
-        color: permitRes.data.color,
-        make: permitRes.data.make,
-        model: permitRes.data.model,
+        licensePlate: formRes.data.licensePlate.toLocaleUpperCase(),
+        color: formRes.data.color,
+        make: formRes.data.make,
+        model: formRes.data.model,
       },
-      startDate: permitRes.data.startDate,
-      endDate: permitRes.data.endDate,
-      exceptionReason: permitRes.data.exceptionReason || "",
+      startDate: formRes.data.startDate,
+      endDate: formRes.data.endDate,
+      exceptionReason: formRes.data.exceptionReason || "",
     };
 
     const tokenRes = getHeaderToken(event.request.headers);
@@ -51,7 +51,7 @@ export const actions: Actions = {
       return invalid(400, { response: tokenRes.message });
     }
 
-    const result = await post("api/permit", permitReq, permitDecoder, accessToken);
+    const result = await post("api/permit", permitReq, permitDecoder, tokenRes.data);
     if (!isOk(result)) {
       if (result.message.includes("401")) {
         return invalid(400, {

@@ -15,12 +15,12 @@ export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    const credsRes = validate(formDecoder, formObject);
-    if (!isOk(credsRes)) {
-      return invalid(400, { error: credsRes.message });
+    const formRes = validate(formDecoder, formObject);
+    if (!isOk(formRes)) {
+      return invalid(400, { error: formRes.message });
     }
 
-    const result = await post("api/login", credsRes.data, sessionDecoder, "");
+    const result = await post("api/login", formRes.data, sessionDecoder, "");
     if (!isOk(result)) {
       let error = "Unhandled error. Please notify the administration or try again later.";
       if (result.message.includes("Unauthorized")) {
