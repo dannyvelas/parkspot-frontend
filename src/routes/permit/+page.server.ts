@@ -23,13 +23,10 @@ export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
+    console.log(formObject);
     const formRes = validate(formDecoder, formObject);
     if (!isOk(formRes)) {
       return invalid(400, { error: formRes.message });
-    } else if (formRes.data.isException === "true" && formRes.data.exceptionReason === "") {
-      return invalid(400, {
-        error: "If this permit is an exception, please put a reason for the exception",
-      });
     }
 
     // cast to form that backend requests
@@ -48,14 +45,15 @@ export const actions: Actions = {
 
     const tokenRes = getHeaderToken(event.request.headers);
     if (!isOk(tokenRes)) {
-      return invalid(400, { response: tokenRes.message });
+      return invalid(401, { response: tokenRes.message });
     }
 
     const result = await post("api/permit", permitReq, permitDecoder, tokenRes.data);
     if (!isOk(result)) {
       if (result.message.includes("401")) {
-        return invalid(400, {
-          error: "Your session has expired. Please log in again to create a permit.",
+        return invalid(401, {
+          error:
+            "Your session has expired. Please log out and log back in again to create a permit.",
         });
       }
       return invalid(400, { error: result.message });
