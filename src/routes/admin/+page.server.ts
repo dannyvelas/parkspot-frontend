@@ -28,19 +28,19 @@ export const actions: Actions = {
       return invalid(400, { response: "Passwords do not match" });
     }
 
-    const accessToken = getHeaderToken(event.request.headers);
-    if (!accessToken) {
-      return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
+    const tokenRes = getHeaderToken(event.request.headers);
+    if (!isOk(tokenRes)) {
+      return invalid(400, { response: tokenRes.message });
     }
 
-    const result = await post(`api/account`, residentRes.data, messageDecoder, accessToken);
+    const result = await post(`api/account`, residentRes.data, messageDecoder, tokenRes.data);
     if (!isOk(result)) {
-      const response = result.message.includes("Failed to fetch")
-        ? "Couldn't connect to server. Please notify the administration or try again later."
-        : result.message.includes("500")
-        ? "Server error. Please file an issue with our team and try again later."
-        : result.message;
-      return invalid(400, { response });
+      if (result.message.includes("401")) {
+        return invalid(400, {
+          error: "Your session has expired. Please log in again to create a permit.",
+        });
+      }
+      return invalid(400, { error: result.message });
     }
 
     return { response: result.data.message };

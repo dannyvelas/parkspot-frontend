@@ -23,8 +23,8 @@ export const actions: Actions = {
       return invalid(400, { response: formRes.message });
     }
 
-    const accessToken = getHeaderToken(event.request.headers);
-    if (!accessToken) {
+    const tokenRes = getHeaderToken(event.request.headers);
+    if (!isOk(tokenRes)) {
       return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
     }
 
@@ -32,7 +32,7 @@ export const actions: Actions = {
       `api/resident/${event.params.id}`,
       formRes.data,
       residentDecoder,
-      accessToken
+      tokenRes.data
     );
     if (!isOk(putRes)) {
       if (putRes.message.includes("401")) {

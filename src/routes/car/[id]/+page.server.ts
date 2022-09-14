@@ -22,12 +22,12 @@ export const actions: Actions = {
       return invalid(400, { response: formRes.message });
     }
 
-    const accessToken = getHeaderToken(event.request.headers);
-    if (!accessToken) {
-      return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
+    const tokenRes = getHeaderToken(event.request.headers);
+    if (!isOk(tokenRes)) {
+      return invalid(400, { response: tokenRes.message });
     }
 
-    const putRes = await put(`api/car/${event.params.id}`, formRes.data, carDecoder, accessToken);
+    const putRes = await put(`api/car/${event.params.id}`, formRes.data, carDecoder, tokenRes.data);
     if (!isOk(putRes)) {
       if (putRes.message.includes("401")) {
         return invalid(400, {

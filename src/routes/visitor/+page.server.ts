@@ -25,15 +25,15 @@ export const actions: Actions = {
       return invalid(400, { response: formRes.message });
     }
 
-    const accessToken = getHeaderToken(event.request.headers);
-    if (!accessToken) {
-      return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
+    const tokenRes = getHeaderToken(event.request.headers);
+    if (!isOk(tokenRes)) {
+      return invalid(400, { response: tokenRes.message });
     }
 
     const isForeverBool = formRes.data.isForever === "true";
     const payload = { ...formRes.data, isForever: isForeverBool };
 
-    const result = await post("api/visitor", payload, visitorDecoder, accessToken);
+    const result = await post("api/visitor", payload, visitorDecoder, tokenRes.data);
     if (!isOk(result)) {
       if (result.message.includes("401")) {
         return invalid(400, {

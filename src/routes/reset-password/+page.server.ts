@@ -16,24 +16,19 @@ export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    const passwordsRes = validate(formDecoder, formObject);
-    if (!isOk(passwordsRes)) {
-      return invalid(400, { response: passwordsRes.message });
-    } else if (passwordsRes.data.password !== passwordsRes.data.confirmPassword) {
+    const formRes = validate(formDecoder, formObject);
+    if (!isOk(formRes)) {
+      return invalid(400, { response: formRes.message });
+    } else if (formRes.data.password !== formRes.data.confirmPassword) {
       return invalid(400, { response: "Error: passwords do not match" });
     }
 
-    const accessToken = getHeaderToken(event.request.headers);
-    if (!accessToken) {
-      return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
+    const tokenRes = getHeaderToken(event.request.headers);
+    if (!isOk(tokenRes)) {
+      return invalid(400, { response: tokenRes.message });
     }
 
-    const putRes = await put(
-      `api/account/password`,
-      passwordsRes.data,
-      messageDecoder,
-      accessToken
-    );
+    const putRes = await put(`api/account/password`, formRes.data, messageDecoder, tokenRes.data);
     if (!isOk(putRes)) {
       return invalid(400, {
         response:

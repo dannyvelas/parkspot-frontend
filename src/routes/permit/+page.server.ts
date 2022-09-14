@@ -46,9 +46,9 @@ export const actions: Actions = {
       exceptionReason: permitRes.data.exceptionReason || "",
     };
 
-    const accessToken = getHeaderToken(event.request.headers);
-    if (!accessToken) {
-      return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
+    const tokenRes = getHeaderToken(event.request.headers);
+    if (!isOk(tokenRes)) {
+      return invalid(400, { response: tokenRes.message });
     }
 
     const result = await post("api/permit", permitReq, permitDecoder, accessToken);
