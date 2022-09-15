@@ -25,7 +25,7 @@ export const actions: Actions = {
 
     const tokenRes = getHeaderToken(event.request.headers);
     if (!isOk(tokenRes)) {
-      return invalid(400, { response: tokenRes.message });
+      return invalid(401, { response: tokenRes.message });
     }
 
     const putRes = await put(`api/account/password`, formRes.data, messageDecoder, tokenRes.data);

@@ -36,7 +36,7 @@ export const actions: Actions = {
     const result = await post(`api/account`, formRes.data, messageDecoder, tokenRes.data);
     if (!isOk(result)) {
       if (result.message.includes("401")) {
-        return invalid(400, {
+        return invalid(401, {
           error: "Your session has expired. Please log in again to create a permit.",
         });
       }
