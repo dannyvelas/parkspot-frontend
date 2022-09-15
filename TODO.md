@@ -44,7 +44,9 @@
 - [x] fix the cheap way that permit list checks whether its a resident list or admin list (by using `pageToHref.includes`)
 - [x] check if `PageData.session` will still be available in a component, even if you don't return it explicitly in the load function. ANS: it will be available, but as possibly undefined. so it's best to return it explicitly in the load func if you need it
 - [x] move renderDate and tsToDate funcs to libs since both \_PermitsList and permit/[id] components use them
+- [ ] remove newRefresh and newAccess if they won't be used
 - [ ] make color be a dropdown
+- [ ] fix status codes of invalids to be NOT 400s sometimes
 - [ ] make counts update when permits are deleted. also when permits are searched
 - [ ] remove /request suffix from page that creates permits
 - [ ] use .scraps/permits/\_\_layout.svelte to inject all the boilerplate into src/routes/permits funcs
