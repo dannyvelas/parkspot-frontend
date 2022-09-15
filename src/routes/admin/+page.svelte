@@ -1,9 +1,7 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
   import { submitWithToken } from "$lib/form";
 
   // props
-  export let data: PageData;
   export let form: Record<string, any> | undefined;
 
   // model
