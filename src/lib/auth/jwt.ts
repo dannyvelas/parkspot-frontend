@@ -3,7 +3,6 @@ import * as jose from "jose";
 import { newErr, newOk } from "$lib/functional";
 
 const REFRESH_SECRET: string = import.meta.env.VITE_TOKEN_REFRESHSECRET;
-const ACCESS_SECRET: string = import.meta.env.VITE_TOKEN_ACCESSSECRET;
 
 export const verifyRefresh = async (token: string) => {
   let verifiedJWT: jose.JWTVerifyResult;
@@ -30,9 +29,16 @@ export const newRefresh = async (user: User) => {
     .sign(Buffer.from(REFRESH_SECRET));
 };
 
-export const newAccess = async (id: string, role: string) => {
-  return await new jose.SignJWT({ payload: { id, role } })
-    .setProtectedHeader({ alg: "HS256", typ: "JWT" })
-    .setExpirationTime("7d")
-    .sign(Buffer.from(ACCESS_SECRET));
+export const expiringSoon = (token: string) => {
+  const payload = jose.decodeJwt(token);
+  const epochTimeNow = (() => {
+    var d = new Date();
+    return Math.round(d.getTime() / 1000);
+  })();
+  if (!payload.exp) {
+    return true;
+  }
+  const secsToExpiry = payload.exp - epochTimeNow;
+  const minsToExpiry = Math.round(secsToExpiry / 60);
+  return minsToExpiry <= 5;
 };
