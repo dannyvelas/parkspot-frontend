@@ -11,7 +11,7 @@
   $: passwordType = passwordsShown ? "text" : "password";
 
   function handleSubmit() {
-    submitWithToken(this, data.session.accessToken);
+    submitWithToken(this);
   }
 </script>
 

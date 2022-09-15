@@ -6,3 +6,5 @@ export { verifyRefresh, newRefresh, expiringSoon } from "./jwt";
 export { onlyRole } from "./role";
 
 export { getHeaderToken } from "./header";
+
+export { tokenStore } from "./store";
