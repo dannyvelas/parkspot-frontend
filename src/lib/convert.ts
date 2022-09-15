@@ -1,7 +1,7 @@
 export const dateToYmd = (date: Date): string => {
   const offset = date.getTimezoneOffset();
-  date = new Date(date.getTime() - offset * 60 * 1000);
-  return date.toISOString().split("T")[0];
+  const newDate = new Date(date.getTime() - offset * 60 * 1000);
+  return newDate.toISOString().split("T")[0];
 };
 
 export const tsToDate = (ts: number): string => {
