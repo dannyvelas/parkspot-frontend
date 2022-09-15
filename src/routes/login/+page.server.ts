@@ -33,9 +33,10 @@ export const actions: Actions = {
       return invalid(400, { error });
     }
 
+    // TODO: get refresh token from server and forward it, instead of creating our own
     const refreshToken = await newRefresh(result.data.user);
-    event.cookies.set("refresh", refreshToken); // causes +layout.server.ts to re-run, thereby redirecting
+    event.cookies.set("refresh", refreshToken);
 
-    return { user: result.data.user, accessToken: result.data.accessToken };
+    return { user: result.data.user, accessToken: result.data.accessToken }; // success causes +layout.server.ts to re-run, thereby redirecting
   },
 };
