@@ -53,7 +53,7 @@
     const formData = new FormData(this);
     formData.set("startDate", startDate);
     formData.set("endDate", endDate);
-    submitWithToken(this, data.session.accessToken, { formData });
+    submitWithToken(this, { formData });
   }
 </script>
 
