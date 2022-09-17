@@ -46,6 +46,7 @@
 - [x] move renderDate and tsToDate funcs to libs since both \_PermitsList and permit/[id] components use them
 - [ ] remove newRefresh and newAccess if they won't be used
 - [ ] make color be a dropdown
+- [ ] is it insecure to have a variable boolean flag in frontend code that sets whether a token should be refreshed? a hacker might be in the reset-password page, go into the code, and change that flag from false to true. this would allow them to visit that page on an expired token and the form submission to work anyway because the token would be refreshed. if so, figure out a way to change this
 - [ ] fix status codes of invalids to be NOT 400s sometimes
 - [ ] make counts update when permits are deleted. also when permits are searched
 - [ ] remove /request suffix from page that creates permits
