@@ -1,10 +1,8 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
   import { onMount } from "svelte";
   import { submitWithToken } from "$lib/form";
 
   // props
-  export let data: PageData;
   export let form: Record<string, any> | undefined;
 
   // helpers
@@ -53,7 +51,7 @@
     const formData = new FormData(this);
     formData.set("accessStart", accessStart);
     formData.set("accessEnd", accessEnd);
-    submitWithToken(this, data.session.accessToken, { formData, resetForm: false });
+    submitWithToken(this, { formData, resetForm: false });
   }
   $: if (form?.response) {
     alert(form.response);
