@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { Permit, permitList } from "$lib/models";
-  import type { Session } from "$lib/auth";
+  import type { User } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
   import { dateToYmd, tsToDate } from "$lib/convert";
+  import { getLatestToken } from "$lib/auth";
 
   // props
-  export let session: Session;
+  export let user: User;
   export let listName: permitList;
   export let permits: Array<Permit>;
   export let totalAmount: number;
@@ -14,7 +15,7 @@
   // events
   const deletePermit = async (i: number, permitId: number) => {
     if (confirm(`Are you sure you want to delete ${permitId}?`)) {
-      const delRes = await del(`api/permit/${permitId}`, session.accessToken);
+      const delRes = await del(`api/permit/${permitId}`, await getLatestToken());
       if (!isOk(delRes)) {
         alert(`Error deleting permit ${permitId}. Please try again later`);
         return;
@@ -43,7 +44,7 @@
       <td>Exception Reason</td>
     {/if}
     <td>Reprint</td>
-    {#if session.user.role === "admin"}
+    {#if user.role === "admin"}
       <td>Edit</td>
       <td>Delete</td>
     {/if}
@@ -63,7 +64,7 @@
         <td>{permit.exceptionReason}</td>
       {/if}
       <td><a href="/permit/{permit.id}">Reprint</a></td>
-      {#if session.user.role === "admin"}
+      {#if user.role === "admin"}
         <td><a href="/car/{permit.car.id}">Edit</a></td>
         <td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
       {/if}
