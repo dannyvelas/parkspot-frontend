@@ -3,6 +3,8 @@ import type { Result } from "$lib/functional";
 import type { ListWithMetadata } from "$lib/models";
 import { listWithMetadataDecoder } from "$lib/models";
 import { MAX_AMT_PER_PAGE } from "$lib/constants";
+import { getLatestToken } from "$lib/auth";
+import { browser } from "$app/environment";
 import { get } from "$lib/api";
 
 export type listConfig<T> = {
@@ -20,5 +22,6 @@ export async function loadList<T>(args: listConfig<T>): Promise<Result<ListWithM
     page: `${args.page}`,
   };
 
-  return await get(args.endpoint, params, listWithMetadataDecoder(args.decoder), args.accessToken);
+  const accessToken = !browser ? args.accessToken : await getLatestToken();
+  return await get(args.endpoint, params, listWithMetadataDecoder(args.decoder), accessToken);
 }
