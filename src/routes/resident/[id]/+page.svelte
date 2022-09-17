@@ -10,7 +10,7 @@
 
   // events
   function handleSubmit() {
-    submitWithToken(this, data.session.accessToken);
+    submitWithToken(this);
   }
 </script>
 
