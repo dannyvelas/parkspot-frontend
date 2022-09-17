@@ -6,6 +6,7 @@
   import { listWithMetadataDecoder } from "$lib/models";
   import { get } from "$lib/api";
   import { isOk, newOk, newErr } from "$lib/functional";
+  import { getLatestToken } from "$lib/auth";
 
   // config
   const dispatch = createEventDispatcher();
@@ -17,7 +18,6 @@
   export let preview: (a: T) => string;
   export let totalAmount: number;
   export let endpoint: string;
-  export let accessToken: string;
 
   // model
   let searchVal = "";
@@ -46,7 +46,7 @@
       endpoint,
       { search: searchVal },
       listWithMetadataDecoder(decoder),
-      accessToken
+      await getLatestToken()
     );
     if (!isOk(getRes)) {
       return newErr(getRes.message);
