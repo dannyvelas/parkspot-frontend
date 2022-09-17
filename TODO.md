@@ -44,7 +44,10 @@
 - [x] fix the cheap way that permit list checks whether its a resident list or admin list (by using `pageToHref.includes`)
 - [x] check if `PageData.session` will still be available in a component, even if you don't return it explicitly in the load function. ANS: it will be available, but as possibly undefined. so it's best to return it explicitly in the load func if you need it
 - [x] move renderDate and tsToDate funcs to libs since both \_PermitsList and permit/[id] components use them
+- [ ] remove validate refresh token func from auth/jwt
+- [ ] consider: should we change the inputs to pages from being `Session` to `User`? the only difference between these two is that the first has an `accessToken` property. But, that property won't be needed in pages anymore because `getLatestToken` func will now be used
 - [ ] remove newRefresh and newAccess if they won't be used
+- [ ] maybe make a List component for residents page, the same way that Permit and Resident pages do
 - [ ] make color be a dropdown
 - [ ] is it insecure to have a variable boolean flag in frontend code that sets whether a token should be refreshed? a hacker might be in the reset-password page, go into the code, and change that flag from false to true. this would allow them to visit that page on an expired token and the form submission to work anyway because the token would be refreshed. if so, figure out a way to change this
 - [ ] fix status codes of invalids to be NOT 400s sometimes
