@@ -4,7 +4,7 @@ import type { Decoder } from "decoders";
 import { newOk, newErr } from "$lib/functional";
 import { applyAction } from "$app/forms";
 import { invalidateAll } from "$app/navigation";
-import { tokenStore, expiringSoon } from "$lib/auth";
+import { tokenStore, getLatestToken } from "$lib/auth";
 import { get } from "svelte/store";
 
 export function validate<T>(
@@ -34,20 +34,21 @@ export function validate<T>(
 type opts = {
   formData?: FormData; // optionally override default formdata
   resetForm?: boolean; // optionally reset form values after submit
-  allowRefresh?: boolean;
+  allowRefresh?: boolean; // optionally explicitly prevent a token refresh
 };
 
 export async function submitWithToken(form: HTMLFormElement, opts?: opts) {
   const justFormData = opts?.formData ?? new FormData(form);
 
-  if ((opts?.allowRefresh === undefined || opts.allowRefresh) && expiringSoon(get(tokenStore))) {
-    await tokenStore.refresh();
-  }
+  const accessToken =
+    opts?.allowRefresh === undefined || opts?.allowRefresh === true
+      ? await getLatestToken()
+      : get(tokenStore);
 
   const response = await fetch(form.action, {
     method: "POST",
     body: justFormData,
-    headers: new Headers({ Authorization: `Bearer ${get(tokenStore)}` }),
+    headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
   });
   const result: ActionResult = await response.json();
 
