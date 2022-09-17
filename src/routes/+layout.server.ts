@@ -21,6 +21,7 @@ export const load: LayoutServerLoad = async (loadInput) => {
 
   console.log(sessionRes.data.accessToken);
 
+  // TODO: send to fronted a new cookie via header
   return {
     session: {
       accessToken: sessionRes.data.accessToken,
