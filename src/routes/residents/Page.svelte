@@ -75,7 +75,6 @@
       preview={previewResident}
       totalAmount={result.data.metadata.totalAmount}
       endpoint={`api/residents`}
-      accessToken={session.accessToken}
       on:result={handleSearch}
     />
     <h2>Amount of Residents: {result.data.metadata.totalAmount}</h2>
