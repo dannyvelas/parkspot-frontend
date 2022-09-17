@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { Permit, permitList } from "$lib/models";
-  import type { User } from "$lib/models";
+  import type { Permit, permitList, User } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
   import { dateToYmd, tsToDate } from "$lib/convert";
