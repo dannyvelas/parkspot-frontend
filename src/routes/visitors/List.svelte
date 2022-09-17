@@ -1,19 +1,19 @@
 <script lang="ts">
-  import type { Visitor } from "$lib/models";
-  import type { Session } from "$lib/auth";
+  import type { Visitor, User } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
   import { dateToYmd } from "$lib/convert";
+  import { getLatestToken } from "$lib/auth";
 
   // props
-  export let session: Session;
+  export let user: User;
   export let visitors: Array<Visitor>;
   export let totalAmount: number;
 
   // events
   const deleteVisitor = async (i: number, visitorId: string, fullName: string) => {
     if (confirm(`Are you sure you want to delete ${fullName}?`)) {
-      const delRes = await del(`api/visitor/${visitorId}`, session.accessToken);
+      const delRes = await del(`api/visitor/${visitorId}`, await getLatestToken());
       if (!isOk(delRes)) {
         alert(`Error deleting visitor ${fullName}. Please try again later`);
         return;
@@ -42,7 +42,7 @@
         <td>Relationship</td>
         <td>Access Start</td>
         <td>Access End</td>
-        {#if session.user.role === "resident"}
+        {#if user.role === "resident"}
           <td>Delete</td>
         {/if}
       </tr>
@@ -54,7 +54,7 @@
           <td>{visitor.relationship}</td>
           <td>{dateToYmd(visitor.accessStart)}</td>
           <td>{dateToYmd(visitor.accessEnd)}</td>
-          {#if session.user.role === "resident"}
+          {#if user.role === "resident"}
             <td
               ><button
                 on:click={() =>
