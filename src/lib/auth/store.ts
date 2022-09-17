@@ -4,7 +4,7 @@ import { sessionDecoder, expiringSoon } from "$lib/auth";
 import { isOk } from "$lib/functional";
 import { get } from "svelte/store";
 
-export const createTokenStore = () => {
+const createTokenStore = () => {
   const { subscribe, set } = writable("");
 
   return {
