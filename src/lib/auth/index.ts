@@ -7,4 +7,4 @@ export { onlyRole } from "./role";
 
 export { getHeaderToken } from "./header";
 
-export { tokenStore } from "./store";
+export { tokenStore, getLatestToken } from "./store";

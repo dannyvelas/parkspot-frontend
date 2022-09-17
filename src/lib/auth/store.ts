@@ -1,7 +1,8 @@
 import { writable } from "svelte/store";
 import { post } from "$lib/api";
-import { sessionDecoder } from "$lib/auth";
+import { sessionDecoder, expiringSoon } from "$lib/auth";
 import { isOk } from "$lib/functional";
+import { get } from "svelte/store";
 
 export const createTokenStore = () => {
   const { subscribe, set } = writable("");
@@ -20,3 +21,10 @@ export const createTokenStore = () => {
 };
 
 export const tokenStore = createTokenStore();
+
+export const getLatestToken = async () => {
+  if (expiringSoon(get(tokenStore))) {
+    await tokenStore.refresh();
+  }
+  return get(tokenStore);
+};
