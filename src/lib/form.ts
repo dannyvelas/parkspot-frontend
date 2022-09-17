@@ -34,12 +34,13 @@ export function validate<T>(
 type opts = {
   formData?: FormData; // optionally override default formdata
   resetForm?: boolean; // optionally reset form values after submit
+  allowRefresh?: boolean;
 };
 
 export async function submitWithToken(form: HTMLFormElement, opts?: opts) {
   const justFormData = opts?.formData ?? new FormData(form);
 
-  if (expiringSoon(get(tokenStore))) {
+  if ((opts?.allowRefresh === undefined || opts.allowRefresh) && expiringSoon(get(tokenStore))) {
     await tokenStore.refresh();
   }
 
