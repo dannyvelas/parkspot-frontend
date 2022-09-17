@@ -30,15 +30,20 @@ export const newRefresh = async (user: User) => {
 };
 
 export const expiringSoon = (token: string) => {
-  const payload = jose.decodeJwt(token);
-  const epochTimeNow = (() => {
-    var d = new Date();
-    return Math.round(d.getTime() / 1000);
-  })();
-  if (!payload.exp) {
-    return true;
+  try {
+    const payload = jose.decodeJwt(token);
+
+    const epochTimeNow = (() => {
+      var d = new Date();
+      return Math.round(d.getTime() / 1000);
+    })();
+    if (!payload.exp) {
+      return true;
+    }
+    const secsToExpiry = payload.exp - epochTimeNow;
+    const minsToExpiry = Math.round(secsToExpiry / 60);
+    return minsToExpiry <= 5;
+  } catch (err) {
+    return true; // JWT invalid
   }
-  const secsToExpiry = payload.exp - epochTimeNow;
-  const minsToExpiry = Math.round(secsToExpiry / 60);
-  return minsToExpiry <= 5;
 };
