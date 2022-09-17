@@ -1,14 +1,12 @@
 import type { PageLoad } from "./$types";
 import type { Result } from "$lib/functional";
 import type { ListWithMetadata, Resident } from "$lib/models";
-import type { Session } from "$lib/auth";
 import { onlyRole } from "$lib/auth";
 import { residentDecoder } from "$lib/models";
 import { loadList } from "$lib/load";
 
 type OutputData = {
   result: Result<ListWithMetadata<Resident>>;
-  session: Session;
 };
 
 export const loadResidents = (endpoint: string, reversed: boolean): PageLoad<OutputData> => {
@@ -25,10 +23,7 @@ export const loadResidents = (endpoint: string, reversed: boolean): PageLoad<Out
       accessToken: session.accessToken,
     });
 
-    return {
-      result,
-      session,
-    };
+    return { result };
   };
 
   return loadFn;

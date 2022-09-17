@@ -5,4 +5,4 @@
   export let data: PageData;
 </script>
 
-<Page title="All Residents" fullInfo={true} {...data} />
+<Page title="All Residents" fullInfo={true} result={data.result} />

@@ -5,4 +5,4 @@
   export let data: PageData;
 </script>
 
-<Page title="Residents and Guest Parking Days" fullInfo={false} {...data} />
+<Page title="Residents and Guest Parking Days" fullInfo={false} result={data.result} />
