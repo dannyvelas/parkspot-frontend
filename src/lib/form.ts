@@ -40,7 +40,7 @@ export async function submitWithToken(form: HTMLFormElement, opts?: opts) {
   const justFormData = opts?.formData ?? new FormData(form);
 
   if (expiringSoon(get(tokenStore))) {
-    await invalidateAll(); // resets tokenStore
+    await tokenStore.refresh();
   }
 
   const response = await fetch(form.action, {
