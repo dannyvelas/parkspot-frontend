@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { Result } from "$lib/functional";
   import type { ListWithMetadata, Resident } from "$lib/models";
-  import type { Session } from "$lib/auth";
   import { afterNavigate } from "$app/navigation";
   import { residentDecoder, previewResident } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { del } from "$lib/api";
   import { page } from "$app/stores";
+  import { getLatestToken } from "$lib/auth";
   import Pagination from "$lib/components/Pagination.svelte";
   import Search from "$lib/components/Search.svelte";
 
@@ -14,7 +14,6 @@
   export let title: string;
   export let fullInfo: boolean;
   export let result: Result<ListWithMetadata<Resident>>;
-  export let session: Session;
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
@@ -27,7 +26,7 @@
   // events
   const deleteResident = async (i: number, residentId: string) => {
     if (confirm(`Are you sure you want to delete ${residentId}?`)) {
-      const delRes = await del(`api/resident/${residentId}`, session.accessToken);
+      const delRes = await del(`api/resident/${residentId}`, await getLatestToken());
       if (!isOk(delRes)) {
         alert(`Error deleting resident ${residentId}. Please try again later`);
         return;
