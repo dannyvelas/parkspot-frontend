@@ -63,7 +63,11 @@
       endpoint={`api/visitors`}
       on:result={handleSearch}
     />
-    <List {session} visitors={result.data.records} totalAmount={result.data.metadata.totalAmount} />
+    <List
+      user={session.user}
+      visitors={result.data.records}
+      totalAmount={result.data.metadata.totalAmount}
+    />
     <Pagination
       totalAmount={result.data.metadata.totalAmount}
       pageToHref={(pageNum) => `visitors?page=${pageNum}`}
