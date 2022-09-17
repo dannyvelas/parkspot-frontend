@@ -3,7 +3,6 @@ import { browser } from "$app/environment";
 import { tokenStore } from "$lib/auth";
 
 export const load: LayoutLoad = async (loadInput) => {
-  // if access token exists
   if (browser && loadInput.data.session) {
     tokenStore.set(loadInput.data.session.accessToken);
   }
