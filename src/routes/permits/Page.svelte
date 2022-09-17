@@ -72,7 +72,7 @@
       {listName}
       permits={result.data.records}
       totalAmount={result.data.metadata.totalAmount}
-      {session}
+      user={session.user}
     />
     <Pagination
       totalAmount={result.data.metadata.totalAmount}
