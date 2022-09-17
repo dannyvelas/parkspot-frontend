@@ -1,5 +1,6 @@
 <script lang="ts">
   import { submitWithToken } from "$lib/form";
+  import { tokenStore } from "$lib/auth";
   import type { PageData } from "./$types";
 
   // props
@@ -12,7 +13,8 @@
 
   // events
   function handleSubmit() {
-    submitWithToken(this, data.accessToken);
+    tokenStore.set(data.accessToken);
+    submitWithToken(this, { allowRefresh: false });
   }
 </script>
 
