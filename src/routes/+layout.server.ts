@@ -5,8 +5,6 @@ import { sessionDecoder } from "$lib/auth";
 import { post } from "$lib/api";
 
 export const load: LayoutServerLoad = async (loadInput) => {
-  console.log("RUNNING");
-
   const cookies = parse(loadInput.request.headers.get("cookie") || "");
   if (!cookies.refresh) {
     return {};
@@ -18,8 +16,6 @@ export const load: LayoutServerLoad = async (loadInput) => {
   if (!isOk(sessionRes)) {
     return {};
   }
-
-  console.log(sessionRes.data.accessToken);
 
   // TODO: send to fronted a new cookie via header
   return {
