@@ -49,6 +49,7 @@
 - [ ] remove newRefresh and newAccess if they won't be used
 - [ ] maybe make a List component for residents page, the same way that Permit and Resident pages do
 - [ ] make color be a dropdown
+- [ ] stop resident/[id] and resident/dashboard from being overlapping
 - [ ] is it insecure to have a variable boolean flag in frontend code that sets whether a token should be refreshed? a hacker might be in the reset-password page, go into the code, and change that flag from false to true. this would allow them to visit that page on an expired token and the form submission to work anyway because the token would be refreshed. if so, figure out a way to change this
 - [ ] fix status codes of invalids to be NOT 400s sometimes
 - [ ] make counts update when permits are deleted. also when permits are searched
