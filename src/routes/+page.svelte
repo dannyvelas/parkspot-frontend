@@ -51,7 +51,7 @@
 
 <style>
   header {
-    background-image: url("/static/miami.jpg");
+    background-image: url("/public/miami.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 30%;
