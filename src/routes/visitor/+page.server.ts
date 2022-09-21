@@ -13,7 +13,7 @@ const formDecoder = object({
   relationship: either(constant("fam/fri"), constant("contractor")),
   accessStart: iso8601,
   accessEnd: iso8601,
-  isForever: optional(either(constant("true"), constant("false"))),
+  isForever: optional(constant("true")),
 });
 
 export const actions: Actions = {

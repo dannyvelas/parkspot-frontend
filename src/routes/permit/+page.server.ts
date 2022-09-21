@@ -1,5 +1,5 @@
 import type { Actions } from "./$types";
-import { object, string, either, constant, optional, iso8601 } from "decoders";
+import { object, string, constant, optional, iso8601 } from "decoders";
 import { permitDecoder } from "$lib/models";
 import { validate } from "$lib/form";
 import { invalid, redirect } from "@sveltejs/kit";
@@ -15,7 +15,7 @@ const formDecoder = object({
   model: string,
   startDate: iso8601,
   endDate: iso8601,
-  isException: optional(either(constant("true"), constant("false"))),
+  isException: optional(constant("true")),
   exceptionReason: optional(string),
 });
 
@@ -23,7 +23,6 @@ export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    console.log(formObject);
     const formRes = validate(formDecoder, formObject);
     if (!isOk(formRes)) {
       return invalid(400, { error: formRes.message });
