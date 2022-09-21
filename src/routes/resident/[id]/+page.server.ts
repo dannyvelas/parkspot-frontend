@@ -34,7 +34,8 @@ export const actions: Actions = {
 
     // conversions before sending to backend
     const unlimDaysBool = formRes.data.unlimDays === "true";
-    const amtParkingDaysUsedNum = Number(formRes.data.amtParkingDaysUsed);
+    const amtParkingDaysUsedNum =
+      formRes.data.amtParkingDaysUsed === "" ? undefined : Number(formRes.data.amtParkingDaysUsed);
     const payload = {
       ...formRes.data,
       unlimDays: unlimDaysBool,
