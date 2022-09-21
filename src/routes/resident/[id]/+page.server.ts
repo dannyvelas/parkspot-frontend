@@ -1,5 +1,5 @@
 import type { Actions } from "./$types";
-import { object, string } from "decoders";
+import { object, string, optional, constant } from "decoders";
 import { residentDecoder } from "$lib/models";
 import { validate } from "$lib/form";
 import { invalid } from "@sveltejs/kit";
@@ -12,6 +12,8 @@ const formDecoder = object({
   lastName: string,
   phone: string,
   email: string,
+  unlimDays: optional(constant("true")),
+  amtParkingDaysUsed: string,
 });
 
 export const actions: Actions = {
@@ -21,6 +23,8 @@ export const actions: Actions = {
     const formRes = validate(formDecoder, formObject, true);
     if (!isOk(formRes)) {
       return invalid(400, { response: formRes.message });
+    } else if (isNaN(Number(formRes.data.amtParkingDaysUsed))) {
+      return invalid(400, { response: "Amount of Parking Days Used field must be a number" });
     }
 
     const tokenRes = getHeaderToken(event.request.headers);
@@ -28,9 +32,18 @@ export const actions: Actions = {
       return invalid(400, { response: '401: Unauthorized. "Unauthorized"' });
     }
 
+    // conversions before sending to backend
+    const unlimDaysBool = formRes.data.unlimDays === "true";
+    const amtParkingDaysUsedNum = Number(formRes.data.amtParkingDaysUsed);
+    const payload = {
+      ...formRes.data,
+      unlimDays: unlimDaysBool,
+      amtParkingDaysUsed: amtParkingDaysUsedNum,
+    };
+
     const putRes = await put(
       `api/resident/${event.params.id}`,
-      formRes.data,
+      payload,
       residentDecoder,
       tokenRes.data
     );
