@@ -10,7 +10,7 @@
 
   // events
   function handleSubmit() {
-    submitWithToken(this);
+    submitWithToken(this, { resetForm: false });
   }
 </script>
 
