@@ -37,6 +37,8 @@ export const actions: Actions = {
     const refreshToken = await newRefresh(result.data.user);
     event.cookies.set("refresh", refreshToken);
 
-    return { user: result.data.user, accessToken: result.data.accessToken }; // success causes +layout.server.ts to re-run, thereby redirecting
+    return { user: result.data.user, accessToken: result.data.accessToken };
+    // success causes sveltekit to run invalidateAll() which causes +layout.server.ts to re-run,
+    // thereby redirecting
   },
 };
