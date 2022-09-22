@@ -87,6 +87,7 @@
             <td>Phone</td>
             <td>Email</td>
             <td>Unlimited Days</td>
+            <td>Amount Of Days Used</td>
             <td>Edit</td>
             <td>Delete</td>
           {:else}
@@ -103,6 +104,7 @@
               <td>{resident.phone}</td>
               <td>{resident.email}</td>
               <td>{resident.unlimDays}</td>
+              <td>{resident.amtParkingDaysUsed}</td>
               <td><a href="resident/{resident.id}">Edit</a></td>
               <td><button on:click={() => deleteResident(i, resident.id)}>Delete</button></td>
             {:else}
