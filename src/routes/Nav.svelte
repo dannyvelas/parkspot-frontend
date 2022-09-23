@@ -1,8 +1,5 @@
 <script lang="ts">
   import { dashboard } from "$lib/navigation";
-  import { messageDecoder } from "$lib/models";
-  import { isOk } from "$lib/functional";
-  import { post } from "$lib/api";
   import { page } from "$app/stores";
   import { invalidateAll } from "$app/navigation";
   import type { Session } from "$lib/auth";
@@ -12,8 +9,8 @@
   // events
   async function logout() {
     if (session) {
-      const postRes = await post(`api/logout`, {}, messageDecoder, "");
-      if (!isOk(postRes)) {
+      const postRes = await fetch("/logout", { method: "POST" });
+      if (!postRes.ok) {
         console.error("Error logging out");
       }
 
