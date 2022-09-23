@@ -34,11 +34,12 @@ export const actions: Actions = {
     }
 
     // TODO: get refresh token from server and forward it, instead of creating our own
-    const refreshToken = await newRefresh(result.data.user);
-    event.cookies.set("refresh", refreshToken);
+    //const refreshToken = await newRefresh(result.data.user);
+    //event.cookies.set("refresh", refreshToken);
 
     return { user: result.data.user, accessToken: result.data.accessToken };
-    // success causes sveltekit to run invalidateAll() which causes +layout.server.ts to re-run,
-    // thereby redirecting
+    // success causes sveltekit to run invalidateAll() which causes +layout.server.ts to re-run
+    // when it does, it will see the refresh cookie and initialize a session. the login page load
+    // function will see this session and redirect the user to their dashboard
   },
 };
