@@ -59,11 +59,14 @@
 - [x] (NOT NECESSARY) make error messages more abstracted and user friendly in login page
 - [x] (DEPLOY) make `credentials=true` in fetch options, only work in dev if it's not necessary in prod. (it is necessary in prod)
 - [✗] (HARD) logout when token expires
+- [ ] every form-submit with `submitWithToken()` refreshes the access token. this is because `submitWithToken` calls `invalidateAll()` which makes the `+layout.server.ts` re-run. this re-fresh is often unnecessary as the `getLatestToken()` function already re-freshes the access token as needed. this unnecessary re-fresh is bad for performance as it triggers a backend api call. find a way to prevent it from happening.
 - [ ] make args to api funcs: put, post, get...an object
 - [ ] return cookies from api, that way we can forward refresh cookie from login.server.ts
 - [ ] remove newRefresh and newAccess once they won't be used once api returns cookies
 - [ ] move getLatestToken outside of auth/store module
+- [ ] (DEPLOY) re-direct all `www.parkspotapp.com` requests to `parkspotapp.com`, that way, you only have to have one domain
 - [ ] define litepicker once
+- [ ] deprecate resident days page
 - [ ] make color be a dropdown
 - [ ] stop resident/[id] and resident/dashboard from being overlapping
 - [ ] fix status codes of invalids to be NOT 400s sometimes
