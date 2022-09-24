@@ -1,16 +1,3 @@
-## Tech debt
-- [x] add env variable for backend URL
-- [x] delete \_LoadedCar.svelte
-- [x] use Status<T> instead of result in car/[id].svelte
-- [x] find a way to make exceptions list shorter (just make the list have the same amt of cols as other lists, use PermitList.svelte)
-- [x] don't allow signed-in users to click login/register buttons
-- [x] make the parameters to Pagination more similarly named to the parameters to PermitList
-- [x] (NOT NECESSARY) make error messages more abstracted and user friendly in login page
-- [x] (DEPLOY) make `credentials=true` in fetch options, only work in dev if it's not necessary in prod. (it is necessary in prod)
-- [ ] remove `reversed` parameter from anywhere that is not a permit endpoint.
-- [ ] (HARD) logout when token expires
-- [ ] (NEW JS LIB) find a way to only define list styles once
-- [ ] (DEPLOY) test how different the user experience is without client side rendering
 ## Major Missing From Spec
 ### Admin
 - [x] show actual number of all permits instead of just the amount on the page
@@ -20,7 +7,7 @@
 - [x] visitors page
 - [x] re-print permit
 - [x] create user account
-- [ ] edit resident parking days
+- [x] edit resident parking days
 ### Resident
 - [x] resident create parking permit
 - [x] see active and all parking permits
@@ -30,12 +17,12 @@
 - [x] nav bar at top of admin page
 - [x] style logout button in navbar to be side-by-side with Go Back To Dashboard
 - [x] delete residents
-- [ ] edit residents
+- [x] edit residents
+- [x] search residents
 - [ ] sort residents by amt parking days
 - [ ] isException column
 - [ ] nav bar at bottom of list pages
 - [ ] add support for security accounts
-- [ ] search residents
 - [ ] ability for admin to see all visitors (not just active)
 - [ ] ability for admin to search all visitors (not just active)
 ## Low priority
@@ -44,38 +31,53 @@
 - [x] fix the cheap way that permit list checks whether its a resident list or admin list (by using `pageToHref.includes`)
 - [x] check if `PageData.session` will still be available in a component, even if you don't return it explicitly in the load function. ANS: it will be available, but as possibly undefined. so it's best to return it explicitly in the load func if you need it
 - [x] move renderDate and tsToDate funcs to libs since both \_PermitsList and permit/[id] components use them
-- [ ] remove validate refresh token func from auth/jwt
-- [ ] consider: should we change the inputs to pages from being `Session` to `User`? the only difference between these two is that the first has an `accessToken` property. But, that property won't be needed in pages anymore because `getLatestToken` func will now be used
-- [ ] remove newRefresh and newAccess if they won't be used
-- [ ] maybe make a List component for residents page, the same way that Permit and Resident pages do
+- [x] remove validate refresh token func from auth/jwt
+- [x] remove /request suffix from page that creates permits
+- [✗] use .scraps/permits/\_\_layout.svelte to inject all the boilerplate into src/routes/permits funcs
+- [x] use dashboard func in lib directory instead of using ones that are defined on-the-spot
+- [x] make sure all load funcs redirect to a users dashboard when that user accesses a page for which they do not have the right role.
+- [✗] make /permits/\* pages automatically re-route to the resident dashboard if it's a resident that is trying to access them
+- [✗] remove `src/routes/residents/\_load.ts` and make it use the `loadList` func instead
+- [✓] A search component? A component that you pass in the list or the api endpoint and it returns a search bar, and for every oninput event on that serach bar, it filters the current list? 
+- [✗] detach pagination and searching from PermitList and VisitorList
+- [✗] probably remove NewPermitReq type definition, it's only used once in one place
+- [✗] probably change the way that the choose-dates input bar is toggled visible by using event bubbling
+- [x] make all permits for resident filter in place when searching
+- [x] organize lib directory by separating helper funcs and components
+- [✗] clean up to make sure that the order of `// props, // model, // init, // events, // helpers` is consistent
+- [x] add check to redirect signed-in users to the correct dashboard
+- [✗] change resident pages from /resident/[id]/permits to me/permits, so that we don't have to worry about resident 123 trying to go to /resident/567/permits
+- [✗] find some way to get 401 and sign person out before API returns 401
+- [✗] find some way to copy less logic between index.svelte and login.svelte (also maybe shorten nav.svelte)
+- [✗] consider: should we change the inputs to pages from being `Session` to `User`? the only difference between these two is that the first has an `accessToken` property. But, that property won't be needed in pages anymore because `getLatestToken` func will now be used. ANSWER: no.
+- [x] add env variable for backend URL
+- [x] delete \_LoadedCar.svelte
+- [x] use Status<T> instead of result in car/[id].svelte
+- [x] find a way to make exceptions list shorter (just make the list have the same amt of cols as other lists, use PermitList.svelte)
+- [x] don't allow signed-in users to click login/register buttons
+- [x] make the parameters to Pagination more similarly named to the parameters to PermitList
+- [x] (NOT NECESSARY) make error messages more abstracted and user friendly in login page
+- [x] (DEPLOY) make `credentials=true` in fetch options, only work in dev if it's not necessary in prod. (it is necessary in prod)
+- [✗] (HARD) logout when token expires
+- [ ] make args to api funcs: put, post, get...an object
+- [ ] return cookies from api, that way we can forward refresh cookie from login.server.ts
+- [ ] remove newRefresh and newAccess once they won't be used once api returns cookies
+- [ ] move getLatestToken outside of auth/store module
+- [ ] define litepicker once
 - [ ] make color be a dropdown
 - [ ] stop resident/[id] and resident/dashboard from being overlapping
-- [ ] is it insecure to have a variable boolean flag in frontend code that sets whether a token should be refreshed? a hacker might be in the reset-password page, go into the code, and change that flag from false to true. this would allow them to visit that page on an expired token and the form submission to work anyway because the token would be refreshed. if so, figure out a way to change this
 - [ ] fix status codes of invalids to be NOT 400s sometimes
 - [ ] make counts update when permits are deleted. also when permits are searched
-- [ ] remove /request suffix from page that creates permits
-- [ ] use .scraps/permits/\_\_layout.svelte to inject all the boilerplate into src/routes/permits funcs
-- [ ] use dashboard func in lib directory instead of using ones that are defined on-the-spot
-- [ ] make sure all load funcs redirect to a users dashboard when that user accesses a page for which they do not have the right role.
-- [ ] make /permits/\* pages automatically re-route to the resident dashboard if it's a resident that is trying to access them
-- [ ] remove `src/routes/residents/\_load.ts` and make it use the `loadList` func instead
-- [ ] detach pagination and searching from PermitList and VisitorList
-- [ ] probably remove NewPermitReq type definition, it's only used once in one place
-- [ ] probably change the way that the choose-dates input bar is toggled visible by using event bubbling
 - [ ] probably remove ability for residents to re-print all of their permits
-- [ ] make all permits for resident filter in place when searching
-- [ ] organize lib directory by separating helper funcs and components
-- [ ] clean up to make sure that the order of `// props, // model, // init, // events, // helpers` is consistent
-- [ ] add check to redirect signed-in users to the correct dashboard
-- [ ] change resident pages from /resident/[id]/permits to me/permits, so that we don't have to worry about resident 123 trying to go to /resident/567/permits
 - [ ] don't let people go to ?page=43 where 43 > total amount of pages
 - [ ] make page amounts re-fresh when items are deleted from list
-- [ ] find some way to get 401 and sign person out before API returns 401
-- [ ] add `map` type to Status and Result
-- [ ] find some way to copy less logic between index.svelte and login.svelte (also maybe shorten nav.svelte)
-- [ ] add banner to parent component of nav when logout error happens
+- [ ] (NOT IMPORTANT) find a way to only define list styles once
+- [ ] (NOT IMPORTANT) test how different the user experience is without client side rendering
 ## Probably not going to do
-- [ ] A search component? A component that you pass in the list or the api endpoint and it returns a search bar, and for every oninput event on that serach bar, it filters the current list? 
+- [✗] is it insecure to have a variable boolean flag in frontend code that sets whether a token should be refreshed? a hacker might be in the reset-password page, go into the code, and change that flag from false to true. this would allow them to visit that page on an expired token and the form submission to work anyway because the token would be refreshed. if so, figure out a way to change this. i don't think it's insecure
+- [✗] add banner to parent component of nav when logout error happens
+- [✗] maybe make a List component for residents page, the same way that Permit and Resident pages do
+- [✗] add `map` type to Status and Result
 ## Won't do
 - [✗] make params a `{}` argument or use generated types in index.svelte
     * little value
