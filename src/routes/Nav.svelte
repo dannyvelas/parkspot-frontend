@@ -2,6 +2,7 @@
   import { dashboard } from "$lib/navigation";
   import { page } from "$app/stores";
   import { invalidateAll } from "$app/navigation";
+  import logo from "$lib/assets/logo.png";
   import type { Session } from "$lib/auth";
 
   export let session: Session | undefined;
@@ -20,45 +21,37 @@
 </script>
 
 <nav>
-  <ul>
-    {#if session}
-      <li>
-        <button on:click={logout}>Logout</button>
-      </li>
-      <li>
-        {#if $page.url.pathname !== "/admin" && $page.url.pathname !== "/resident"}
-          <a href={dashboard(session.user)}>Go Back To Dashboard</a>
-        {/if}
-      </li>
-    {:else}
-      <li>
-        <a href="/">Home</a>
-      </li>
-      <li>
-        <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
-      </li>
-    {/if}
-  </ul>
+  <a href="/"><img id="logo" alt="ParkSpot Logo" src={logo} /></a>
+  {#if session}
+    <button>Placeholder</button>
+  {:else}
+    <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
+  {/if}
 </nav>
 
 <style>
   nav {
-    border-radius: 5px;
-  }
-
-  ul {
+    background-color: #13d380;
     display: flex;
-    list-style: none;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-inline-start: 0px;
+    padding: 14px 35px;
   }
 
-  li {
-    margin: 10px;
+  img {
+    width: 140px;
+    height: auto;
   }
 
+  a {
+    color: white;
+    text-decoration: none;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 300;
+  }
+
+  /*
   a,
   button {
     text-decoration: none;
@@ -74,4 +67,5 @@
   button {
     color: #ff2d00;
   }
+   */
 </style>
