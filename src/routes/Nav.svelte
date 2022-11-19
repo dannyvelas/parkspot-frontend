@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { dashboard } from "$lib/navigation";
   import { page } from "$app/stores";
   import { invalidateAll } from "$app/navigation";
   import logo from "$lib/assets/logo.png";
@@ -50,22 +49,4 @@
     font-family: "Work Sans", sans-serif;
     font-weight: 300;
   }
-
-  /*
-  a,
-  button {
-    text-decoration: none;
-    font-weight: bold;
-    background-color: transparent;
-    border: none;
-  }
-
-  a {
-    color: #636363;
-  }
-
-  button {
-    color: #ff2d00;
-  }
-   */
 </style>
