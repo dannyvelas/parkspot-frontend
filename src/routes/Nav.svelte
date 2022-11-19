@@ -20,7 +20,7 @@
 </script>
 
 <nav>
-  <a href="/"><img id="logo" alt="ParkSpot Logo" src={logo} /></a>
+  <a href="/"><img alt="ParkSpot Logo" src={logo} /></a>
   {#if session}
     <button>Placeholder</button>
   {:else}
