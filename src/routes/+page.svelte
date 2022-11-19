@@ -1,5 +1,24 @@
+<script lang="ts">
+  import hero from "$lib/assets/hero.png";
+  import underline from "$lib/assets/landing/underline.png";
+</script>
+
 <header>
-  <h1>Las Vistas Parking and Visitor List</h1>
+  <div class="hero-container">
+    <h1>
+      <span>Take Control</span> Of Your Community Parking With A Simple &
+      <span>Easy-To-Use App</span>
+    </h1>
+    <div class="subhero-container">
+      <h2>Welcome to ParkSpot!</h2>
+      <img id="underline" alt="Underline" src={underline} />
+    </div>
+    <h3>
+      A Modern Application That Helps Community Administrators Enforce Parking Rules For Their
+      Residential Communities!
+    </h3>
+  </div>
+  <img id="hero" alt="ParkSpot Hero" src={hero} />
 </header>
 <article>
   <section>
@@ -50,28 +69,44 @@
 </article>
 
 <style>
-  header {
-    background-image: url("/public/miami.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 30%;
-    display: flex;
-    height: 250px;
-    position: relative;
+  * {
+    font-family: "Work Sans", sans-serif;
+    font-weight: 300;
   }
 
-  article {
-    margin: auto;
+  header {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 80%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  div.hero-container {
+    padding: 0 15%;
   }
 
   h1 {
-    margin: 10px;
-    color: #ccccff;
-    text-shadow: 0.5px 0.5px black;
-    font-size: 2em;
+    font-size: 2.3em;
+  }
+
+  h1 > span {
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
+
+  h3 {
+    color: #6d6d6d;
+  }
+
+  div.subhero-container > h2 {
+    margin-bottom: 0px;
+  }
+
+  img#hero {
+    width: 500px;
+    height: auto;
   }
 </style>
