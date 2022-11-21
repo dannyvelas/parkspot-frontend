@@ -1,15 +1,16 @@
 <script lang="ts">
   import hero from "$lib/assets/hero.png";
   import underline from "$lib/assets/landing/underline.png";
+  import cars from "$lib/assets/landing/cars.png";
 </script>
 
 <header>
-  <div class="hero-container">
+  <div class="hero-text-container">
     <h1>
       <span>Take Control</span> Of Your Community Parking With A Simple &
       <span>Easy-To-Use App</span>
     </h1>
-    <div class="subhero-container">
+    <div class="subhero-text-container">
       <h2>Welcome to ParkSpot!</h2>
       <img id="underline" alt="Underline" src={underline} />
     </div>
@@ -21,23 +22,17 @@
   <img id="hero" alt="ParkSpot Hero" src={hero} />
 </header>
 <article>
-  <section>
-    <h2>Temporary Parking Permit Directions</h2>
-    <ol>
-      <li>
-        <b>There exists only one account per apartment</b>
-      </li>
-      <li>
-        <b>Usernames:</b>
-        <ul>
-          <li>A resident owner's username starts with "B". Eg: B8100123</li>
-          <li>A tenant username starts with "T". Eg: T8100123</li>
-        </ul>
-      </li>
-      <li>
-        <b>Only Las Vistas residents can request parking permits</b>
-      </li>
-    </ol>
+  <section class="simple">
+    <div class="simple-text-container">
+      <h2>Parking Management Made Simple</h2>
+      <p>
+        You can finally say goodbye to those daunting piles of paperwork lying on your desk! With
+        our smart app, you can now keep a record of permits, residents, and their visitors all in
+        one place! Issuing permits, granting additional parking days or unlimited parking days is
+        only a few clicks away.
+      </p>
+    </div>
+    <img id="cars" alt="Cars Parking" src={cars} />
   </section>
   <section>
     <h2>Parking Regulations</h2>
@@ -81,7 +76,7 @@
     align-items: center;
   }
 
-  div.hero-container {
+  div.hero-text-container {
     padding: 0 15%;
   }
 
@@ -89,7 +84,7 @@
     font-size: 2.3em;
   }
 
-  h1 > span {
+  h1 span {
     font-weight: 600;
   }
 
@@ -101,12 +96,42 @@
     color: #6d6d6d;
   }
 
-  div.subhero-container > h2 {
+  div.subhero-text-container h2 {
     margin-bottom: 0px;
   }
 
   img#hero {
-    width: 500px;
+    width: 35%;
     height: auto;
+  }
+
+  section {
+    padding: 50px 15%;
+  }
+
+  article section h2 {
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.4em;
+  }
+
+  section.simple {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  div.simple-text-container {
+    width: 45%;
+  }
+
+  img#cars {
+    width: 35%;
+    height: auto;
+  }
+
+  p {
+    line-height: 1.75;
   }
 </style>
