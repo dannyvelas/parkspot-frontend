@@ -36,7 +36,7 @@
   <a href="/permits/exceptions"><button>Submit</button></a>
 </p>
 <p>
-  List Parking Days Given To Guests by Resident Id:
+  List Parking Days Given To Guests by Resident ID:
   <a href="/residents/days"><button>Submit</button></a>
 </p>
 <p>
@@ -60,7 +60,7 @@
   </div>
 {/if}
 <form method="POST" action="?/register" on:submit|preventDefault={handleSubmit}>
-  <input required type="text" name="residentID" placeholder="Resident ID" />
+  <input required type="text" name="id" placeholder="Resident ID" />
   <input required type="text" name="firstName" placeholder="First Name" />
   <input required type="text" name="lastName" placeholder="Last Name" />
   <input required type="text" name="phone" placeholder="Phone" />

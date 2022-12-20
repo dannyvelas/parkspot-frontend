@@ -24,11 +24,11 @@
   });
 
   // events
-  const deleteResident = async (i: number, residentId: string) => {
-    if (confirm(`Are you sure you want to delete ${residentId}?`)) {
-      const delRes = await del(`api/resident/${residentId}`, await getLatestToken());
+  const deleteResident = async (i: number, residentID: string) => {
+    if (confirm(`Are you sure you want to delete ${residentID}?`)) {
+      const delRes = await del(`api/resident/${residentID}`, await getLatestToken());
       if (!isOk(delRes)) {
-        alert(`Error deleting resident ${residentId}. Please try again later`);
+        alert(`Error deleting resident ${residentID}. Please try again later`);
         return;
       }
 
@@ -38,7 +38,7 @@
       ];
       result.data!.metadata.totalAmount = result.data!.metadata.totalAmount - 1;
 
-      alert(`Deleted resident ${residentId}`);
+      alert(`Deleted resident ${residentID}`);
     }
   };
   const handleSearch = async (event: CustomEvent<Result<Resident[]>>) => {

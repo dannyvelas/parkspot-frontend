@@ -21,7 +21,7 @@
   })();
 
   // model
-  const residentId = data.session.user.role === "resident" ? data.session.user.id : "";
+  const residentID = data.session.user.role === "resident" ? data.session.user.id : "";
   let isException = false;
   $: exceptionReason = isException ? "" : ""; // clear when checked/unchecked
   let startDate = dateToday.toISOString();
@@ -72,8 +72,8 @@
     type="text"
     name="residentID"
     placeholder="Resident ID"
-    readonly={residentId !== ""}
-    value={residentId}
+    readonly={residentID !== ""}
+    value={residentID}
   />
   <input required type="text" name="licensePlate" placeholder="License Plate" />
   <input required type="text" name="color" placeholder="Color" />

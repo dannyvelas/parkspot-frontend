@@ -2,7 +2,7 @@ import * as decoders from "decoders";
 
 export type Visitor = {
   id: string;
-  residentId: string;
+  residentID: string;
   firstName: string;
   lastName: string;
   relationship: string;
@@ -12,7 +12,7 @@ export type Visitor = {
 
 export const visitorDecoder: decoders.Decoder<Visitor> = decoders.object({
   id: decoders.string,
-  residentId: decoders.string,
+  residentID: decoders.string,
   firstName: decoders.string,
   lastName: decoders.string,
   relationship: decoders.string,
@@ -22,7 +22,7 @@ export const visitorDecoder: decoders.Decoder<Visitor> = decoders.object({
 
 export const preview = (visitor: Visitor) => {
   return `
-    ${visitor.residentId}
+    ${visitor.residentID}
     ${visitor.firstName}
     ${visitor.lastName}`;
 };

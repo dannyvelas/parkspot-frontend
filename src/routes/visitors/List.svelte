@@ -11,9 +11,9 @@
   export let totalAmount: number;
 
   // events
-  const deleteVisitor = async (i: number, visitorId: string, fullName: string) => {
+  const deleteVisitor = async (i: number, visitorID: string, fullName: string) => {
     if (confirm(`Are you sure you want to delete ${fullName}?`)) {
-      const delRes = await del(`api/visitor/${visitorId}`, await getLatestToken());
+      const delRes = await del(`api/visitor/${visitorID}`, await getLatestToken());
       if (!isOk(delRes)) {
         alert(`Error deleting visitor ${fullName}. Please try again later`);
         return;
@@ -48,7 +48,7 @@
       </tr>
       {#each visitors as visitor, i (visitor.id)}
         <tr>
-          <td>{visitor.residentId}</td>
+          <td>{visitor.residentID}</td>
           <td>{visitor.firstName}</td>
           <td>{visitor.lastName}</td>
           <td>{visitor.relationship}</td>

@@ -22,7 +22,7 @@
 <nav>
   <a href="/"><img alt="ParkSpot Logo" src={logo} /></a>
   {#if session}
-    <button>Placeholder</button>
+    <button on:click={logout}>Logout</button>
   {:else}
     <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
   {/if}

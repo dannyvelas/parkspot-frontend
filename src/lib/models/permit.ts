@@ -4,7 +4,7 @@ import { carDecoder } from "./car";
 
 export type Permit = {
   id: number;
-  residentId: string;
+  residentID: string;
   car: Car;
   startDate: Date;
   endDate: Date;
@@ -15,7 +15,7 @@ export type Permit = {
 
 export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
   id: decoders.number,
-  residentId: decoders.string,
+  residentID: decoders.string,
   car: carDecoder,
   startDate: decoders.iso8601,
   endDate: decoders.iso8601,
@@ -27,7 +27,7 @@ export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
 export const preview = (permit: Permit) => {
   return `
     ${permit.id}
-    ${permit.residentId}
+    ${permit.residentID}
     ${permit.car.licensePlate}
     ${permit.car.color}
     ${permit.car.make}
@@ -35,7 +35,7 @@ export const preview = (permit: Permit) => {
 };
 
 export type NewPermitReq = {
-  residentId: string;
+  residentID: string;
   car: NewCarReq;
   startDate: string;
   endDate: string;

@@ -8,7 +8,7 @@ import { post } from "$lib/api";
 import { getHeaderToken } from "$lib/auth";
 
 const formDecoder = decoders.object({
-  residentID: decoders.string,
+  id: decoders.string,
   firstName: decoders.string,
   lastName: decoders.string,
   phone: decoders.string,
@@ -33,14 +33,14 @@ export const actions: Actions = {
       return invalid(400, { response: tokenRes.message });
     }
 
-    const result = await post(`api/account`, formRes.data, messageDecoder, tokenRes.data);
+    const result = await post(`api/resident`, formRes.data, messageDecoder, tokenRes.data);
     if (!isOk(result)) {
       if (result.message.includes("401")) {
         return invalid(401, {
-          error: "Your session has expired. Please log in again to create a permit.",
+          response: "Error: your session has expired. Please log in again to create a permit.",
         });
       }
-      return invalid(400, { error: result.message });
+      return invalid(400, { response: "Error: " + result.message });
     }
 
     return { response: result.data.message };

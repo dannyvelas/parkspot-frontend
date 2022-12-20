@@ -21,7 +21,7 @@
   {:else}
     <div class="section">
       <p style="font-size:70px">Permit ID: {result.data.id}</p>
-      <p style="font-size:40px">Resident ID: {result.data.residentId}</p>
+      <p style="font-size:40px">Resident ID: {result.data.residentID}</p>
     </div>
     <div class="section">
       <p style="font-size:40px">Start Date: {dateToYmd(result.data.startDate)}</p>

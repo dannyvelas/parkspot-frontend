@@ -12,17 +12,17 @@
   export let totalAmount: number;
 
   // events
-  const deletePermit = async (i: number, permitId: number) => {
-    if (confirm(`Are you sure you want to delete ${permitId}?`)) {
-      const delRes = await del(`api/permit/${permitId}`, await getLatestToken());
+  const deletePermit = async (i: number, permitID: number) => {
+    if (confirm(`Are you sure you want to delete ${permitID}?`)) {
+      const delRes = await del(`api/permit/${permitID}`, await getLatestToken());
       if (!isOk(delRes)) {
-        alert(`Error deleting permit ${permitId}. Please try again later`);
+        alert(`Error deleting permit ${permitID}. Please try again later`);
         return;
       }
 
       permits = [...permits.slice(0, i), ...permits.slice(i + 1)];
 
-      alert(`Deleted permit ${permitId}`);
+      alert(`Deleted permit ${permitID}`);
     }
   };
 </script>
@@ -51,7 +51,7 @@
   {#each permits as permit, i (permit.id)}
     <tr>
       <td>{permit.id}</td>
-      <td>{permit.residentId}</td>
+      <td>{permit.residentID}</td>
       <td>{permit.car.licensePlate}</td>
       <td>{permit.car.color}</td>
       <td>{permit.car.make}</td>
