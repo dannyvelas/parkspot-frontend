@@ -1,11 +1,13 @@
 import * as decoders from "decoders";
-import type { Car, NewCarReq } from "./car";
-import { carDecoder } from "./car";
 
 export type Permit = {
   id: number;
   residentID: string;
-  car: Car;
+  carID: string;
+  licensePlate: string;
+  color: string;
+  make: string;
+  model: string;
   startDate: Date;
   endDate: Date;
   requestTS: number;
@@ -16,7 +18,11 @@ export type Permit = {
 export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
   id: decoders.number,
   residentID: decoders.string,
-  car: carDecoder,
+  carID: decoders.string,
+  licensePlate: decoders.string,
+  color: decoders.string,
+  make: decoders.string,
+  model: decoders.string,
   startDate: decoders.iso8601,
   endDate: decoders.iso8601,
   requestTS: decoders.number,
@@ -28,15 +34,15 @@ export const preview = (permit: Permit) => {
   return `
     ${permit.id}
     ${permit.residentID}
-    ${permit.car.licensePlate}
-    ${permit.car.color}
-    ${permit.car.make}
-    ${permit.car.model}`;
+    ${permit.licensePlate}
+    ${permit.color}
+    ${permit.make}
+    ${permit.model}`;
 };
 
 export type NewPermitReq = {
   residentID: string;
-  car: NewCarReq;
+  carID: string;
   startDate: string;
   endDate: string;
   exceptionReason: string;

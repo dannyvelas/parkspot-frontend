@@ -52,10 +52,10 @@
     <tr>
       <td>{permit.id}</td>
       <td>{permit.residentID}</td>
-      <td>{permit.car.licensePlate}</td>
-      <td>{permit.car.color}</td>
-      <td>{permit.car.make}</td>
-      <td>{permit.car.model}</td>
+      <td>{permit.licensePlate}</td>
+      <td>{permit.color}</td>
+      <td>{permit.make}</td>
+      <td>{permit.model}</td>
       <td>{dateToYmd(permit.startDate)}</td>
       <td>{dateToYmd(permit.endDate)}</td>
       <td>{tsToDate(permit.requestTS)}</td>
@@ -64,7 +64,7 @@
       {/if}
       <td><a href="/permit/{permit.id}">Reprint</a></td>
       {#if user.role === "admin"}
-        <td><a href="/car/{permit.car.id}">Edit</a></td>
+        <td><a href="/car/{permit.carID}">Edit</a></td>
         <td><button on:click={() => deletePermit(i, permit.id)}>Delete</button></td>
       {/if}
     </tr>
