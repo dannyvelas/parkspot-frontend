@@ -5,7 +5,7 @@ import { validate } from "$lib/form";
 import { invalid, redirect } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
-import { getHeaderToken } from "$lib/auth";
+import { getHeaderToken } from "$lib/server/auth";
 
 const formDecoder = object({
   residentID: string,
