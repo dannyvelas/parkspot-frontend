@@ -64,11 +64,6 @@
 </article>
 
 <style>
-  * {
-    font-family: "Work Sans", sans-serif;
-    font-weight: 300;
-  }
-
   header {
     display: flex;
     flex-direction: row;
