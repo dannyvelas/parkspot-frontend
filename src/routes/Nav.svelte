@@ -22,7 +22,10 @@
 <nav>
   <a href="/"><img alt="ParkSpot Logo" src={logo} /></a>
   {#if session}
-    <button on:click={logout}>Logout</button>
+    <div id="user-menu">
+      <p id="user-name">{session.user.firstName + " " + session.user.lastName}</p>
+      <iconify-icon icon="dashicons:arrow-down-alt2" style="color: white" />
+    </div>
   {:else}
     <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
   {/if}
@@ -36,6 +39,18 @@
     justify-content: space-between;
     align-items: center;
     padding: 14px 35px;
+  }
+
+  #user-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 0.5rem;
+  }
+
+  #user-name {
+    color: white;
+    font-size: 0.75rem;
   }
 
   img {
