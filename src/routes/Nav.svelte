@@ -5,6 +5,7 @@
   import type { Session } from "$lib/auth";
 
   export let session: Session | undefined;
+  let dropdownOpen = false;
 
   // events
   async function logout() {
@@ -24,7 +25,16 @@
   {#if session}
     <div id="user-menu">
       <p id="user-name">{session.user.firstName + " " + session.user.lastName}</p>
-      <iconify-icon icon="dashicons:arrow-down-alt2" style="color: white" />
+      <iconify-icon
+        icon="dashicons:arrow-down-alt2"
+        on:click|preventDefault={() => (dropdownOpen = !dropdownOpen)}
+        on:keypress={() => (dropdownOpen = !dropdownOpen)}
+      />
+      {#if dropdownOpen}
+        <div id="dropdown">
+          <p class="dropdown-el" on:click={logout} on:keypress={logout}>Logout</p>
+        </div>
+      {/if}
     </div>
   {:else}
     <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
@@ -42,15 +52,21 @@
   }
 
   #user-menu {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    column-gap: 0.5rem;
+    cursor: default;
+    position: relative;
   }
 
   #user-name {
+    display: inline-block;
     color: white;
     font-size: 0.75rem;
+    margin: 0;
+  }
+
+  iconify-icon {
+    color: white;
+    display: inline-block;
+    vertical-align: middle;
   }
 
   img {
@@ -63,5 +79,18 @@
     text-decoration: none;
     font-family: "Work Sans", sans-serif;
     font-weight: 300;
+  }
+
+  #dropdown {
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    width: 100%;
+  }
+
+  .dropdown-el {
+    font-size: 0.75rem;
+    margin: 0.5rem 0.75rem;
   }
 </style>
