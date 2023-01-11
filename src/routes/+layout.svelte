@@ -1,5 +1,6 @@
 <script lang="ts">
-  import Nav from "./Nav.svelte";
+  import Nav from "$lib/components/Nav.svelte";
+  import Sidebar from "$lib/components/Sidebar.svelte";
   import "normalize.css";
   import "../app.css";
   import type { PageData } from "./$types";
@@ -8,7 +9,17 @@
 </script>
 
 <Nav session={data.session} />
+<div>
+  <Sidebar />
 
-<main>
-  <slot />
-</main>
+  <main>
+    <slot />
+  </main>
+</div>
+
+<style>
+  div {
+    display: flex;
+    flex-direction: row;
+  }
+</style>
