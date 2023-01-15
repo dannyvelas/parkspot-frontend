@@ -1,46 +1,76 @@
 <script>
   import { page } from "$app/stores";
+
+  let shrunk = false;
+  $: dynamicPadding = !shrunk ? "60px" : "25px";
 </script>
 
 <nav>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/dashboard"}>
+  <button on:click={() => (shrunk = !shrunk)}>
+    <iconify-icon icon="uiw:shrink" style="color:#6d6d6d" width="15" height="15" />
+  </button>
+  <div
+    class="sidebar-wrapper"
+    class:active={$page.url.pathname == "/dashboard"}
+    style:padding-right={dynamicPadding}
+  >
     <a href="/dashboard" class="sidebar-link" class:active={$page.url.pathname == "/dashboard"}>
       <iconify-icon
         class="circle"
         class:active={$page.url.pathname == "/dashboard"}
         icon="material-symbols:dashboard-outline-rounded"
       />
-      Dashboard
+      {#if !shrunk}
+        Dashboard
+      {/if}
     </a>
   </div>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/permits"}>
+  <div
+    class="sidebar-wrapper"
+    class:active={$page.url.pathname == "/permits"}
+    style:padding-right={dynamicPadding}
+  >
     <a href="/permits" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
       <iconify-icon
         class="circle"
         class:active={$page.url.pathname == "/permits"}
         icon="clarity:details-line"
       />
-      Permits
+      {#if !shrunk}
+        Permits
+      {/if}
     </a>
   </div>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/residents"}>
+  <div
+    class="sidebar-wrapper"
+    class:active={$page.url.pathname == "/residents"}
+    style:padding-right={dynamicPadding}
+  >
     <a href="/residents" class="sidebar-link" class:active={$page.url.pathname == "/residents"}>
       <iconify-icon
         class="circle"
         class:active={$page.url.pathname == "/residents"}
         icon="uit:house-user"
       />
-      Residents
+      {#if !shrunk}
+        Residents
+      {/if}
     </a>
   </div>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/visitors"}>
+  <div
+    class="sidebar-wrapper"
+    class:active={$page.url.pathname == "/visitors"}
+    style:padding-right={dynamicPadding}
+  >
     <a href="/visitors" class="sidebar-link" class:active={$page.url.pathname == "/visitors"}>
       <iconify-icon
         class="circle"
         class:active={$page.url.pathname == "/visitors"}
         icon="material-symbols:badge-outline"
       />
-      Visitors
+      {#if !shrunk}
+        Visitors
+      {/if}
     </a>
   </div>
 </nav>
@@ -53,7 +83,13 @@
     box-shadow: 0px 4px 60px rgba(0, 0, 0, 0.06);
     border-radius: 0px 18px 18px 0px;
     margin-bottom: 25px;
-    padding-top: 35px;
+    padding-top: 10px;
+    padding-left: 25px;
+  }
+
+  button {
+    border-style: none;
+    background: none;
   }
 
   iconify-icon {
@@ -74,8 +110,10 @@
   }
 
   .sidebar-wrapper {
-    padding: 12.5px 60px 12.5px 25px;
-    margin: 12.5px 0 12.5px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+    margin-top: 12.5px;
+    margin-bottom: 12.5px;
   }
 
   .circle {
