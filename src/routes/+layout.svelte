@@ -13,9 +13,11 @@
 </div>
 
 <div id="app-container">
-  <div id="sidebar-container">
-    <Sidebar />
-  </div>
+  {#if data.session}
+    <div id="sidebar-container">
+      <Sidebar />
+    </div>
+  {/if}
 
   <main>
     <slot />
@@ -34,5 +36,6 @@
 
   main {
     padding: 0 25px;
+    margin: 0 auto;
   }
 </style>
