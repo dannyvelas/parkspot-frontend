@@ -3,11 +3,11 @@
 </script>
 
 <nav>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/admin"}>
-    <a href="/admin" class="sidebar-link" class:active={$page.url.pathname == "/admin"}>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/dashboard"}>
+    <a href="/dashboard" class="sidebar-link" class:active={$page.url.pathname == "/dashboard"}>
       <iconify-icon
         class="circle"
-        class:active={$page.url.pathname == "/admin"}
+        class:active={$page.url.pathname == "/dashboard"}
         icon="material-symbols:dashboard-outline-rounded"
       />
       Dashboard
@@ -52,9 +52,7 @@
     flex-direction: column;
     box-shadow: 0px 4px 60px rgba(0, 0, 0, 0.06);
     border-radius: 0px 18px 18px 0px;
-    margin-top: 25px;
     margin-bottom: 25px;
-    margin-right: 25px;
     padding-top: 35px;
   }
 

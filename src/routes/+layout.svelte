@@ -8,9 +8,14 @@
   export let data: PageData;
 </script>
 
-<Nav session={data.session} />
-<div>
-  <Sidebar />
+<div id="nav-container">
+  <Nav session={data.session} />
+</div>
+
+<div id="app-container">
+  <div id="sidebar-container">
+    <Sidebar />
+  </div>
 
   <main>
     <slot />
@@ -18,8 +23,16 @@
 </div>
 
 <style>
-  div {
+  #app-container {
     display: flex;
     flex-direction: row;
+  }
+
+  #nav-container {
+    margin-bottom: 25px;
+  }
+
+  main {
+    padding: 0 25px;
   }
 </style>
