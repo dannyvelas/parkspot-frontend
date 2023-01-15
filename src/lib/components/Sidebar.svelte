@@ -3,25 +3,45 @@
 </script>
 
 <nav>
-  <div class="sidebar-item">
-    <iconify-icon
-      class="circle"
-      class:active={$page.url.pathname == "/admin"}
-      icon="material-symbols:dashboard-outline-rounded"
-    />
-    <a class:active={$page.url.pathname == "/admin"} href="/admin"> Dashboard </a>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/admin"}>
+    <a href="/admin" class="sidebar-link" class:active={$page.url.pathname == "/admin"}>
+      <iconify-icon
+        class="circle"
+        class:active={$page.url.pathname == "/admin"}
+        icon="material-symbols:dashboard-outline-rounded"
+      />
+      Dashboard
+    </a>
   </div>
-  <div class="sidebar-item">
-    <iconify-icon class="circle" icon="clarity:details-line" />
-    <a href="/permits"> Permits </a>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/permits"}>
+    <a href="/permits" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
+      <iconify-icon
+        class="circle"
+        class:active={$page.url.pathname == "/permits"}
+        icon="clarity:details-line"
+      />
+      Permits
+    </a>
   </div>
-  <div class="sidebar-item">
-    <iconify-icon class="circle" icon="uit:house-user" />
-    <a href="/residents"> Residents </a>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/residents"}>
+    <a href="/residents" class="sidebar-link" class:active={$page.url.pathname == "/residents"}>
+      <iconify-icon
+        class="circle"
+        class:active={$page.url.pathname == "/residents"}
+        icon="uit:house-user"
+      />
+      Residents
+    </a>
   </div>
-  <div class="sidebar-item">
-    <iconify-icon class="circle" icon="material-symbols:badge-outline" />
-    <a href="/visitors"> Visitors </a>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/visitors"}>
+    <a href="/visitors" class="sidebar-link" class:active={$page.url.pathname == "/visitors"}>
+      <iconify-icon
+        class="circle"
+        class:active={$page.url.pathname == "/visitors"}
+        icon="material-symbols:badge-outline"
+      />
+      Visitors
+    </a>
   </div>
 </nav>
 
@@ -42,18 +62,22 @@
     display: inline;
   }
 
-  .sidebar-item {
+  a {
+    text-decoration: none;
+    color: #6d6d6d;
+  }
+
+  .sidebar-link {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 12px;
-    margin: 25px 60px 25px 25px;
     font-size: 0.75rem;
   }
 
-  a {
-    text-decoration: none;
-    color: #6d6d6d;
+  .sidebar-wrapper {
+    padding: 12.5px 60px 12.5px 25px;
+    margin: 12.5px 0 12.5px;
   }
 
   .circle {
@@ -61,6 +85,10 @@
     border-radius: 50px;
     padding: 10px;
     color: #8a8a8a;
+  }
+
+  .sidebar-wrapper.active {
+    border-right: solid #13d380;
   }
 
   iconify-icon.active {
