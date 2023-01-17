@@ -1,28 +1,34 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { tweened } from "svelte/motion";
   import { cubicIn } from "svelte/easing";
 
   let shrunk = false;
-  let padding = tweened(25, {
-    duration: 700,
-    easing: cubicIn,
-  })
   $: icon = !shrunk ? "ic:round-arrow-back-ios-new" : "ic:round-arrow-forward-ios";
+
+  export function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
+    const style = getComputedStyle(node);
+    const opacity = +style.opacity;
+    return {
+      delay,
+      duration: 400,
+      easing: cubicIn,
+      css: (t: number) => {
+        console.log(t * parseFloat(style.paddingRight) + 25);
+        return `
+        overflow: hidden;
+        opacity: ${Math.min(t * 20, 1) * opacity};
+        width: ${t * parseFloat(style.width)}px;
+        padding-right: ${t * parseFloat(style.paddingRight) + 25}px`;
+      },
+    };
+  }
 </script>
 
 <nav>
-  <button style:text-align="right" on:click={() => {
-    shrunk = !shrunk
-    padding.set(shrunk ? 25 : 60)
-  }}>
+  <button style:text-align="right" on:click={() => (shrunk = !shrunk)}>
     <iconify-icon {icon} style="color:#6d6d6d" width="15" height="15" />
   </button>
-  <div
-    class="sidebar-wrapper"
-    class:active={$page.url.pathname == "/dashboard"}
-    style:padding-right={`${$padding}px`}
-  >
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/dashboard"}>
     <a href="/dashboard" class="sidebar-link" class:active={$page.url.pathname == "/dashboard"}>
       <iconify-icon
         class="circle"
@@ -30,55 +36,7 @@
         icon="material-symbols:dashboard-outline-rounded"
       />
       {#if !shrunk}
-        Dashboard
-      {/if}
-    </a>
-  </div>
-  <div
-    class="sidebar-wrapper"
-    class:active={$page.url.pathname == "/permits"}
-    style:padding-right={`${$padding}px`}
-  >
-    <a href="/permits" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
-      <iconify-icon
-        class="circle"
-        class:active={$page.url.pathname == "/permits"}
-        icon="clarity:details-line"
-      />
-      {#if !shrunk}
-        Permits
-      {/if}
-    </a>
-  </div>
-  <div
-    class="sidebar-wrapper"
-    class:active={$page.url.pathname == "/residents"}
-    style:padding-right={`${$padding}px`}
-  >
-    <a href="/residents" class="sidebar-link" class:active={$page.url.pathname == "/residents"}>
-      <iconify-icon
-        class="circle"
-        class:active={$page.url.pathname == "/residents"}
-        icon="uit:house-user"
-      />
-      {#if !shrunk}
-        Residents
-      {/if}
-    </a>
-  </div>
-  <div
-    class="sidebar-wrapper"
-    class:active={$page.url.pathname == "/visitors"}
-    style:padding-right={`${$padding}px`}
-  >
-    <a href="/visitors" class="sidebar-link" class:active={$page.url.pathname == "/visitors"}>
-      <iconify-icon
-        class="circle"
-        class:active={$page.url.pathname == "/visitors"}
-        icon="material-symbols:badge-outline"
-      />
-      {#if !shrunk}
-        Visitors
+        <span transition:horizontalSlide>Dashboard</span>
       {/if}
     </a>
   </div>
