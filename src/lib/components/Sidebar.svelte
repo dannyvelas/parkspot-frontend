@@ -1,18 +1,27 @@
-<script>
+<script lang="ts">
   import { page } from "$app/stores";
+  import { tweened } from "svelte/motion";
+  import { cubicIn } from "svelte/easing";
 
   let shrunk = false;
-  $: dynamicPadding = !shrunk ? "60px" : "25px";
+  let padding = tweened(25, {
+    duration: 700,
+    easing: cubicIn,
+  })
+  $: icon = !shrunk ? "ic:round-arrow-back-ios-new" : "ic:round-arrow-forward-ios";
 </script>
 
 <nav>
-  <button on:click={() => (shrunk = !shrunk)}>
-    <iconify-icon icon="uiw:shrink" style="color:#6d6d6d" width="15" height="15" />
+  <button style:text-align="right" on:click={() => {
+    shrunk = !shrunk
+    padding.set(shrunk ? 25 : 60)
+  }}>
+    <iconify-icon {icon} style="color:#6d6d6d" width="15" height="15" />
   </button>
   <div
     class="sidebar-wrapper"
     class:active={$page.url.pathname == "/dashboard"}
-    style:padding-right={dynamicPadding}
+    style:padding-right={`${$padding}px`}
   >
     <a href="/dashboard" class="sidebar-link" class:active={$page.url.pathname == "/dashboard"}>
       <iconify-icon
@@ -28,7 +37,7 @@
   <div
     class="sidebar-wrapper"
     class:active={$page.url.pathname == "/permits"}
-    style:padding-right={dynamicPadding}
+    style:padding-right={`${$padding}px`}
   >
     <a href="/permits" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
       <iconify-icon
@@ -44,7 +53,7 @@
   <div
     class="sidebar-wrapper"
     class:active={$page.url.pathname == "/residents"}
-    style:padding-right={dynamicPadding}
+    style:padding-right={`${$padding}px`}
   >
     <a href="/residents" class="sidebar-link" class:active={$page.url.pathname == "/residents"}>
       <iconify-icon
@@ -60,7 +69,7 @@
   <div
     class="sidebar-wrapper"
     class:active={$page.url.pathname == "/visitors"}
-    style:padding-right={dynamicPadding}
+    style:padding-right={`${$padding}px`}
   >
     <a href="/visitors" class="sidebar-link" class:active={$page.url.pathname == "/visitors"}>
       <iconify-icon
@@ -90,10 +99,6 @@
   button {
     border-style: none;
     background: none;
-  }
-
-  iconify-icon {
-    display: inline;
   }
 
   a {
