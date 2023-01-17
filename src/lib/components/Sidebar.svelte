@@ -7,19 +7,14 @@
 
   export function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
     const style = getComputedStyle(node);
-    const opacity = +style.opacity;
     return {
       delay,
       duration: 400,
       easing: cubicIn,
-      css: (t: number) => {
-        console.log(t * parseFloat(style.paddingRight) + 25);
-        return `
+      css: (t: number) => `
         overflow: hidden;
-        opacity: ${Math.min(t * 20, 1) * opacity};
         width: ${t * parseFloat(style.width)}px;
-        padding-right: ${t * parseFloat(style.paddingRight) + 25}px`;
-      },
+        padding-right: ${t * parseFloat(style.paddingRight)}px;`,
     };
   }
 </script>
@@ -36,7 +31,7 @@
         icon="material-symbols:dashboard-outline-rounded"
       />
       {#if !shrunk}
-        <span transition:horizontalSlide>Dashboard</span>
+        <span transition:horizontalSlide style:padding-right="60px">Dashboard</span>
       {/if}
     </a>
   </div>
@@ -68,7 +63,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 12px;
     font-size: 0.75rem;
   }
 
@@ -84,6 +78,7 @@
     border-radius: 50px;
     padding: 10px;
     color: #8a8a8a;
+    margin: 0 10px;
   }
 
   .sidebar-wrapper.active {
