@@ -31,7 +31,43 @@
         icon="material-symbols:dashboard-outline-rounded"
       />
       {#if !shrunk}
-        <span transition:horizontalSlide style:padding-right="60px">Dashboard</span>
+        <span transition:horizontalSlide>Dashboard</span>
+      {/if}
+    </a>
+  </div>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/permits"}>
+    <a href="/permits" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
+      <iconify-icon
+        class="circle"
+        class:active={$page.url.pathname == "/permits"}
+        icon="clarity:details-line"
+      />
+      {#if !shrunk}
+        <span transition:horizontalSlide>Permits</span>
+      {/if}
+    </a>
+  </div>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/residents"}>
+    <a href="/residents" class="sidebar-link" class:active={$page.url.pathname == "/residents"}>
+      <iconify-icon
+        class="circle"
+        class:active={$page.url.pathname == "/residents"}
+        icon="uit:house-user"
+      />
+      {#if !shrunk}
+        <span transition:horizontalSlide>Residents</span>
+      {/if}
+    </a>
+  </div>
+  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/visitors"}>
+    <a href="/visitors" class="sidebar-link" class:active={$page.url.pathname == "/visitors"}>
+      <iconify-icon
+        class="circle"
+        class:active={$page.url.pathname == "/visitors"}
+        icon="material-symbols:badge-outline"
+      />
+      {#if !shrunk}
+        <span transition:horizontalSlide>Visitors</span>
       {/if}
     </a>
   </div>
@@ -92,5 +128,9 @@
 
   a.active {
     color: #13d380;
+  }
+
+  span {
+    padding-right: 60px;
   }
 </style>
