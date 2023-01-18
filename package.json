@@ -41,7 +41,6 @@
     "cookie": "^0.5.0",
     "decoders": "^2.0.0",
     "jose": "^4.9.2",
-    "litepicker": "^2.0.12",
-    "normalize.css": "^8.0.1"
+    "litepicker": "^2.0.12"
   }
 }
