@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
   import { cubicIn } from "svelte/easing";
 
-  let shrunk = false;
+  let shrunk = true;
   $: icon = !shrunk ? "ic:round-arrow-back-ios-new" : "ic:round-arrow-forward-ios";
 
   export function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
@@ -131,6 +131,6 @@
   }
 
   span {
-    padding-right: 60px;
+    padding-right: 40px;
   }
 </style>
