@@ -15,6 +15,7 @@
         console.error("Error logging out");
       }
 
+      dropdownOpen = false;
       invalidateAll();
     }
   }
