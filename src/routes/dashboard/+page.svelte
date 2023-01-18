@@ -11,7 +11,7 @@
   <title>{capitalRole} Dashboard</title>
 </svelte:head>
 
-<h1>Welcome, {capitalize(data.session.user.firstName)}!</h1>
+<h1 class="text-3xl font-bold underline">Welcome, {capitalize(data.session.user.firstName)}!</h1>
 
 <style>
   h1 {
