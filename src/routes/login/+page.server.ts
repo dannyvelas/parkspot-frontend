@@ -6,6 +6,7 @@ import { validate } from "$lib/form";
 import { fail } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { post } from "$lib/api";
+import { PUBLIC_ENV } from "$env/static/public";
 
 const formDecoder = decoders.object({
   id: decoders.string,
@@ -36,7 +37,10 @@ export const actions: Actions = {
 
     // TODO: get refresh token from server and forward it, instead of creating our own
     const refreshToken = await newRefresh(result.data.user);
-    event.cookies.set("refresh", refreshToken, { sameSite: "strict" });
+    event.cookies.set("refresh", refreshToken, {
+      sameSite: "strict",
+      secure: PUBLIC_ENV == "prod",
+    });
 
     return { user: result.data.user, accessToken: result.data.accessToken };
     // success causes sveltekit to run invalidateAll() which causes +layout.server.ts to re-run
