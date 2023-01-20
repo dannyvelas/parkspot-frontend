@@ -4,7 +4,7 @@
   import { createEventDispatcher } from "svelte";
   import { MAX_AMT_PER_PAGE } from "$lib/constants";
   import { listWithMetadataDecoder } from "$lib/models";
-  import { get } from "$lib/api";
+  import { Request } from "$lib/api";
   import { isOk, newOk, newErr } from "$lib/functional";
   import { getLatestToken } from "$lib/auth";
 
@@ -42,12 +42,10 @@
       );
     }
 
-    const getRes = await get(
-      endpoint,
-      { search: searchVal },
-      listWithMetadataDecoder(decoder),
-      await getLatestToken()
-    );
+    const getRes = await new Request(listWithMetadataDecoder(decoder))
+      .setParams({ search: searchVal })
+      .setAccessToken(await getLatestToken())
+      .get(endpoint);
     if (!isOk(getRes)) {
       return newErr(getRes.message);
     }

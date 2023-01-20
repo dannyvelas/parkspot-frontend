@@ -1,158 +1,176 @@
-import type { Result } from '$lib/functional';
-import type { Message } from '$lib/models';
-import type { Decoder } from 'decoders';
-import { PUBLIC_BACKENDURL } from '$env/static/public';
-import { isOk, newOk, newErr } from '$lib/functional';
-import { messageDecoder } from '$lib/models';
-type Method = 'GET' | 'DELETE' | 'POST' | 'PUT';
+import type { Result } from "$lib/functional";
+import type { Decoder } from "decoders";
+import { PUBLIC_BACKENDURL } from "$env/static/public";
+import { isOk, newOk, newErr } from "$lib/functional";
+type Method = "GET" | "DELETE" | "POST" | "PUT";
 
 type FetchOpts = {
-	method: Method;
-	mode: 'cors';
-	headers: Headers;
-	body?: string;
-	credentials: 'include';
+  method: Method;
+  mode: "cors";
+  headers: Headers;
+  body?: string;
+  credentials: "include";
 };
 
-const getFetchOpts = <ReqBody>(
-	method: Method,
-	request: ReqBody | undefined,
-	accessToken: string,
-	headers?: Array<[string, string]>
-) => {
-	const fetchOpts: FetchOpts = {
-		method,
-		mode: 'cors',
-		credentials: 'include',
-		headers: new Headers()
-	};
-	if (request) {
-		fetchOpts.headers.append('Content-Type', 'application/json');
-		fetchOpts.body = JSON.stringify(request);
-	}
+export class Request<Req, Res> {
+  private decoder?: Decoder<Res>;
+  private params: Record<string, string> = {};
+  private accessToken?: string;
+  private headers: Array<[string, string]> = [];
+  private method!: Method;
+  private path!: string;
+  private body?: Req;
 
-	if (accessToken) {
-		fetchOpts.headers.append('Authorization', `Bearer ${accessToken}`);
-	}
+  constructor(decoder?: Decoder<Res>) {
+    this.decoder = decoder;
+    return this;
+  }
 
-	const justHeaders = headers !== undefined ? headers : [];
-	for (const [k, v] of justHeaders) {
-		fetchOpts.headers.append(k, v);
-	}
+  setParams(params: Record<string, string>) {
+    this.params = params;
+    return this;
+  }
 
-	return fetchOpts;
-};
+  addParam(key: string, value: string) {
+    this.params = { ...this.params, [key]: value };
+    return this;
+  }
 
-const getResponse = async (path: string, fetchOpts: FetchOpts): Promise<Result<Response>> => {
-	let response: Response;
-	try {
-		response = await fetch(`${PUBLIC_BACKENDURL}/${path}`, fetchOpts);
-	} catch (error) {
-		if (error instanceof TypeError) {
-			return newErr('Error getting response: ' + error.message);
-		} else {
-			return newErr('Unhandled error getting response');
-		}
-	}
+  setAccessToken(accessToken: string) {
+    this.accessToken = accessToken;
+    return this;
+  }
 
-	return newOk(response);
-};
+  setHeaders(headers: Array<[string, string]>) {
+    this.headers = headers;
+    return this;
+  }
 
-const getJson = async (response: Response): Promise<Result<any>> => {
-	try {
-		const jsonResponse = await response.json();
-		return newOk(jsonResponse);
-	} catch (error) {
-		if (error instanceof SyntaxError) {
-			return newErr('Error parsing JSON: ' + error.message);
-		} else {
-			return newErr('Unhandled error parsing JSON');
-		}
-	}
-};
+  async get(path: string) {
+    this.path = path;
+    this.method = "GET";
+    return this.send();
+  }
 
-const decodeJson = <T>(json: any, responseDecoder: Decoder<T>): Result<T> => {
-	try {
-		const decodedResponse = responseDecoder.verify(json);
-		return newOk(decodedResponse);
-	} catch (error) {
-		return newErr('Error decoding response: ' + error);
-	}
-};
+  async delete(path: string) {
+    this.path = path;
+    this.method = "DELETE";
 
-const sendReq = async <ReqBody, ResBody>(
-	method: Method,
-	path: string,
-	params: Record<string, string>,
-	request: ReqBody | undefined,
-	responseDecoder: Decoder<ResBody>,
-	accessToken: string,
-	headers?: Array<[string, string]>
-): Promise<Result<ResBody>> => {
-	const fetchOpts = getFetchOpts(method, request, accessToken, headers);
-	const paramStr = new URLSearchParams(params).toString();
-	const response = await getResponse(`${path}?${paramStr}`, fetchOpts);
-	if (!isOk(response)) {
-		return newErr(response.message);
-	}
+    let rawResponse = await this.getRawResponse();
+    return !isOk(rawResponse) ? newErr(rawResponse.message) : newOk({ ok: true });
+  }
 
-	if (!response.data.ok) {
-		// non-200 status code
-		const statusText = `${response.data.status}: ${response.data.statusText}`;
-		const responseText = await response.data.text();
-		const fullError = responseText ? `${statusText}. ${responseText}` : statusText;
-		return newErr(fullError);
-	}
+  async post(path: string, body?: Req) {
+    this.path = path;
+    this.body = body;
+    this.method = "POST";
+    return this.send();
+  }
 
-	const jsonResponse = await getJson(response.data);
-	if (!isOk(jsonResponse)) {
-		return newErr(jsonResponse.message);
-	}
+  async put(path: string, body?: Req) {
+    this.path = path;
+    this.body = body;
+    this.method = "PUT";
+    return this.send();
+  }
 
-	const decodedResponse = decodeJson(jsonResponse.data, responseDecoder);
-	if (!isOk(decodedResponse)) {
-		return newErr(decodedResponse.message);
-	}
+  private async send(): Promise<Result<Res>> {
+    const rawResponse = await this.getRawResponse();
+    if (!isOk(rawResponse)) {
+      return newErr(rawResponse.message);
+    }
 
-	return newOk(decodedResponse.data);
-};
+    return this.parseResponse(rawResponse.data);
+  }
 
-export const get = <ResBody>(
-	path: string,
-	params: Record<string, string>,
-	responseDecoder: Decoder<ResBody>,
-	accessToken: string,
-	headers?: Array<[string, string]>
-) =>
-	sendReq<undefined, ResBody>(
-		'GET',
-		path,
-		params,
-		undefined,
-		responseDecoder,
-		accessToken,
-		headers
-	);
+  private async getRawResponse(): Promise<Result<Response>> {
+    const fetchOpts = this.getFetchOpts();
+    const paramStr = new URLSearchParams(this.params).toString();
+    const pathAndParms = `${this.path}?${paramStr}`;
 
-export const del = async (
-	path: string,
-	accessToken: string,
-	headers?: Array<[string, string]>
-): Promise<Result<Message>> =>
-	sendReq<undefined, Message>('DELETE', path, {}, undefined, messageDecoder, accessToken, headers);
+    let response: Response;
+    try {
+      response = await fetch(`${PUBLIC_BACKENDURL}/${pathAndParms}`, fetchOpts);
+    } catch (error) {
+      if (error instanceof TypeError) {
+        return newErr("Error getting response: " + error.message);
+      } else {
+        return newErr("Unhandled error getting response");
+      }
+    }
 
-export const post = <ReqBody, ResBody>(
-	path: string,
-	request: ReqBody,
-	responseDecoder: Decoder<ResBody>,
-	accessToken: string,
-	headers?: Array<[string, string]>
-) => sendReq<ReqBody, ResBody>('POST', path, {}, request, responseDecoder, accessToken, headers);
+    if (!response.ok) {
+      // non-200 status code
+      const statusText = `${response.status}: ${response.statusText}`;
+      const responseText = await response.text();
+      const fullError = responseText ? `${statusText}. ${responseText}` : statusText;
+      return newErr(fullError);
+    }
 
-export const put = <ReqBody, ResBody>(
-	path: string,
-	request: ReqBody,
-	responseDecoder: Decoder<ResBody>,
-	accessToken: string,
-	headers?: Array<[string, string]>
-) => sendReq<ReqBody, ResBody>('PUT', path, {}, request, responseDecoder, accessToken, headers);
+    return newOk(response);
+  }
+
+  private getFetchOpts() {
+    const fetchOpts: FetchOpts = {
+      method: this.method,
+      mode: "cors",
+      credentials: "include",
+      headers: new Headers(),
+    };
+    if (this.body) {
+      fetchOpts.headers.append("Content-Type", "application/json");
+      fetchOpts.body = JSON.stringify(this.body);
+    }
+
+    if (this.accessToken) {
+      fetchOpts.headers.append("Authorization", `Bearer ${this.accessToken}`);
+    }
+
+    const justHeaders = this.headers !== undefined ? this.headers : [];
+    for (const [k, v] of justHeaders) {
+      fetchOpts.headers.append(k, v);
+    }
+
+    return fetchOpts;
+  }
+
+  private async parseResponse(response: Response): Promise<Result<Res>> {
+    const jsonResponse = await this.getJson(response);
+    if (!isOk(jsonResponse)) {
+      return newErr(jsonResponse.message);
+    }
+
+    const decodedResponse = this.decodeJson(jsonResponse.data);
+    if (!isOk(decodedResponse)) {
+      return newErr(decodedResponse.message);
+    }
+
+    return newOk(decodedResponse.data);
+  }
+
+  private async getJson(response: Response): Promise<Result<any>> {
+    try {
+      const jsonResponse = await response.json();
+      return newOk(jsonResponse);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        return newErr("Error parsing JSON: " + error.message);
+      } else {
+        return newErr("Unhandled error parsing JSON");
+      }
+    }
+  }
+
+  private decodeJson(json: any): Result<Res> {
+    if (!this.decoder) {
+      return newErr("developer error: decoder undefined");
+    }
+
+    try {
+      const decodedResponse = this.decoder.verify(json);
+      return newOk(decodedResponse);
+    } catch (error) {
+      return newErr("Error decoding response: " + error);
+    }
+  }
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Permit, permitList, User } from "$lib/models";
-  import { del } from "$lib/api";
+  import { Request } from "$lib/api";
   import { isOk } from "$lib/functional";
   import { dateToYmd, tsToDate } from "$lib/convert";
   import { getLatestToken } from "$lib/auth";
@@ -14,7 +14,10 @@
   // events
   const deletePermit = async (i: number, permitID: number) => {
     if (confirm(`Are you sure you want to delete ${permitID}?`)) {
-      const delRes = await del(`api/permit/${permitID}`, await getLatestToken());
+      //const delRes = await del(`api/permit/${permitID}`, await getLatestToken());
+      const delRes = await new Request()
+        .setAccessToken(await getLatestToken())
+        .delete(`api/permit/${permitID}`);
       if (!isOk(delRes)) {
         alert(`Error deleting permit ${permitID}. Please try again later`);
         return;

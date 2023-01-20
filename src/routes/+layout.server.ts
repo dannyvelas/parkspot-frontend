@@ -2,7 +2,7 @@ import type { LayoutServerLoad } from "./$types";
 import { parse } from "cookie";
 import { isOk } from "$lib/functional";
 import { sessionDecoder } from "$lib/auth";
-import { post } from "$lib/api";
+import { Request } from "$lib/api";
 
 export const load: LayoutServerLoad = async (loadInput) => {
   const cookies = parse(loadInput.request.headers.get("cookie") || "");
@@ -10,9 +10,9 @@ export const load: LayoutServerLoad = async (loadInput) => {
     return {};
   }
 
-  const sessionRes = await post("api/refresh-tokens", {}, sessionDecoder, "", [
-    ["cookie", `refresh=${cookies.refresh}`],
-  ]);
+  const sessionRes = await new Request(sessionDecoder)
+    .setHeaders([["cookie", `refresh=${cookies.refresh}`]])
+    .post("api/refresh-tokens");
   if (!isOk(sessionRes)) {
     return {};
   }

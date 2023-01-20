@@ -5,7 +5,7 @@ import { newRefresh } from "$lib/server/auth";
 import { validate } from "$lib/form";
 import { fail } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
-import { post } from "$lib/api";
+import { Request } from "$lib/api";
 import { PUBLIC_ENV } from "$env/static/public";
 
 const formDecoder = decoders.object({
@@ -22,7 +22,7 @@ export const actions: Actions = {
       return fail(400, { error: formRes.message });
     }
 
-    const result = await post("api/login", formRes.data, sessionDecoder, "");
+    const result = await new Request(sessionDecoder).post("api/login", formRes.data);
     if (!isOk(result)) {
       let error = "Unhandled error. Please notify the administration or try again later.";
       if (result.message.includes("Unauthorized")) {
