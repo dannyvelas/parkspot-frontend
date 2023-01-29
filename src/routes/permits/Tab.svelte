@@ -36,7 +36,7 @@
 <h1>{capitalize(listName)}</h1>
 
 {#if isOk(initialPermits) && isOk(permitsShown)}
-  <div class="stack-container">
+  <div>
     {#if bannerError != ""}
       <div>
         <p>{bannerError}. Please try again later.</p>
