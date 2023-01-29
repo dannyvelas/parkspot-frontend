@@ -10,7 +10,6 @@
   // model
   let permitTabs: permitList[] = ["all", "active", "expired", "exceptions"];
   let openTab: permitList = "all";
-  $: initialPermits = data.lists[openTab];
 </script>
 
 <svelte:head>
@@ -31,7 +30,11 @@
   </ul>
 </nav>
 
-<Tab listName={openTab} {initialPermits} session={data.session} />
+{#each permitTabs as permitTab}
+  {#if openTab === permitTab}
+    <Tab listName={permitTab} initialPermits={data.lists[permitTab]} session={data.session} />
+  {/if}
+{/each}
 
 <style lang="postcss">
   .active {
