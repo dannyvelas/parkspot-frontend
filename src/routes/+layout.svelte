@@ -7,34 +7,16 @@
   export let data: PageData;
 </script>
 
-<div id="nav-container">
+<div class="mb-6">
   <Nav session={data.session} />
 </div>
 
-<div id="app-container">
+<div class="flex flex-row">
   {#if data.session}
-    <div id="sidebar-container">
-      <Sidebar />
-    </div>
+    <Sidebar />
   {/if}
 
-  <main>
+  <main class="px-6">
     <slot />
   </main>
 </div>
-
-<style>
-  #app-container {
-    display: flex;
-    flex-direction: row;
-  }
-
-  #nav-container {
-    margin-bottom: 25px;
-  }
-
-  main {
-    padding: 0 25px;
-    margin: 0 auto;
-  }
-</style>
