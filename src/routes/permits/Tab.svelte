@@ -5,7 +5,6 @@
   import { permitDecoder, previewPermit } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/convert";
-  import { afterNavigate } from "$app/navigation";
   import List from "./List.svelte";
   import Search from "$lib/components/Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
@@ -13,47 +12,30 @@
 
   // props
   export let listName: permitList;
-  export let result: Result<ListWithMetadata<Permit>>;
+  export let initialPermits: Result<ListWithMetadata<Permit>>;
   export let session: Session;
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
-  let initialPermits: Array<Permit>; // holds permits before any searching happened
+  let permitsShown = initialPermits;
   let bannerError = "";
-  let listTitle = (() => {
-    if (listName === "exceptions") {
-      return "Exception";
-    }
-    return capitalize(listName);
-  })();
-
-  // init
-  afterNavigate(() => {
-    initialPermits = (result.data && result.data.records) || [];
-  });
 
   // events
   const handleSearch = async (event: CustomEvent<Result<Permit[]>>) => {
     if (!isOk(event.detail)) {
-      result.data!.records = initialPermits;
+      permitsShown = initialPermits;
       bannerError = `Error searching: ${event.detail.message}`;
       return;
     }
 
-    result.data!.records = event.detail.data;
+    permitsShown.data!.records = event.detail.data;
     bannerError = "";
   };
 </script>
 
-<svelte:head>
-  <title>{listTitle} Permits</title>
-</svelte:head>
+<h1>{capitalize(listName)}</h1>
 
-<h1>{listTitle} Permits</h1>
-
-{#if !isOk(result)}
-  {result.message}
-{:else}
+{#if isOk(initialPermits) && isOk(permitsShown)}
   <div class="stack-container">
     {#if bannerError != ""}
       <div>
@@ -61,36 +43,25 @@
       </div>
     {/if}
     <Search
-      initialList={initialPermits}
+      initialList={initialPermits.data.records}
       decoder={permitDecoder}
       preview={previewPermit}
-      totalAmount={result.data.metadata.totalAmount}
+      totalAmount={initialPermits.data.metadata.totalAmount}
       endpoint={`api/permits/${listName}`}
       on:result={handleSearch}
     />
     <List
       {listName}
-      permits={result.data.records}
-      totalAmount={result.data.metadata.totalAmount}
+      permits={permitsShown.data.records}
+      totalAmount={permitsShown.data.metadata.totalAmount}
       user={session.user}
     />
     <Pagination
-      totalAmount={result.data.metadata.totalAmount}
+      totalAmount={permitsShown.data.metadata.totalAmount}
       pageToHref={(pageNum) => `/permits/${listName}?page=${pageNum}`}
       {currPageNum}
     />
   </div>
+{:else if !isOk(initialPermits)}
+  {initialPermits.message}
 {/if}
-
-<style>
-  .stack-container {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  h1 {
-    text-align: center;
-  }
-</style>
