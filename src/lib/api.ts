@@ -26,13 +26,8 @@ export class Request<Req, Res> {
     return this;
   }
 
-  setParams(params: Record<string, string>) {
-    this.params = params;
-    return this;
-  }
-
-  addParam(key: string, value: string) {
-    this.params = { ...this.params, [key]: value };
+  addParams(params: Record<string, string>) {
+    this.params = { ...this.params, ...params };
     return this;
   }
 

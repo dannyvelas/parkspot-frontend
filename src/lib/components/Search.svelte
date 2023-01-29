@@ -43,7 +43,7 @@
     }
 
     const getRes = await new Request(listWithMetadataDecoder(decoder))
-      .setParams({ search: searchVal })
+      .addParams({ search: searchVal })
       .setAccessToken(await getLatestToken())
       .get(endpoint);
     if (!isOk(getRes)) {
