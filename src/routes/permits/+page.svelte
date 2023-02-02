@@ -23,8 +23,10 @@
         <button
           class="text-sm text-gray-400"
           class:active={openTab === permitTab}
-          on:click={() => (openTab = permitTab)}>{capitalize(permitTab)}</button
+          on:click={() => (openTab = permitTab)}
         >
+          {capitalize(permitTab)}
+        </button>
       </li>
     {/each}
   </ul>
