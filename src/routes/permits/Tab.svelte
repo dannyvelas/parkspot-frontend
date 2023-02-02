@@ -5,6 +5,7 @@
   import { permitDecoder, previewPermit } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/convert";
+  import { deepCopy } from "$lib/copy";
   import List from "./List.svelte";
   import Search from "$lib/components/Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
@@ -17,13 +18,13 @@
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
-  let permitsShown = initialPermits;
+  let permitsShown = deepCopy(initialPermits); // using a deepCopy instead of initialPermits prevents us from overwriting `initialPermits` in the parent
   let bannerError = "";
 
   // events
   const handleSearch = async (event: CustomEvent<Result<Permit[]>>) => {
     if (!isOk(event.detail)) {
-      permitsShown = initialPermits;
+      permitsShown = deepCopy(initialPermits);
       bannerError = `Error searching: ${event.detail.message}`;
       return;
     }
