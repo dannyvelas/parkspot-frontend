@@ -20,6 +20,7 @@ export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
     const initialPermits = await new Request(listWithMetadataDecoder(permitDecoder))
       .addParams({ page, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
       .setAccessToken(accessToken)
+      .setFetchFn(loadInput.fetch)
       .get(endpoint);
 
     return { initialPermits };
