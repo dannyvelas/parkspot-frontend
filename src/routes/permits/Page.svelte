@@ -11,7 +11,7 @@
 
   // props
   export let listName: permitList;
-  export let initialPermits: Result<ListWithMetadata<Permit>>;
+  export let permits: Result<ListWithMetadata<Permit>>;
   export let session: Session;
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
@@ -35,9 +35,9 @@
 
 <h1>{capitalize(listName)}</h1>
 
-{#if !isOk(initialPermits)}
-  {initialPermits.message}
-{:else if isOk(initialPermits)}
+{#if !isOk(permits)}
+  {permits.message}
+{:else if isOk(permits)}
   <div>
     {#if bannerError != ""}
       <div>
@@ -48,12 +48,12 @@
     <button on:click={handleSearch}>Search</button>
     <List
       {listName}
-      permits={initialPermits.data.records}
-      totalAmount={initialPermits.data.metadata.totalAmount}
+      permits={permits.data.records}
+      totalAmount={permits.data.metadata.totalAmount}
       user={session.user}
     />
     <Pagination
-      totalAmount={initialPermits.data.metadata.totalAmount}
+      totalAmount={permits.data.metadata.totalAmount}
       pageToHref={(pageNum) => `/permits/${listName}?page=${pageNum}`}
       {currPageNum}
     />

@@ -5,4 +5,4 @@
   export let data: PageData;
 </script>
 
-<Page listName="exceptions" initialPermits={data.initialPermits} session={data.session} />
+<Page listName="exceptions" permits={data.permits} session={data.session} />

@@ -8,7 +8,7 @@ import { Request } from "$lib/api";
 import { listWithMetadataDecoder, permitDecoder } from "$lib/models";
 
 type OutputData = {
-  initialPermits: Result<ListWithMetadata<Permit>>;
+  permits: Result<ListWithMetadata<Permit>>;
 };
 
 export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
@@ -18,13 +18,13 @@ export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
     const page = loadInput.url.searchParams.get("page") || "1";
     const search = loadInput.url.searchParams.get("search") || "";
 
-    const initialPermits = await new Request(listWithMetadataDecoder(permitDecoder))
+    const permits = await new Request(listWithMetadataDecoder(permitDecoder))
       .addParams({ page, search, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
       .setAccessToken(accessToken)
       .setFetchFn(loadInput.fetch)
       .get(endpoint);
 
-    return { initialPermits };
+    return { permits };
   };
 
   return loadFn;
