@@ -5,6 +5,7 @@
   import { permitDecoder, previewPermit } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/convert";
+  import { afterNavigate } from "$app/navigation";
   import { deepCopy } from "$lib/copy";
   import List from "./List.svelte";
   import Search from "$lib/components/Search.svelte";
@@ -18,8 +19,15 @@
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
-  let permitsShown = deepCopy(initialPermits); // using a deepCopy instead of initialPermits prevents us from mutating `initialPermits` in the parent whenever we mutate `permitsShown`
+  let permitsShown = deepCopy(initialPermits);
   let bannerError = "";
+
+  afterNavigate(() => {
+    // setting permitsShown in `afterNavigate` this is necessary, otherwise permitsShown will stay stale even when initialPermits changes. the best example of this happens when clicking on a different page number.
+    // using a deepCopy instead of initialPermits prevents us from mutating `initialPermits` in the parent whenever we mutate `permitsShown`
+    permitsShown = deepCopy(initialPermits);
+    console.log("running");
+  });
 
   // events
   const handleSearch = async (event: CustomEvent<Result<Permit[]>>) => {
@@ -49,7 +57,7 @@
       initialList={initialPermits.data.records}
       decoder={permitDecoder}
       preview={previewPermit}
-      totalAmount={initialPermits.data.metadata.totalAmount}
+      totalAmount={permitsShown.data.metadata.totalAmount}
       endpoint={`api/permits/${listName}`}
       on:result={handleSearch}
     />
