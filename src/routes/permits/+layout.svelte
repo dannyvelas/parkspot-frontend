@@ -1,15 +1,10 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
   import type { permitList } from "$lib/models";
   import { capitalize } from "$lib/convert";
-  import Tab from "./Tab.svelte";
-
-  // props
-  export let data: PageData;
+  import { page } from "$app/stores";
 
   // model
   let permitTabs: permitList[] = ["all", "active", "expired", "exceptions"];
-  let openTab: permitList = "all";
 </script>
 
 <svelte:head>
@@ -20,23 +15,19 @@
   <ul class="flex flex-row gap-12 border-b mb-4">
     {#each permitTabs as permitTab}
       <li>
-        <button
+        <a
+          href="/permits/{permitTab}"
           class="text-sm text-gray-400"
-          class:active={openTab === permitTab}
-          on:click={() => (openTab = permitTab)}
+          class:active={$page.url.pathname.endsWith(permitTab)}
         >
           {capitalize(permitTab)}
-        </button>
+        </a>
       </li>
     {/each}
   </ul>
 </nav>
 
-{#each permitTabs as permitTab}
-  {#if openTab === permitTab}
-    <Tab listName={permitTab} initialPermits={data.lists[permitTab]} session={data.session} />
-  {/if}
-{/each}
+<slot />
 
 <style lang="postcss">
   .active {

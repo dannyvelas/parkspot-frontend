@@ -1,6 +1,7 @@
-import type { PageLoad } from "./$types";
-import type { PermitLists } from "./types";
+import type { LayoutLoad } from "./$types";
 import type { Session } from "$lib/auth";
+import type { Result } from "$lib/functional";
+import type { ListWithMetadata, Permit } from "$lib/models";
 import { listWithMetadataDecoder } from "$lib/models";
 import { browser } from "$app/environment";
 import { getLatestToken } from "$lib/auth";
@@ -8,12 +9,19 @@ import { redirect } from "@sveltejs/kit";
 import { permitDecoder } from "$lib/models";
 import { Request } from "$lib/api";
 
+type PermitLists = {
+  all: Result<ListWithMetadata<Permit>>;
+  active: Result<ListWithMetadata<Permit>>;
+  expired: Result<ListWithMetadata<Permit>>;
+  exceptions: Result<ListWithMetadata<Permit>>;
+};
+
 type OutputData = {
   lists: PermitLists;
   session: Session;
 };
 
-export const load: PageLoad<OutputData> = async (loadInput) => {
+export const load: LayoutLoad<OutputData> = async (loadInput) => {
   const parentData = await loadInput.parent();
   if (!parentData.session) throw redirect(307, "/login");
 
@@ -21,7 +29,7 @@ export const load: PageLoad<OutputData> = async (loadInput) => {
   const page = loadInput.url.searchParams.get("page") || "1";
 
   const req = new Request(listWithMetadataDecoder(permitDecoder))
-    .addParams({ page })
+    .addParams({ page, limit: "10" })
     .setAccessToken(accessToken);
 
   const [all, active, expired, exceptions] = await Promise.all([
