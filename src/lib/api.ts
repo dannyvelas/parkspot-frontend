@@ -20,6 +20,7 @@ export class Request<Req, Res> {
   private method!: Method;
   private path!: string;
   private body?: Req;
+  private fetchFn = fetch;
 
   constructor(decoder?: Decoder<Res>) {
     this.decoder = decoder;
@@ -38,6 +39,11 @@ export class Request<Req, Res> {
 
   setHeaders(headers: Array<[string, string]>) {
     this.headers = headers;
+    return this;
+  }
+
+  setFetchFn(fetchFn: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>) {
+    this.fetchFn = fetchFn;
     return this;
   }
 
@@ -85,7 +91,7 @@ export class Request<Req, Res> {
 
     let response: Response;
     try {
-      response = await fetch(`${PUBLIC_BACKENDURL}/${pathAndParms}`, fetchOpts);
+      response = await this.fetchFn(`${PUBLIC_BACKENDURL}/${pathAndParms}`, fetchOpts);
     } catch (error) {
       if (error instanceof TypeError) {
         return newErr("Error getting response: " + error.message);
