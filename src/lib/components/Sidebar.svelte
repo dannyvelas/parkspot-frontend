@@ -36,10 +36,10 @@
     </a>
   </div>
   <div class="sidebar-wrapper" class:active={$page.url.pathname == "/permits"}>
-    <a href="/permits" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
+    <a href="/permits/all" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
       <iconify-icon
         class="circle"
-        class:active={$page.url.pathname == "/permits"}
+        class:active={$page.url.pathname.startsWith("/permits")}
         icon="clarity:details-line"
       />
       {#if !shrunk}
