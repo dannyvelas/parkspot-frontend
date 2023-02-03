@@ -26,7 +26,6 @@
     // setting permitsShown in `afterNavigate` this is necessary, otherwise permitsShown will stay stale even when initialPermits changes. the best example of this happens when clicking on a different page number.
     // using a deepCopy instead of initialPermits prevents us from mutating `initialPermits` in the parent whenever we mutate `permitsShown`
     permitsShown = deepCopy(initialPermits);
-    console.log("running");
   });
 
   // events
