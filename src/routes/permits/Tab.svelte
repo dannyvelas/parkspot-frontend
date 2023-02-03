@@ -18,7 +18,7 @@
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
-  let permitsShown = deepCopy(initialPermits); // using a deepCopy instead of initialPermits prevents us from overwriting `initialPermits` in the parent
+  let permitsShown = deepCopy(initialPermits); // using a deepCopy instead of initialPermits prevents us from mutating `initialPermits` in the parent whenever we mutate `permitsShown`
   let bannerError = "";
 
   // events
@@ -36,7 +36,9 @@
 
 <h1>{capitalize(listName)}</h1>
 
-{#if isOk(initialPermits) && isOk(permitsShown)}
+{#if !isOk(initialPermits)}
+  {initialPermits.message}
+{:else if isOk(initialPermits) && isOk(permitsShown)}
   <div>
     {#if bannerError != ""}
       <div>
@@ -63,6 +65,4 @@
       {currPageNum}
     />
   </div>
-{:else if !isOk(initialPermits)}
-  {initialPermits.message}
 {/if}
