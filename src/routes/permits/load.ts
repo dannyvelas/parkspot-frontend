@@ -16,9 +16,10 @@ export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
     const parentData = await loadInput.parent();
     const accessToken = !browser ? parentData.session.accessToken : await getLatestToken();
     const page = loadInput.url.searchParams.get("page") || "1";
+    const search = loadInput.url.searchParams.get("search") || "";
 
     const initialPermits = await new Request(listWithMetadataDecoder(permitDecoder))
-      .addParams({ page, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
+      .addParams({ page, search, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
       .setAccessToken(accessToken)
       .setFetchFn(loadInput.fetch)
       .get(endpoint);

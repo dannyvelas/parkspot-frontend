@@ -2,15 +2,12 @@
   import type { Result } from "$lib/functional";
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
   import type { Session } from "$lib/auth";
-  import { permitDecoder, previewPermit } from "$lib/models";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/convert";
-  import { afterNavigate } from "$app/navigation";
-  import { deepCopy } from "$lib/copy";
   import List from "./List.svelte";
-  import Search from "$lib/components/Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
 
   // props
   export let listName: permitList;
@@ -19,25 +16,20 @@
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
 
   // model
-  let permitsShown = deepCopy(initialPermits);
+  let searchVal = $page.url.searchParams.get("search") || "";
   let bannerError = "";
 
-  afterNavigate(() => {
-    // setting permitsShown in `afterNavigate` this is necessary, otherwise permitsShown will stay stale even when initialPermits changes. the best example of this happens when clicking on a different page number.
-    // using a deepCopy instead of initialPermits prevents us from mutating `initialPermits` in the parent whenever we mutate `permitsShown`
-    permitsShown = deepCopy(initialPermits);
-  });
-
   // events
-  const handleSearch = async (event: CustomEvent<Result<Permit[]>>) => {
-    if (!isOk(event.detail)) {
-      permitsShown = deepCopy(initialPermits);
-      bannerError = `Error searching: ${event.detail.message}`;
-      return;
+  const handleSearch = async () => {
+    if (searchVal === "" && $page.url.searchParams.get("search") !== "") {
+      goto("?");
     }
 
-    permitsShown.data!.records = event.detail.data;
-    bannerError = "";
+    if (searchVal !== "") {
+      let query = new URLSearchParams($page.url.searchParams);
+      query.set("search", searchVal);
+      goto(`?${query.toString()}`);
+    }
   };
 </script>
 
@@ -45,29 +37,23 @@
 
 {#if !isOk(initialPermits)}
   {initialPermits.message}
-{:else if isOk(initialPermits) && isOk(permitsShown)}
+{:else if isOk(initialPermits)}
   <div>
     {#if bannerError != ""}
       <div>
         <p>{bannerError}. Please try again later.</p>
       </div>
     {/if}
-    <Search
-      initialList={initialPermits.data.records}
-      decoder={permitDecoder}
-      preview={previewPermit}
-      totalAmount={permitsShown.data.metadata.totalAmount}
-      endpoint={`api/permits/${listName}`}
-      on:result={handleSearch}
-    />
+    <input type="text" bind:value={searchVal} placeholder="Search" />
+    <button on:click={handleSearch}>Search</button>
     <List
       {listName}
-      permits={permitsShown.data.records}
-      totalAmount={permitsShown.data.metadata.totalAmount}
+      permits={initialPermits.data.records}
+      totalAmount={initialPermits.data.metadata.totalAmount}
       user={session.user}
     />
     <Pagination
-      totalAmount={permitsShown.data.metadata.totalAmount}
+      totalAmount={initialPermits.data.metadata.totalAmount}
       pageToHref={(pageNum) => `/permits/${listName}?page=${pageNum}`}
       {currPageNum}
     />
