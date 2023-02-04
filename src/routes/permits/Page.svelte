@@ -31,6 +31,10 @@
       goto(`?${query.toString()}`);
     }
   };
+  const pageToHref = (pageNum: number) => {
+    const searchParam = searchVal === "" ? "" : `search=${searchVal}&`;
+    return `/permits/${listName}?${searchParam}page=${pageNum}`;
+  };
 </script>
 
 <h1>{capitalize(listName)}</h1>
@@ -52,10 +56,6 @@
       totalAmount={permits.data.metadata.totalAmount}
       user={session.user}
     />
-    <Pagination
-      totalAmount={permits.data.metadata.totalAmount}
-      pageToHref={(pageNum) => `/permits/${listName}?page=${pageNum}`}
-      {currPageNum}
-    />
+    <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
   </div>
 {/if}
