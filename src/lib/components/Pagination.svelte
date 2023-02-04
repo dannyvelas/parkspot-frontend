@@ -6,15 +6,16 @@
   export let pageToHref: (a: number) => string;
   export let currPageNum: number;
 
-  const amountPages = (() => {
+  $: pageNums = Array.from({ length: getAmtPages(totalAmount) }, (_, i) => i + 1);
+
+  function getAmtPages(totalAmount: number) {
     const int_div = totalAmount / MAX_AMT_PER_PAGE;
     if (totalAmount % MAX_AMT_PER_PAGE !== 0) {
       return int_div + 1;
     } else {
       return int_div;
     }
-  })();
-  const pageNums = Array.from({ length: amountPages }, (_, i) => i + 1);
+  }
 </script>
 
 {#if pageNums.length > 1}
