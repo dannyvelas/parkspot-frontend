@@ -21,15 +21,19 @@
 
   // events
   const handleSearch = async () => {
-    if (searchVal === "" && $page.url.searchParams.get("search") !== "") {
-      goto("?");
+    if (searchVal === "" && $page.url.searchParams.get("search") === "") {
+      return;
     }
 
-    if (searchVal !== "") {
-      let query = new URLSearchParams($page.url.searchParams);
-      query.set("search", searchVal);
-      goto(`?${query.toString()}`);
+    if (searchVal === "") {
+      goto("?");
+      return;
     }
+
+    let query = new URLSearchParams($page.url.searchParams);
+    query.set("search", searchVal);
+    query.delete("page"); // searches will purposely erase the state of the current page number
+    goto(`?${query.toString()}`);
   };
   const pageToHref = (pageNum: number) => {
     const searchParam = searchVal === "" ? "" : `search=${searchVal}&`;
