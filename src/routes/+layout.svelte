@@ -16,7 +16,7 @@
     <Sidebar />
   {/if}
 
-  <main class="px-6 mx-auto">
+  <main class="px-10 mx-auto">
     <slot />
   </main>
 </div>
