@@ -11,8 +11,8 @@
   <title>Permits</title>
 </svelte:head>
 
-<nav>
-  <ul class="flex flex-row gap-12 border-b mb-4">
+<nav class="mb-4">
+  <ul class="flex flex-row gap-12 border-b">
     {#each permitTabs as permitTab}
       <li>
         <a
