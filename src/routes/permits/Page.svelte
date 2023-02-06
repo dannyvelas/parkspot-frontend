@@ -21,7 +21,7 @@
 
   // events
   const handleSearch = async () => {
-    if (searchVal === "" && $page.url.searchParams.get("search") === "") {
+    if (searchVal === $page.url.searchParams.get("search")) {
       return;
     }
 
@@ -41,7 +41,10 @@
   };
 </script>
 
-<h1>{capitalize(listName)}</h1>
+<header class="mb-4">
+  <h1 class="text-base">{capitalize(listName)} Permits</h1>
+  <div class="text-xs text-gray-400">{permits.data?.metadata.totalAmount || 0} total</div>
+</header>
 
 {#if !isOk(permits)}
   {permits.message}
@@ -52,8 +55,21 @@
         <p>{bannerError}. Please try again later.</p>
       </div>
     {/if}
-    <input type="text" bind:value={searchVal} placeholder="Search" />
-    <button on:click={handleSearch}>Search</button>
+    <div class="flex flex-row gap-x-4">
+      <div class="grow flex flex-row items-center bg-white rounded-lg border border-green-400">
+        <iconify-icon icon="heroicons:magnifying-glass-solid" class="text-green-400 mx-1" />
+        <input
+          class="grow p-1 bg-white placeholder:text-slate-400 placeholder:text-xs focus:outline-none"
+          placeholder="Search"
+          type="text"
+          name="search"
+        />
+      </div>
+      <div class="flex flex-row items-center gap-x-2">
+        <span class="text-xs text-green-400">Create New Permit</span>
+        <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
+      </div>
+    </div>
     <List
       {listName}
       permits={permits.data.records}
@@ -62,4 +78,12 @@
     />
     <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
   </div>
+  <!--
+      <input
+        class="grow rounded-lg border border-green-400"
+        type="text"
+        bind:value={searchVal}
+        placeholder="Search"
+      />
+      -->
 {/if}
