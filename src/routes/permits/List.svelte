@@ -9,7 +9,6 @@
   export let user: User;
   export let listName: permitList;
   export let permits: Array<Permit>;
-  export let totalAmount: number;
 
   // events
   const deletePermit = async (i: number, permitID: number) => {
@@ -30,7 +29,6 @@
   };
 </script>
 
-<h2>Amount of Permits: {totalAmount}</h2>
 <table>
   <tr>
     <td>Permit ID</td>
@@ -78,9 +76,5 @@
   table,
   td {
     border: 1px solid black;
-  }
-
-  h2 {
-    text-align: center;
   }
 </style>

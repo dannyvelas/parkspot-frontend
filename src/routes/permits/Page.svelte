@@ -68,6 +68,7 @@
       />
       <button
         class="absolute inset-y-1.5 right-1.5 rounded-2xl bg-green-400 text-white text-xs px-6"
+        on:click={handleSearch}
       >
         Go
       </button>
@@ -77,11 +78,6 @@
       <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
     </div>
   </div>
-  <List
-    {listName}
-    permits={permits.data.records}
-    totalAmount={permits.data.metadata.totalAmount}
-    user={session.user}
-  />
+  <List {listName} permits={permits.data.records} user={session.user} />
   <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
 {/if}
