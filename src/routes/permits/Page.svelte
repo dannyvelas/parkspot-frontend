@@ -84,12 +84,4 @@
     user={session.user}
   />
   <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
-  <!--
-      <input
-        class="grow rounded-lg border border-green-400"
-        type="text"
-        bind:value={searchVal}
-        placeholder="Search"
-      />
-      -->
 {/if}
