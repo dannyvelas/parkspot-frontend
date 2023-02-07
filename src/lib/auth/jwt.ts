@@ -12,7 +12,7 @@ export const getLatestToken = async () => {
       // logout user if referesh request failed
       const postRes = await fetch("/logout", { method: "POST" });
       if (!postRes.ok) {
-        console.error("Error logging out");
+        console.error("Error logging out after fetching latest token");
       }
       invalidateAll();
 
