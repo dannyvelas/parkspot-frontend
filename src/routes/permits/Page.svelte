@@ -49,35 +49,41 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
-  <div>
-    {#if bannerError != ""}
-      <div>
-        <p>{bannerError}. Please try again later.</p>
-      </div>
-    {/if}
-    <div class="flex flex-row gap-x-4">
-      <div class="grow flex flex-row items-center bg-white rounded-lg border border-green-400">
-        <iconify-icon icon="heroicons:magnifying-glass-solid" class="text-green-400 mx-1" />
-        <input
-          class="grow p-1 bg-white placeholder:text-slate-400 placeholder:text-xs focus:outline-none"
-          placeholder="Search"
-          type="text"
-          name="search"
-        />
-      </div>
-      <div class="flex flex-row items-center gap-x-2">
-        <span class="text-xs text-green-400">Create New Permit</span>
-        <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
-      </div>
+  {#if bannerError != ""}
+    <div>
+      <p>{bannerError}. Please try again later.</p>
     </div>
-    <List
-      {listName}
-      permits={permits.data.records}
-      totalAmount={permits.data.metadata.totalAmount}
-      user={session.user}
-    />
-    <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
+  {/if}
+  <div class="flex flex-row gap-x-4">
+    <label class="relative block grow flex">
+      <iconify-icon
+        icon="heroicons:magnifying-glass-solid"
+        class="absolute inset-y-0 left-0 text-green-400 pl-2 flex items-center"
+      />
+      <input
+        class="grow pl-7 py-2 bg-white rounded-2xl border border-slate-300 text-xs placeholder:text-slate-400 placeholder:text-xs focus:outline-none"
+        placeholder="Search"
+        type="text"
+        name="search"
+      />
+      <button
+        class="absolute inset-y-1.5 right-1.5 rounded-2xl bg-green-400 text-white text-xs px-6"
+      >
+        Go
+      </button>
+    </label>
+    <div class="flex flex-row items-center gap-x-2">
+      <span class="text-xs text-green-400">Create New Permit</span>
+      <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
+    </div>
   </div>
+  <List
+    {listName}
+    permits={permits.data.records}
+    totalAmount={permits.data.metadata.totalAmount}
+    user={session.user}
+  />
+  <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
   <!--
       <input
         class="grow rounded-lg border border-green-400"
