@@ -13,7 +13,6 @@
   // events
   const deletePermit = async (i: number, permitID: number) => {
     if (confirm(`Are you sure you want to delete ${permitID}?`)) {
-      //const delRes = await del(`api/permit/${permitID}`, await getLatestToken());
       const delRes = await new Request()
         .setAccessToken(await getLatestToken())
         .delete(`api/permit/${permitID}`);
