@@ -54,7 +54,7 @@
       <p>{bannerError}. Please try again later.</p>
     </div>
   {/if}
-  <div class="flex flex-row gap-x-4">
+  <div class="flex flex-row gap-x-4 mb-4">
     <label class="relative block grow flex">
       <iconify-icon
         icon="heroicons:magnifying-glass-solid"
@@ -65,6 +65,7 @@
         placeholder="Search"
         type="text"
         name="search"
+        bind:value={searchVal}
       />
       <button
         class="absolute inset-y-1.5 right-1.5 rounded-2xl bg-green-400 text-white text-xs px-6"
