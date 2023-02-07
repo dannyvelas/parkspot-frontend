@@ -7,16 +7,14 @@
   export let data: PageData;
 </script>
 
-<div class="mb-6">
-  <Nav session={data.session} />
-</div>
+<Nav session={data.session} />
 
 <div class="flex flex-row">
   {#if data.session}
     <Sidebar />
   {/if}
 
-  <main class="px-10 mx-auto">
+  <main class="grow px-10">
     <slot />
   </main>
 </div>

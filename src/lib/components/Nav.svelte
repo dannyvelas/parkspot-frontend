@@ -21,7 +21,7 @@
   }
 </script>
 
-<nav>
+<nav class="mb-6">
   <a href="/"><img alt="ParkSpot Logo" src={logo} /></a>
   {#if session}
     <div id="user-menu">
