@@ -6,7 +6,7 @@ import { get } from "svelte/store";
 import { invalidateAll } from "$app/navigation";
 
 export const getLatestToken = async () => {
-  if (!expiringSoon(get(tokenStore))) {
+  if (expiringSoon(get(tokenStore))) {
     const sessionRes = await new Request(sessionDecoder).post("api/refresh-tokens");
     if (!isOk(sessionRes)) {
       // logout user if referesh request failed
