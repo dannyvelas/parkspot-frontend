@@ -65,10 +65,11 @@
         placeholder="Search"
         type="text"
         name="search"
+        maxlength="100"
         bind:value={searchVal}
       />
       <button
-        class="absolute inset-y-1.5 right-1.5 rounded-2xl bg-green-400 text-white text-xs px-6"
+        class="absolute inset-y-1 right-1 rounded-2xl bg-green-400 text-white text-xs px-6"
         on:click={handleSearch}
       >
         Go
