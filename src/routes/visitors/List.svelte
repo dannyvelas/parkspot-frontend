@@ -2,7 +2,7 @@
   import type { Visitor, User } from "$lib/models";
   import { del } from "$lib/api";
   import { isOk } from "$lib/functional";
-  import { dateToYmd } from "$lib/convert";
+  import { dateToYmd } from "$lib/time";
   import { getLatestToken } from "$lib/auth";
 
   // props

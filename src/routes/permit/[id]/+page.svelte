@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from "./$types";
   import { isOk } from "$lib/functional";
-  import { dateToYmd, tsToDate } from "$lib/convert";
+  import { dateToYmd, tsToDate } from "$lib/time";
 
   export let data: PageData;
   $: result = data.result;

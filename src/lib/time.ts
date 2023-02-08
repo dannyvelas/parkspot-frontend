@@ -14,8 +14,13 @@ export const tsToDate = (ts: number): string => {
   return offset_date.replace("T", " ").split(".")[0];
 };
 
+export const epochSecondsNow = () => {
+  var d = new Date();
+  return Math.round(d.getTime() / 1000);
+};
+
 export const capitalize = (s: string): string => {
   if (s === "") return s;
 
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 };
