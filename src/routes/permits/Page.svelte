@@ -3,7 +3,7 @@
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
   import type { Session } from "$lib/auth";
   import { isOk } from "$lib/functional";
-  import { capitalize } from "$lib/convert";
+  import { capitalize } from "$lib/strings";
   import List from "./List.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { page } from "$app/stores";
@@ -80,6 +80,6 @@
       <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
     </div>
   </div>
-  <List {listName} permits={permits.data.records} user={session.user} />
+  <List permits={permits.data.records} user={session.user} />
   <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
 {/if}

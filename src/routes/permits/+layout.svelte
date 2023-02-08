@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { permitList } from "$lib/models";
-  import { capitalize } from "$lib/convert";
+  import { capitalize } from "$lib/strings";
   import { page } from "$app/stores";
 
   // model
