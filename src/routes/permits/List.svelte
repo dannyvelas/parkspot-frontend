@@ -28,33 +28,16 @@
   };
 
   // helpers
-  type Status = "Active" | "Expired" | "Active Exception" | "Expired Exception";
-  const getStatus = (p: Permit): Status => {
+  const isActive = (p: Permit): boolean => {
     const now = epochSecondsNow();
-    const isActive = p.startDate.getTime() < now && p.endDate.getTime() > now;
-    const isException = !p.exceptionReason || p.exceptionReason === "";
-
-    switch (true) {
-      case isActive && isException:
-        return "Active Exception";
-      case isActive && !isException:
-        return "Active";
-      case !isActive && isException:
-        return "Expired Exception";
-      default:
-        return "Expired";
-    }
+    return p.startDate.getTime() < now && p.endDate.getTime() > now;
   };
 
-  const getTWStatusColors = (status: Status): string => {
-    switch (status) {
-      case "Active Exception":
-      case "Expired Exception":
-        return "bg-orange-200 text-orange-500";
-      case "Active":
-        return "bg-green-200 text-green-500";
-      default:
-        return "bg-rose-200 text-rose-500";
+  const getTWColors = (isActive: boolean): string => {
+    if (isActive) {
+      return "bg-green-200 text-green-500";
+    } else {
+      return "bg-rose-200 text-rose-500";
     }
   };
 </script>
@@ -75,11 +58,8 @@
       <span class="text-xs basis-2/6 text-zinc-800"
         >{capitalize(permit.color)} {capitalize(permit.make)} {capitalize(permit.model)}</span
       >
-      <span
-        class="{getTWStatusColors(
-          getStatus(permit)
-        )} text-xs basis-1/6 text-center rounded-lg px-4 py-0.5"
-        >{getStatus(permit)}
+      <span class="{getTWColors(isActive(permit))} text-xs text-center rounded-lg px-4 py-0.5"
+        >{isActive(permit) ? "Active" : "Expired"}
       </span>
     </div>
   {/each}
