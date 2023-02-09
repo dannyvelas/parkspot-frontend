@@ -3,7 +3,6 @@
   import { Request } from "$lib/api";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/strings";
-  import { epochSecondsNow } from "$lib/time";
   import { getLatestToken } from "$lib/auth";
 
   // props
@@ -29,8 +28,14 @@
 
   // helpers
   const isActive = (p: Permit): boolean => {
-    const now = epochSecondsNow();
+    const now = new Date().getTime();
     return p.startDate.getTime() < now && p.endDate.getTime() > now;
+  };
+
+  const prettyDate = (d: Date): string => {
+    let day = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
+    let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
+    return `${mo}-${day}`;
   };
 
   const getTWColors = (isActive: boolean): string => {

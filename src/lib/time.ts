@@ -13,8 +13,3 @@ export const tsToDate = (ts: number): string => {
   const offset_date = new Date(date.getTime() - offset * 60 * 1000).toISOString();
   return offset_date.replace("T", " ").split(".")[0];
 };
-
-export const epochSecondsNow = () => {
-  var d = new Date();
-  return Math.round(d.getTime() / 1000);
-};
