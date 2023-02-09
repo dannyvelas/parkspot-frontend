@@ -13,7 +13,7 @@
 
 <div class="relative">
   {#if data.session && sidebarIsOpen}
-    <Sidebar on:closeSidebar={() => (sidebarIsOpen = false)} />
+    <Sidebar twClasses={"absolute z-20 h-full"} on:closeSidebar={() => (sidebarIsOpen = false)} />
   {/if}
 
   <div

@@ -6,6 +6,9 @@
   // config
   const dispatch = createEventDispatcher();
 
+  // props
+  export let twClasses: string;
+
   export function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
     const style = getComputedStyle(node);
     return {
@@ -20,7 +23,7 @@
   }
 </script>
 
-<nav transition:horizontalSlide class="absolute z-20 bg-white flex flex-col h-full">
+<nav transition:horizontalSlide class="{twClasses} bg-white flex flex-col">
   <button class="text-left" on:click={() => dispatch("closeSidebar")}>
     <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
   </button>
