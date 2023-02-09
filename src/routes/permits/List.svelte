@@ -49,20 +49,22 @@
 
 <div>
   <div class="bg-black rounded text-white mb-2 shadow-md flex flex-row px-8 py-3">
-    <span class="text-xs basis-1/6">ID</span>
-    <span class="text-xs basis-1/6">Resident ID</span>
-    <span class="text-xs basis-1/6">License</span>
-    <span class="text-xs basis-2/6">Vehicle</span>
-    <span class="text-xs basis-1/6">Status</span>
+    <span class="text-xs basis-1/4 md:basis-1/6">ID</span>
+    <span class="text-xs md:basis-1/6 hidden lg:inline">Resident ID</span>
+    <span class="text-xs basis-1/4 md:basis-1/6">License</span>
+    <span class="text-xs basis-1/4 md:basis-2/6">Vehicle</span>
+    <span class="text-xs basis-1/4 md:basis-1/6">Status</span>
   </div>
   {#each permits as permit, i (permit.id)}
     <div class="bg-white rounded mb-2 shadow-md flex flex-row px-8 py-3">
-      <span class="text-xs basis-1/6 text-zinc-800">{permit.id}</span>
-      <span class="text-xs basis-1/6 text-zinc-800">{permit.residentID}</span>
-      <span class="text-xs basis-1/6 text-zinc-800">{permit.licensePlate}</span>
-      <span class="text-xs basis-2/6 text-zinc-800"
-        >{capitalize(permit.color)} {capitalize(permit.make)} {capitalize(permit.model)}</span
-      >
+      <span class="text-xs basis-1/4 md:basis-1/6 text-zinc-800">{permit.id}</span>
+      <span class="text-xs basis-1/6 text-zinc-800 hidden lg:inline">{permit.residentID}</span>
+      <span class="text-xs basis-1/4 md:basis-1/6 text-zinc-800">{permit.licensePlate}</span>
+      <span class="text-xs basis-1/4 md:basis-2/6 text-zinc-800">
+        <span class="hidden lg:inline">{capitalize(permit.color)}</span>
+        {capitalize(permit.make)}
+        <span class="hidden lg:inline">{capitalize(permit.model)}</span>
+      </span>
       <span class="{getTWColors(isActive(permit))} text-xs text-center rounded-lg px-4 py-0.5"
         >{isActive(permit) ? "Active" : "Expired"}
       </span>

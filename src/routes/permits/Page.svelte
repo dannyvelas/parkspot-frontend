@@ -58,7 +58,7 @@
     <label class="relative block grow flex">
       <iconify-icon
         icon="heroicons:magnifying-glass-solid"
-        class="absolute inset-y-0 left-0 text-green-400 pl-2 flex items-center"
+        class="absolute z-0 inset-y-0 left-0 text-green-400 pl-2 flex items-center"
       />
       <input
         class="grow pl-7 py-2 bg-white rounded-2xl border border-slate-300 text-xs placeholder:text-slate-400 placeholder:text-xs focus:outline-none"
@@ -69,7 +69,7 @@
         bind:value={searchVal}
       />
       <button
-        class="absolute inset-y-1 right-1 rounded-2xl bg-green-400 text-white text-xs px-6"
+        class="absolute z-0 inset-y-1 right-1 rounded-2xl bg-green-400 text-white text-xs px-6"
         on:click={handleSearch}
       >
         Go

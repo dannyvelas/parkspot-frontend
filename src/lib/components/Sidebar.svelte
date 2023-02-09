@@ -1,9 +1,10 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { cubicIn } from "svelte/easing";
+  import { createEventDispatcher } from "svelte";
 
-  let shrunk = true;
-  $: icon = !shrunk ? "ic:round-arrow-back-ios-new" : "ic:round-arrow-forward-ios";
+  // config
+  const dispatch = createEventDispatcher();
 
   export function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
     const style = getComputedStyle(node);
@@ -19,9 +20,9 @@
   }
 </script>
 
-<nav>
-  <button style:text-align="right" on:click={() => (shrunk = !shrunk)}>
-    <iconify-icon {icon} style="color:#6d6d6d" width="15" height="15" />
+<nav transition:horizontalSlide class="absolute z-20 bg-white flex flex-col h-full">
+  <button class="text-left" on:click={() => dispatch("closeSidebar")}>
+    <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
   </button>
   <div class="sidebar-wrapper" class:active={$page.url.pathname == "/dashboard"}>
     <a href="/dashboard" class="sidebar-link" class:active={$page.url.pathname == "/dashboard"}>
@@ -30,9 +31,7 @@
         class:active={$page.url.pathname == "/dashboard"}
         icon="material-symbols:dashboard-outline-rounded"
       />
-      {#if !shrunk}
-        <span transition:horizontalSlide>Dashboard</span>
-      {/if}
+      <span>Dashboard</span>
     </a>
   </div>
   <div class="sidebar-wrapper" class:active={$page.url.pathname == "/permits"}>
@@ -42,9 +41,7 @@
         class:active={$page.url.pathname.startsWith("/permits")}
         icon="clarity:details-line"
       />
-      {#if !shrunk}
-        <span transition:horizontalSlide>Permits</span>
-      {/if}
+      <span>Permits</span>
     </a>
   </div>
   <div class="sidebar-wrapper" class:active={$page.url.pathname == "/residents"}>
@@ -54,9 +51,7 @@
         class:active={$page.url.pathname == "/residents"}
         icon="uit:house-user"
       />
-      {#if !shrunk}
-        <span transition:horizontalSlide>Residents</span>
-      {/if}
+      <span>Residents</span>
     </a>
   </div>
   <div class="sidebar-wrapper" class:active={$page.url.pathname == "/visitors"}>
@@ -66,28 +61,18 @@
         class:active={$page.url.pathname == "/visitors"}
         icon="material-symbols:badge-outline"
       />
-      {#if !shrunk}
-        <span transition:horizontalSlide>Visitors</span>
-      {/if}
+      <span>Visitors</span>
     </a>
   </div>
 </nav>
 
 <style>
   nav {
-    background-color: white;
-    display: flex;
-    flex-direction: column;
     box-shadow: 0px 4px 60px rgba(0, 0, 0, 0.06);
     border-radius: 0px 18px 18px 0px;
     margin-bottom: 25px;
     padding-top: 10px;
     padding-left: 25px;
-  }
-
-  button {
-    border-style: none;
-    background: none;
   }
 
   a {
