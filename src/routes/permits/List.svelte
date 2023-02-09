@@ -48,17 +48,17 @@
 </script>
 
 <div
-  class="bg-black rounded text-white mb-2 shadow-md flex flex-row justify-between md:justify-start px-4 md:px-8 py-3"
+  class="bg-black rounded text-white mb-2 shadow-md flex flex-row justify-between md:justify-start px-2 md:px-8 py-3"
 >
   <span class="text-xs basis-1/6">ID</span>
   <span class="text-xs hidden md:basis-1/6  md:inline">Resident ID</span>
   <span class="text-xs basis-1/4 md:basis-2/6">Vehicle</span>
   <span class="text-xs basis-1/4 md:basis-1/6">License</span>
-  <span class="text-xs basis-1/6 md:basis-1/12">Status</span>
+  <span class="text-xs basis-1/4 md:basis-1/5 lg:basis-1/12">Status</span>
 </div>
 {#each permits as permit, i (permit.id)}
   <div
-    class="bg-white rounded mb-2 shadow-md flex flex-row justify-between md:justify-start px-4 md:px-8 py-3"
+    class="bg-white rounded mb-2 shadow-md flex flex-row justify-between md:justify-start px-2 md:px-8 py-3"
   >
     <span class="text-xs text-zinc-800 basis-1/6">{permit.id}</span>
     <span class="text-xs text-zinc-800 hidden md:basis-1/6 md:inline">{permit.residentID}</span>
@@ -71,7 +71,7 @@
     <span
       class="{getTWColors(
         isActive(permit)
-      )} text-xs text-center rounded-lg basis-1/6 md:basis-1/12 py-0.5"
+      )} text-xs text-center rounded-lg basis-1/4 md:basis-1/5 lg:basis-1/12 py-0.5"
       >{isActive(permit) ? "Active" : "Expired"}
     </span>
   </div>
