@@ -9,7 +9,6 @@
 
   // model
   let sidebarIsOpen = false;
-  $: coverDisplay = sidebarIsOpen ? "block" : "hidden";
 </script>
 
 <div class="relative">
@@ -17,11 +16,13 @@
     <Sidebar on:closeSidebar={() => (sidebarIsOpen = false)} />
   {/if}
 
-  <div class="absolute w-full h-full {coverDisplay} z-10 bg-gray-800 opacity-25" />
+  <div
+    class="absolute w-full h-full {sidebarIsOpen ? 'block' : 'hidden'} z-10 bg-gray-800 opacity-25"
+  />
 
   <Nav on:openSidebar={() => (sidebarIsOpen = true)} session={data.session} />
 
-  <main class="grow px-10">
+  <main class="grow px-4 md:px-10">
     <slot />
   </main>
 </div>
