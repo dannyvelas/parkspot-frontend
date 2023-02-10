@@ -45,8 +45,9 @@
 <div
   class="bg-black rounded text-white mb-2 shadow-md flex flex-row justify-between md:justify-start px-2 md:px-8 py-3"
 >
-  <div class="text-xs basis-1/6">ID</div>
-  <div class="text-xs hidden md:basis-1/6  md:inline">Resident ID</div>
+  <div class="text-xs basis-1/12" />
+  <div class="text-xs hidden md:inline md:basis-1/6">ID</div>
+  <div class="text-xs hidden md:inline md:basis-1/6 ">Resident ID</div>
   <div class="text-xs basis-1/4 md:basis-2/6">Vehicle</div>
   <div class="text-xs basis-1/4 md:basis-1/6">License</div>
   <div class="text-xs basis-1/4 md:basis-1/5 lg:basis-1/12">Status</div>
@@ -55,8 +56,11 @@
   <div
     class="bg-white rounded mb-2 shadow-md flex flex-row justify-between md:justify-start px-2 md:px-8 py-3"
   >
-    <div class="text-xs text-zinc-800 basis-1/6">{permit.id}</div>
-    <div class="text-xs text-zinc-800 hidden md:basis-1/6 md:inline">{permit.residentID}</div>
+    <div class="text-xs basis-1/12">
+      <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
+    </div>
+    <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.id}</div>
+    <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.residentID}</div>
     <div class="text-xs text-zinc-800 basis-1/4 md:basis-2/6">
       <span class="hidden lg:inline">{capitalize(permit.color)}</span>
       {capitalize(permit.make)}
