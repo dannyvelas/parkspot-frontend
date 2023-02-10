@@ -57,7 +57,9 @@
     class="bg-white rounded mb-2 shadow-md flex flex-row justify-between md:justify-start px-2 md:px-8 py-3"
   >
     <div class="text-xs basis-1/12">
-      <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
+      <button>
+        <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
+      </button>
     </div>
     <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.id}</div>
     <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.residentID}</div>
