@@ -38,13 +38,8 @@
     return `${mo}-${day}`;
   };
 
-  const getTWColors = (isActive: boolean): string => {
-    if (isActive) {
-      return "bg-green-200 text-green-500";
-    } else {
-      return "bg-rose-200 text-rose-500";
-    }
-  };
+  const twGreenStatus = "bg-green-200 text-green-500";
+  const twRedStatus = "bg-rose-200 text-rose-500";
 </script>
 
 <div
@@ -69,9 +64,9 @@
     </div>
     <div class="text-xs text-zinc-800 basis-1/4 md:basis-1/6">{permit.licensePlate}</div>
     <div
-      class="{getTWColors(
-        isActive(permit)
-      )} text-xs text-center rounded-lg basis-1/4 md:basis-1/5 lg:basis-1/12 py-0.5"
+      class="{isActive(permit)
+        ? twGreenStatus
+        : twRedStatus} text-xs text-center rounded-lg basis-1/4 md:basis-1/5 lg:basis-1/12 py-0.5"
     >
       {isActive(permit) ? "Active" : "Expired"}
     </div>
