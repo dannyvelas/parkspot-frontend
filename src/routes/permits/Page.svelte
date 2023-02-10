@@ -76,7 +76,7 @@
       </button>
     </label>
     <div class="flex flex-row items-center gap-x-2">
-      <span class="text-xs text-green-400">Create New Permit</span>
+      <span class="text-xs text-green-400">Create Permit</span>
       <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
     </div>
   </div>
