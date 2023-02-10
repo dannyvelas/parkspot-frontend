@@ -37,15 +37,16 @@
     <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
   </button>
   {#each sidebarItems as sidebarItem}
-    <div class="sidebar-wrapper" class:active={$page.url.pathname == sidebarItem.path}>
+    <div class="sidebar-wrapper" class:active={$page.url.pathname === sidebarItem.path}>
       <a
         href={sidebarItem.path}
         class="sidebar-link"
-        class:active={$page.url.pathname == sidebarItem.path}
+        class:active={$page.url.pathname === sidebarItem.path}
+        on:click={() => dispatch("closeSidebar")}
       >
         <iconify-icon
           class="circle"
-          class:active={$page.url.pathname == sidebarItem.path}
+          class:active={$page.url.pathname === sidebarItem.path}
           icon={sidebarItem.icon}
         />
         <span>{sidebarItem.name}</span>
