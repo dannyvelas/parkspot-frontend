@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Permit } from "$lib/models";
   import { capitalize } from "$lib/strings";
+  import { slide } from "svelte/transition";
 
   // props
   export let permit: Permit;
@@ -46,22 +47,25 @@
     </div>
   </div>
   {#if isExpanded}
-    <div>
+    <div transition:slide>
       <div class="text-xs font-bold">Permit {permit.id}</div>
       <div class="text-xs">{prettyDate(permit.startDate)} - {prettyDate(permit.endDate)}</div>
       <hr class="my-3" />
       <div class="flex flex-row">
-        <div class="flex flex-col gap-1">
+        <div class="basis-1/2 flex flex-col gap-1 truncate">
           <div class="text-xs text-gray-500 mb-2">Resident</div>
-          <div class="text-xs text-black">Atticus Finch</div>
-          <div class="text-xs text-gray-500">atticus.finch@gmail.com</div>
-          <div class="text-xs text-gray-500">{permit.residentID}</div>
+          <div class="text-xs text-black truncate">Atticus Finch</div>
+          <div class="text-xs text-gray-500 truncate">atticus.finch@gmail.com</div>
+          <div class="text-xs text-gray-500 truncate">{permit.residentID}</div>
         </div>
-        <div class="flex flex-col gap-1">
-          <div class="text-xs text-gray-500 mb-2">Vehicle</div>
-          <div class="text-xs text-black">{capitalize(permit.color)} {capitalize(permit.make)}</div>
-          <div class="text-xs text-gray-500">{capitalize(permit.model)}</div>
-          <div class="text-xs text-gray-500">{permit.licensePlate}</div>
+        <div class="basis-1/2 flex flex-col gap-1 truncate">
+          <div class="text-xs text-gray-500 mb-2 truncate">Vehicle</div>
+          <div class="text-xs text-black truncate">
+            {capitalize(permit.color)}
+            {capitalize(permit.make)}
+          </div>
+          <div class="text-xs text-gray-500 truncate">{capitalize(permit.model)}</div>
+          <div class="text-xs text-gray-500 truncate">{permit.licensePlate}</div>
         </div>
       </div>
     </div>
