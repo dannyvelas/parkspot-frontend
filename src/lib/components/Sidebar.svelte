@@ -9,6 +9,15 @@
   // props
   export let twClasses: string;
 
+  // model
+  const sidebarItems = [
+    { name: "Dashboard", path: "/dashboard", icon: "material-symbols:dashboard-outline-rounded" },
+    { name: "Permits", path: "/permits/all", icon: "clarity:details-line" },
+    { name: "Residents", path: "/residents", icon: "uit:house-user" },
+    { name: "Visitors", path: "/visitors", icon: "material-symbols:badge-outline" },
+  ];
+
+  // animations
   export function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
     const style = getComputedStyle(node);
     return {
@@ -27,46 +36,22 @@
   <button class="text-left" on:click={() => dispatch("closeSidebar")}>
     <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
   </button>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/dashboard"}>
-    <a href="/dashboard" class="sidebar-link" class:active={$page.url.pathname == "/dashboard"}>
-      <iconify-icon
-        class="circle"
-        class:active={$page.url.pathname == "/dashboard"}
-        icon="material-symbols:dashboard-outline-rounded"
-      />
-      <span>Dashboard</span>
-    </a>
-  </div>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/permits"}>
-    <a href="/permits/all" class="sidebar-link" class:active={$page.url.pathname == "/permits"}>
-      <iconify-icon
-        class="circle"
-        class:active={$page.url.pathname.startsWith("/permits")}
-        icon="clarity:details-line"
-      />
-      <span>Permits</span>
-    </a>
-  </div>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/residents"}>
-    <a href="/residents" class="sidebar-link" class:active={$page.url.pathname == "/residents"}>
-      <iconify-icon
-        class="circle"
-        class:active={$page.url.pathname == "/residents"}
-        icon="uit:house-user"
-      />
-      <span>Residents</span>
-    </a>
-  </div>
-  <div class="sidebar-wrapper" class:active={$page.url.pathname == "/visitors"}>
-    <a href="/visitors" class="sidebar-link" class:active={$page.url.pathname == "/visitors"}>
-      <iconify-icon
-        class="circle"
-        class:active={$page.url.pathname == "/visitors"}
-        icon="material-symbols:badge-outline"
-      />
-      <span>Visitors</span>
-    </a>
-  </div>
+  {#each sidebarItems as sidebarItem}
+    <div class="sidebar-wrapper" class:active={$page.url.pathname == sidebarItem.path}>
+      <a
+        href={sidebarItem.path}
+        class="sidebar-link"
+        class:active={$page.url.pathname == sidebarItem.path}
+      >
+        <iconify-icon
+          class="circle"
+          class:active={$page.url.pathname == sidebarItem.path}
+          icon={sidebarItem.icon}
+        />
+        <span>{sidebarItem.name}</span>
+      </a>
+    </div>
+  {/each}
 </nav>
 
 <style>
