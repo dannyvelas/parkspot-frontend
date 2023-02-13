@@ -23,12 +23,18 @@
   const twRedStatus = "bg-rose-200 text-rose-500";
 </script>
 
-<div class="bg-white flex flex-col gap-2 rounded mb-2 shadow-md px-2 md:px-8 py-3">
+<div
+  class="bg-white flex flex-col gap-2 rounded shadow-md px-2 md:px-8 py-3"
+  on:click={() => (isExpanded = !isExpanded)}
+  on:keypress={() => (isExpanded = !isExpanded)}
+>
   <div class="flex flex-row justify-between md:justify-start">
     <div class="text-xs basis-1/12">
-      <button on:click={() => (isExpanded = !isExpanded)}>
+      {#if !isExpanded}
         <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
-      </button>
+      {:else}
+        <iconify-icon icon="material-symbols:keyboard-arrow-up-rounded" />
+      {/if}
     </div>
     <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.id}</div>
     <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.residentID}</div>
