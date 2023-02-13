@@ -62,9 +62,7 @@
       <div class="flex flex-row">
         <div class="basis-1/2 flex flex-col gap-1 truncate">
           <div class="text-xs text-gray-500 mb-2">Resident</div>
-          <div class="text-xs text-black truncate">Atticus Finch</div>
-          <div class="text-xs text-gray-500 truncate">atticus.finch@gmail.com</div>
-          <div class="text-xs text-gray-500 truncate">{permit.residentID}</div>
+          <div class="text-xs truncate">{permit.residentID}</div>
         </div>
         <div class="basis-1/2 flex flex-col gap-1 truncate">
           <div class="text-xs text-gray-500 mb-2 truncate">Vehicle</div>
