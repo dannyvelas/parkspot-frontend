@@ -55,7 +55,9 @@
   {#if isExpanded}
     <div transition:slide>
       <div class="text-xs font-bold">Permit {permit.id}</div>
-      <div class="text-xs">{prettyDate(permit.startDate)} - {prettyDate(permit.endDate)}</div>
+      <div class="text-xs text-gray-500">
+        {prettyDate(permit.startDate)} - {prettyDate(permit.endDate)}
+      </div>
       <hr class="my-3" />
       <div class="flex flex-row">
         <div class="basis-1/2 flex flex-col gap-1 truncate">
