@@ -23,12 +23,12 @@
   const twRedStatus = "bg-rose-200 text-rose-500";
 </script>
 
-<div
-  class="bg-white flex flex-col gap-2 rounded shadow-md px-2 md:px-8 py-3"
-  on:click={() => (isExpanded = !isExpanded)}
-  on:keypress={() => (isExpanded = !isExpanded)}
->
-  <div class="flex flex-row justify-between md:justify-start">
+<div class="bg-white flex flex-col gap-2 rounded shadow-md px-2 md:px-8 py-3">
+  <div
+    class="flex flex-row justify-between md:justify-start"
+    on:click={() => (isExpanded = !isExpanded)}
+    on:keypress={() => (isExpanded = !isExpanded)}
+  >
     <div class="text-xs basis-1/12">
       {#if !isExpanded}
         <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
