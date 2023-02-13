@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Permit } from "$lib/models";
   import { capitalize } from "$lib/strings";
+  import { minimalDate, detailDate } from "$lib/time";
   import { slide } from "svelte/transition";
 
   // props
@@ -10,13 +11,6 @@
   const now = new Date().getTime();
   const isActive = permit.startDate.getTime() < now && permit.endDate.getTime() > now;
   let isExpanded = false;
-
-  // helpers
-  const prettyDate = (d: Date): string => {
-    const day = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
-    const mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
-    return `${mo}-${day}`;
-  };
 
   // styles
   const twGreenStatus = "bg-green-200 text-green-500";
@@ -53,25 +47,44 @@
     </div>
   </div>
   {#if isExpanded}
-    <div transition:slide>
-      <div class="text-xs font-bold">Permit {permit.id}</div>
-      <div class="text-xs text-gray-500">
-        {prettyDate(permit.startDate)} - {prettyDate(permit.endDate)}
-      </div>
-      <hr class="my-3" />
-      <div class="flex flex-row">
-        <div class="basis-1/2 flex flex-col gap-1 truncate">
-          <div class="text-xs text-gray-500 mb-2">Resident</div>
-          <div class="text-xs truncate">{permit.residentID}</div>
+    <div transition:slide class="flex flex-col justify-between h-60">
+      <div>
+        <div class="text-xs font-bold">Permit {permit.id}</div>
+        <div class="text-xs text-gray-500">
+          {minimalDate(permit.startDate)} - {minimalDate(permit.endDate)}
         </div>
-        <div class="basis-1/2 flex flex-col gap-1 truncate">
-          <div class="text-xs text-gray-500 mb-2 truncate">Vehicle</div>
-          <div class="text-xs text-black truncate">
-            {capitalize(permit.color)}
-            {capitalize(permit.make)}
+        <hr class="my-3" />
+        <div class="flex flex-row">
+          <div class="basis-1/2 flex flex-col gap-1 truncate">
+            <div class="text-xs text-gray-500 mb-2">Resident</div>
+            <div class="text-xs truncate">{permit.residentID}</div>
           </div>
-          <div class="text-xs text-gray-500 truncate">{capitalize(permit.model)}</div>
-          <div class="text-xs text-gray-500 truncate">{permit.licensePlate}</div>
+          <div class="basis-1/2 flex flex-col gap-1 truncate">
+            <div class="text-xs text-gray-500 mb-2 truncate">Vehicle</div>
+            <div class="text-xs text-black truncate">
+              {capitalize(permit.color)}
+              {capitalize(permit.make)}
+            </div>
+            <div class="text-xs text-gray-500 truncate">{capitalize(permit.model)}</div>
+            <div class="text-xs text-gray-500 truncate">{permit.licensePlate}</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs font-bold text-gray-500">
+          Requested Date: {detailDate(new Date(permit.requestTS * 1000))}
+        </div>
+        <hr class="my-3" />
+        <div class="flex flex-row justify-around">
+          <div class="basis-20 border border-sky-500 rounded-md text-center text-sky-500">
+            Reprint
+          </div>
+          <div class="basis-20 border border-green-500 rounded-md text-center text-green-500">
+            Edit
+          </div>
+          <div class="basis-20 border border-rose-500 rounded-md text-center text-rose-500">
+            Delete
+          </div>
         </div>
       </div>
     </div>
