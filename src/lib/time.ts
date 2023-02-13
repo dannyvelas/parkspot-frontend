@@ -13,3 +13,17 @@ export const tsToDate = (ts: number): string => {
   const offset_date = new Date(date.getTime() - offset * 60 * 1000).toISOString();
   return offset_date.replace("T", " ").split(".")[0];
 };
+
+export const minimalDate = (d: Date): string => {
+  return d.toLocaleDateString("en-us", { month: "short", day: "2-digit" });
+};
+
+export const detailDate = (d: Date): string => {
+  return d.toLocaleDateString("en-us", {
+    month: "long",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
