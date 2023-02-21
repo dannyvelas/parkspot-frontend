@@ -22,7 +22,7 @@
 
   <Nav on:openSidebar={() => (sidebarIsOpen = true)} session={data.session} />
 
-  <main class="grow px-4 md:px-10">
+  <main class="px-4 md:px-10">
     <slot />
   </main>
 </div>
