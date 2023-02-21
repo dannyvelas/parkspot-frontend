@@ -51,7 +51,7 @@
     </div>
   </div>
   {#if isExpanded}
-    <div transition:slide class="flex flex-col justify-between h-60">
+    <div transition:slide class="flex flex-col gap-y-5">
       <div>
         <div class="text-xs font-bold">Permit {permit.id}</div>
         <div class="text-xs text-gray-500">
@@ -60,11 +60,11 @@
         <hr class="my-3" />
         <div class="flex flex-row">
           <div class="basis-1/2 flex flex-col gap-1 truncate">
-            <div class="text-xs text-gray-500 mb-2">Resident</div>
+            <div class="text-xs font-bold text-gray-500 mb-2">Resident</div>
             <div class="text-xs truncate">{permit.residentID}</div>
           </div>
           <div class="basis-1/2 flex flex-col gap-1 truncate">
-            <div class="text-xs text-gray-500 mb-2 truncate">Vehicle</div>
+            <div class="text-xs font-bold text-gray-500 mb-2 truncate">Vehicle</div>
             <div class="text-xs text-black truncate">
               {capitalize(permit.color)}
               {capitalize(permit.make)}
@@ -74,9 +74,16 @@
           </div>
         </div>
       </div>
+      {#if permit.exceptionReason}
+        <div>
+          <div class="text-xs font-bold text-gray-500 mb-2">Exception Reason</div>
+          <div class="text-xs">{permit.exceptionReason}</div>
+        </div>
+      {/if}
       <div>
-        <div class="text-xs font-bold text-gray-500">
-          Requested Date: {detailDate(new Date(permit.requestTS * 1000))}
+        <div class="text-xs font-bold text-gray-500">Requested Date</div>
+        <div class="text-xs">
+          {detailDate(new Date(permit.requestTS * 1000))}
         </div>
         <hr class="my-3" />
         <div class="flex flex-row justify-around">
