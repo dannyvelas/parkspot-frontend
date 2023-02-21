@@ -3,6 +3,10 @@
   import { capitalize } from "$lib/strings";
   import { minimalDate, detailDate } from "$lib/time";
   import { slide } from "svelte/transition";
+  import { createEventDispatcher } from "svelte";
+
+  // config
+  const dispatch = createEventDispatcher();
 
   // props
   export let permit: Permit;
@@ -82,9 +86,12 @@
           <div class="basis-20 border border-green-500 rounded-md text-center text-green-500">
             Edit
           </div>
-          <div class="basis-20 border border-rose-500 rounded-md text-center text-rose-500">
+          <button
+            class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
+            on:click={() => dispatch("clickDelete", permit)}
+          >
             Delete
-          </div>
+          </button>
         </div>
       </div>
     </div>

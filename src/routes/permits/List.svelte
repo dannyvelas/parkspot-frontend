@@ -10,19 +10,19 @@
   export let permits: Array<Permit>;
 
   // events
-  const deletePermit = async (i: number, permitID: number) => {
-    if (confirm(`Are you sure you want to delete ${permitID}?`)) {
+  const deletePermit = async (event: CustomEvent<Permit>) => {
+    if (confirm(`Are you sure you want to delete ${event.detail.id}?`)) {
       const delRes = await new Request()
         .setAccessToken(await getLatestToken())
-        .delete(`api/permit/${permitID}`);
+        .delete(`api/permit/${event.detail.id}`);
       if (!isOk(delRes)) {
-        alert(`Error deleting permit ${permitID}. Please try again later`);
+        alert(`Error deleting permit ${event.detail.id}. Please try again later`);
         return;
       }
 
-      permits = [...permits.slice(0, i), ...permits.slice(i + 1)];
+      permits = permits.filter((p) => p.id != event.detail.id);
 
-      alert(`Deleted permit ${permitID}`);
+      alert(`Deleted permit ${event.detail.id}`);
     }
   };
 </script>
@@ -39,6 +39,6 @@
     <div class="text-xs basis-16">Status</div>
   </div>
   {#each permits as permit, i (permit.id)}
-    <Row {permit} />
+    <Row {permit} on:clickDelete={deletePermit} />
   {/each}
 </div>
