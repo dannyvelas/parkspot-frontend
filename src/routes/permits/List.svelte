@@ -36,7 +36,7 @@
     <div class="text-xs hidden md:inline md:basis-1/6 ">Resident ID</div>
     <div class="text-xs basis-1/4 md:basis-2/6">Vehicle</div>
     <div class="text-xs basis-1/4 md:basis-1/6">License</div>
-    <div class="text-xs basis-1/4 md:basis-1/6 lg:basis-1/12">Status</div>
+    <div class="text-xs basis-16">Status</div>
   </div>
   {#each permits as permit, i (permit.id)}
     <Row {permit} />

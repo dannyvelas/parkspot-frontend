@@ -41,7 +41,7 @@
     <div
       class="{isActive
         ? twGreenStatus
-        : twRedStatus} text-xs text-center rounded-lg basis-1/4 md:basis-1/6 lg:basis-1/12 py-0.5"
+        : twRedStatus} text-xs text-center rounded-lg basis-16 py-0.5"
     >
       {isActive ? "Active" : "Expired"}
     </div>
