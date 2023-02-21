@@ -80,12 +80,18 @@
         </div>
         <hr class="my-3" />
         <div class="flex flex-row justify-around">
-          <div class="basis-20 border border-sky-500 rounded-md text-center text-sky-500">
+          <a
+            class="basis-20 border border-sky-500 rounded-md text-center text-sky-500"
+            href="/permit/{permit.id}/display"
+          >
             Reprint
-          </div>
-          <div class="basis-20 border border-green-500 rounded-md text-center text-green-500">
+          </a>
+          <a
+            class="basis-20 border border-green-500 rounded-md text-center text-green-500"
+            href="/permit/{permit.id}"
+          >
             Edit
-          </div>
+          </a>
           <button
             class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
             on:click={() => dispatch("clickDelete", permit)}
