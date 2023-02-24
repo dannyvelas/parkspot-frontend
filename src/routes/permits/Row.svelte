@@ -10,6 +10,7 @@
 
   // props
   export let permit: Permit;
+  export let userRole: string;
 
   // model
   const now = new Date().getTime();
@@ -93,18 +94,20 @@
           >
             Reprint
           </a>
-          <a
-            class="basis-20 border border-green-500 rounded-md text-center text-green-500"
-            href="/permit/{permit.id}"
-          >
-            Edit
-          </a>
-          <button
-            class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
-            on:click={() => dispatch("clickDelete", permit)}
-          >
-            Delete
-          </button>
+          {#if userRole === "admin"}
+            <a
+              class="basis-20 border border-green-500 rounded-md text-center text-green-500"
+              href="/permit/{permit.id}"
+            >
+              Edit
+            </a>
+            <button
+              class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
+              on:click={() => dispatch("clickDelete", permit)}
+            >
+              Delete
+            </button>
+          {/if}
         </div>
       </div>
     </div>

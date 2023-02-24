@@ -38,7 +38,7 @@
     <div class="text-xs basis-1/4 md:basis-1/6">License</div>
     <div class="text-xs basis-16">Status</div>
   </div>
-  {#each permits as permit, i (permit.id)}
-    <Row {permit} on:clickDelete={deletePermit} />
+  {#each permits as permit}
+    <Row {permit} userRole={user.role} on:clickDelete={deletePermit} />
   {/each}
 </div>
