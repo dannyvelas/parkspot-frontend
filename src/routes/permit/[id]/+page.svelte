@@ -1,56 +1,32 @@
 <script lang="ts">
   import type { PageData } from "./$types";
   import { isOk } from "$lib/functional";
-  import { dateToYmd, tsToDate } from "$lib/time";
 
   export let data: PageData;
-  $: result = data.result;
 </script>
 
 <svelte:head>
-  <title>Print Your Permit</title>
+  <title>Edit Permit</title>
 </svelte:head>
 
-<div id="outer">
-  <div class="section">
-    <h1 style="font-size:50px">Las Vistas Guest Parking Pass</h1>
-    <h2 style="font-size:40px">Display on Dashboard</h2>
+{#if !isOk(data.permit)}
+  <p>Error: {data.permit.message}</p>
+{:else}
+  <div class="bg-white rounded flex flex-col mx-auto w-64 gap-4 p-5">
+    <p class="text-center font-bold text-lg">Edit Permit</p>
+    <input class="text-gray-500 border rounded p-2" value={data.permit.data.id} readonly />
+    <input class="text-gray-500 border rounded p-2" value={data.permit.data.residentID} readonly />
+    <input
+      class="border rounded p-2"
+      placeholder="Enter new color"
+      value={data.permit.data.color}
+    />
+    <input class="border rounded p-2" placeholder="Enter new make" value={data.permit.data.make} />
+    <input
+      class="border rounded p-2"
+      placeholder="Enter new model"
+      value={data.permit.data.model}
+    />
+    <button class="bg-green-400 text-white border rounded px-4 py-1">Edit Permit</button>
   </div>
-  {#if !isOk(result)}
-    <p>Error: {result.message}</p>
-  {:else}
-    <div class="section">
-      <p style="font-size:70px">Permit ID: {result.data.id}</p>
-      <p style="font-size:40px">Resident ID: {result.data.residentID}</p>
-    </div>
-    <div class="section">
-      <p style="font-size:40px">Start Date: {dateToYmd(result.data.startDate)}</p>
-      <p style="font-size:40px">End Date: {dateToYmd(result.data.endDate)}</p>
-      <p style="font-size:40px">
-        {result.data.car.color}
-        {result.data.car.make}
-        {result.data.car.model} &#58; {result.data.car.licensePlate}
-      </p>
-    </div>
-    <p>Requested &#58; {tsToDate(result.data.requestTS)}</p>
-  {/if}
-</div>
-
-<style>
-  div#outer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .section {
-    margin: 30px;
-  }
-
-  h1,
-  h2,
-  p {
-    margin: 0px;
-  }
-</style>
+{/if}
