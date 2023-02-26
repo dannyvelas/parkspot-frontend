@@ -96,13 +96,12 @@
             Reprint
           </a>
           {#if userRole === "admin"}
-            <a
+            <button
               class="basis-20 border border-green-500 rounded-md text-center text-green-500"
-              href="/permit/{permit.id}"
-              data-sveltekit-reload
+              on:click={() => dispatch("clickEdit", permit)}
             >
               Edit
-            </a>
+            </button>
             <button
               class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
               on:click={() => dispatch("clickDelete", permit)}
