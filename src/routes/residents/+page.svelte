@@ -64,7 +64,7 @@
   <div class="flex flex-row gap-x-4 mb-4">
     <Search twClasses="grow" {lastSearch} />
     <div class="flex flex-row items-center gap-x-2">
-      <span class="text-xs text-green-400">Create Permit</span>
+      <span class="text-xs text-green-400">Create Resident</span>
       <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
     </div>
   </div>
@@ -79,7 +79,7 @@
       <div class="text-xs basis-8">Days</div>
     </div>
     {#each data.residents.data.records as resident}
-      <Row {resident} userRole={data.session.user.role} on:clickDelete={deleteResident} />
+      <Row {resident} on:clickDelete={deleteResident} />
     {/each}
   </div>
   <Pagination totalAmount={data.residents.data.metadata.totalAmount} {pageToHref} {currPageNum} />
