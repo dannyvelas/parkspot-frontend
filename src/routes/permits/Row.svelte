@@ -22,27 +22,27 @@
   const twRedStatus = "bg-rose-200 text-rose-500";
 </script>
 
-<div class="bg-white flex flex-col gap-2 rounded shadow-md px-2 md:px-8 py-3">
+<div class="bg-white flex flex-col gap-2 rounded shadow-md px-2 lg:px-8 py-3">
   <div
-    class="flex flex-row justify-between md:justify-start"
+    class="flex flex-row justify-between"
     on:click={() => (isExpanded = !isExpanded)}
     on:keypress={() => (isExpanded = !isExpanded)}
   >
-    <div class="text-xs basis-1/12">
+    <div class="text-xs basis-3">
       {#if !isExpanded}
         <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
       {:else}
         <iconify-icon icon="material-symbols:keyboard-arrow-up-rounded" />
       {/if}
     </div>
-    <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.id}</div>
-    <div class="text-xs text-zinc-800 hidden md:inline md:basis-1/6">{permit.residentID}</div>
-    <div class="text-xs text-zinc-800 basis-1/4 md:basis-2/6">
+    <div class="text-xs text-zinc-800 hidden md:inline md:basis-12">{permit.id}</div>
+    <div class="text-xs text-zinc-800 hidden md:inline md:basis-20">{permit.residentID}</div>
+    <div class="text-xs text-zinc-800 basis-20 md:basis-1/3">
       <span class="hidden lg:inline">{capitalize(permit.color)}</span>
       <span>{capitalize(permit.make)}</span>
       <span class="hidden lg:inline">{capitalize(permit.model)}</span>
     </div>
-    <div class="text-xs text-zinc-800 basis-1/4 md:basis-1/6">{permit.licensePlate}</div>
+    <div class="text-xs text-zinc-800 basis-20">{permit.licensePlate}</div>
     <div
       class="{isActive
         ? twGreenStatus

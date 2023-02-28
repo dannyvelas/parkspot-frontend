@@ -29,13 +29,13 @@
 
 <div class="flex flex-col gap-2">
   <div
-    class="bg-black rounded text-white shadow-md flex flex-row justify-between md:justify-start px-2 md:px-8 py-3"
+    class="bg-black rounded text-white shadow-md flex flex-row justify-between px-2 lg:px-8 py-3"
   >
-    <div class="text-xs basis-1/12" />
-    <div class="text-xs hidden md:inline md:basis-1/6">ID</div>
-    <div class="text-xs hidden md:inline md:basis-1/6 ">Resident ID</div>
-    <div class="text-xs basis-1/4 md:basis-2/6">Vehicle</div>
-    <div class="text-xs basis-1/4 md:basis-1/6">License</div>
+    <div class="text-xs basis-3" />
+    <div class="text-xs hidden md:inline md:basis-12">ID</div>
+    <div class="text-xs hidden md:inline md:basis-20">Resident ID</div>
+    <div class="text-xs basis-20 md:basis-1/3">Vehicle</div>
+    <div class="text-xs basis-20">License</div>
     <div class="text-xs basis-16">Status</div>
   </div>
   {#each permits as permit}
