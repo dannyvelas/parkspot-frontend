@@ -1,4 +1,21 @@
 import type { PageLoad } from "./$types";
-import { loadResidents } from "./load";
+import { MAX_AMT_PER_PAGE } from "$lib/constants";
+import { Request } from "$lib/api";
+import { listWithMetadataDecoder, residentDecoder } from "$lib/models";
+import { onlyRole, getLatestToken } from "$lib/auth";
+import { browser } from "$app/environment";
 
-export const load: PageLoad = loadResidents("api/residents", true);
+export const load: PageLoad = async (loadInput) => {
+  const parentData = await loadInput.parent();
+  const session = onlyRole("admin", parentData.session);
+  const accessToken = !browser ? session.accessToken : await getLatestToken();
+  const page = loadInput.url.searchParams.get("page") || "1";
+
+  const residents = await new Request(listWithMetadataDecoder(residentDecoder))
+    .addParams({ page, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
+    .setAccessToken(accessToken)
+    .setFetchFn(loadInput.fetch)
+    .get("api/residents");
+
+  return { residents, session };
+};
