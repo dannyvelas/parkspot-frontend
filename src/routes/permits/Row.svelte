@@ -91,7 +91,6 @@
           <a
             class="basis-20 border border-sky-500 rounded-md text-center text-sky-500"
             href="/permit/{permit.id}/display"
-            data-sveltekit-reload
           >
             Reprint
           </a>
