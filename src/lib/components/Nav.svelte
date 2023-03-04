@@ -46,7 +46,7 @@
         on:keypress={() => (dropdownOpen = !dropdownOpen)}
       />
       {#if dropdownOpen}
-        <div id="dropdown">
+        <div class="absolute bg-stone-50 shadow z-0 right-0">
           <p class="dropdown-el" on:click={logout} on:keypress={logout}>Logout</p>
         </div>
       {/if}
@@ -73,14 +73,6 @@
     text-decoration: none;
     font-family: "Work Sans", sans-serif;
     font-weight: 300;
-  }
-
-  #dropdown {
-    position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 0;
-    width: 100%;
   }
 
   .dropdown-el {
