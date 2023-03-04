@@ -38,8 +38,8 @@
     <a href="/"><img alt="ParkSpot Logo" src={logo} /></a>
   </div>
   {#if session}
-    <div id="user-menu">
-      <p id="user-name">{session.user.firstName + " " + session.user.lastName}</p>
+    <div class="cursor-default relative">
+      <span class="hidden md:inline text-xs text-white">{session.user.firstName}</span>
       <iconify-icon
         icon="dashicons:arrow-down-alt2"
         on:click|preventDefault={() => (dropdownOpen = !dropdownOpen)}
@@ -57,18 +57,6 @@
 </nav>
 
 <style>
-  #user-menu {
-    cursor: default;
-    position: relative;
-  }
-
-  #user-name {
-    display: inline-block;
-    color: white;
-    font-size: 0.75rem;
-    margin: 0;
-  }
-
   iconify-icon {
     color: white;
     display: inline-block;
