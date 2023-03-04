@@ -52,7 +52,7 @@
     </div>
   </div>
   {#if isExpanded}
-    <div transition:slide class="flex flex-col gap-y-5">
+    <div transition:slide|local class="flex flex-col gap-y-5">
       <div>
         <div class="text-xs font-bold">Permit {permit.id}</div>
         <div class="text-xs text-gray-500">
