@@ -58,10 +58,10 @@
       <p>{bannerError}. Please try again later.</p>
     </div>
   {/if}
-  <div class="flex flex-row gap-x-4 mb-4">
+  <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
     <Search twClasses="grow" {lastSearch} />
     <div class="flex flex-row items-center gap-x-2">
-      <span class="text-xs text-green-400">Create Permit</span>
+      <span class="text-xs text-green-400">Create</span>
       <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
     </div>
   </div>
