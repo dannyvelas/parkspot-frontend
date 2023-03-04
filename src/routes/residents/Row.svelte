@@ -52,13 +52,6 @@
       </div>
       <div>
         <div class="flex flex-row justify-around">
-          <a
-            class="basis-20 border border-sky-500 rounded-md text-center text-sky-500"
-            href="/resident/{resident.id}/display"
-            data-sveltekit-reload
-          >
-            Reprint
-          </a>
           <button
             class="basis-20 border border-green-500 rounded-md text-center text-green-500"
             on:click={() => dispatch("clickEdit", resident)}
