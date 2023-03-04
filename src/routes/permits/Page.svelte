@@ -2,10 +2,12 @@
   import type { Result } from "$lib/functional";
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
   import type { Session } from "$lib/auth";
+  import { Request } from "$lib/api";
+  import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/strings";
   import { page } from "$app/stores";
-  import List from "./List.svelte";
+  import Row from "./Row.svelte";
   import Search from "$lib/components/Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
 
@@ -18,6 +20,23 @@
   // model
   let lastSearch = $page.url.searchParams.get("search") || "";
   let bannerError = "";
+
+  // events
+  const deletePermit = async (event: CustomEvent<Permit>) => {
+    if (confirm(`Are you sure you want to delete ${event.detail.id}?`)) {
+      const delRes = await new Request()
+        .setAccessToken(await getLatestToken())
+        .delete(`api/permit/${event.detail.id}`);
+      if (!isOk(delRes)) {
+        alert(`Error deleting permit ${event.detail.id}. Please try again later`);
+        return;
+      }
+
+      permits.data!.records = permits.data!.records.filter((p) => p.id != event.detail.id);
+
+      alert(`Deleted permit ${event.detail.id}`);
+    }
+  };
 
   // helpers
   const pageToHref = (pageNum: number) => {
@@ -46,6 +65,21 @@
       <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
     </div>
   </div>
-  <List permits={permits.data.records} user={session.user} />
+
+  <div class="flex flex-col gap-2">
+    <div
+      class="bg-black rounded text-white shadow-md flex flex-row justify-between px-2 lg:px-8 py-3"
+    >
+      <div class="text-xs basis-3" />
+      <div class="text-xs hidden md:inline md:basis-12">ID</div>
+      <div class="text-xs hidden md:inline md:basis-20">Resident ID</div>
+      <div class="text-xs basis-20 md:basis-1/3">Vehicle</div>
+      <div class="text-xs basis-20">License</div>
+      <div class="text-xs basis-16">Status</div>
+    </div>
+    {#each permits.data.records as permit}
+      <Row {permit} userRole={session.user.role} on:clickDelete={deletePermit} />
+    {/each}
+  </div>
   <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
 {/if}
