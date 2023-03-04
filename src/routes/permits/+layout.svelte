@@ -12,7 +12,7 @@
 </svelte:head>
 
 <nav class="mb-4">
-  <ul class="flex flex-row gap-10 md:gap-12 border-b">
+  <ul class="flex flex-row gap-4 md:gap-12 border-b">
     {#each permitTabs as permitTab}
       <li>
         <a
