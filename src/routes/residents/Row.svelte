@@ -33,7 +33,7 @@
         <iconify-icon icon="material-symbols:keyboard-arrow-up-rounded" />
       {/if}
     </div>
-    <div class="text-xs text-zinc-800 basis-14">{resident.id}</div>
+    <div class="text-xs text-zinc-800 basis-20">{resident.id}</div>
     <div class="text-xs text-zinc-800 basis-32">{fullName}</div>
     <div class="hidden lg:inline lg:basis-24 lg:flex lg:flex-row">
       <span class="text-xs basis-16 {twPermissionColors} text-center rounded-lg py-0.5">

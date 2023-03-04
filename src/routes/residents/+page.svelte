@@ -61,10 +61,10 @@
       <p>{bannerError}. Please try again later.</p>
     </div>
   {/if}
-  <div class="flex flex-row gap-x-4 mb-4">
+  <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
     <Search twClasses="grow" {lastSearch} />
     <div class="flex flex-row items-center gap-x-2">
-      <span class="text-xs text-green-400">Create Resident</span>
+      <span class="text-xs text-green-400">Create</span>
       <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
     </div>
   </div>
@@ -73,7 +73,7 @@
       class="bg-black rounded text-white shadow-md flex flex-row justify-between px-2 lg:px-8 py-3"
     >
       <div class="text-xs basis-3" />
-      <div class="text-xs basis-14">ID</div>
+      <div class="text-xs basis-20">ID</div>
       <div class="text-xs basis-32">Name</div>
       <div class="text-xs hidden lg:inline lg:basis-24">Unlimited Days?</div>
       <div class="text-xs basis-8">Days</div>
