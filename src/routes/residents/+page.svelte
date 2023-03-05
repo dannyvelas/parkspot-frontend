@@ -5,9 +5,10 @@
   import { Request } from "$lib/api";
   import { page } from "$app/stores";
   import { getLatestToken } from "$lib/auth";
-  import Pagination from "$lib/components/Pagination.svelte";
-  import Search from "$lib/components/Search.svelte";
   import Row from "./Row.svelte";
+  import Search from "$lib/components/Search.svelte";
+  import Pagination from "$lib/components/Pagination.svelte";
+  import TableHeader from "$lib/components/TableHeader.svelte";
 
   // props
   export let data: PageData;
@@ -69,15 +70,13 @@
     </div>
   </div>
   <div class="flex flex-col gap-2">
-    <div
-      class="bg-black rounded text-white shadow-md flex flex-row justify-between px-2 lg:px-8 py-3"
-    >
+    <TableHeader>
       <div class="text-xs basis-3" />
       <div class="text-xs basis-20">ID</div>
       <div class="text-xs basis-32">Name</div>
       <div class="text-xs hidden lg:inline lg:basis-24">Unlimited Days?</div>
       <div class="text-xs basis-8">Days</div>
-    </div>
+    </TableHeader>
     {#each data.residents.data.records as resident}
       <Row {resident} on:clickDelete={deleteResident} />
     {/each}

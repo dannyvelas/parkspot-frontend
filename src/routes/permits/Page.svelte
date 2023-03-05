@@ -10,6 +10,7 @@
   import Row from "./Row.svelte";
   import Search from "$lib/components/Search.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
+  import TableHeader from "$lib/components/TableHeader.svelte";
 
   // props
   export let listName: permitList;
@@ -67,16 +68,14 @@
   </div>
 
   <div class="flex flex-col gap-2">
-    <div
-      class="bg-black rounded text-white shadow-md flex flex-row justify-between px-2 lg:px-8 py-3"
-    >
+    <TableHeader>
       <div class="text-xs basis-3" />
       <div class="text-xs hidden md:inline md:basis-12">ID</div>
       <div class="text-xs hidden md:inline md:basis-20">Resident ID</div>
       <div class="text-xs basis-20 md:basis-1/3">Vehicle</div>
       <div class="text-xs basis-20">License</div>
       <div class="text-xs basis-16">Status</div>
-    </div>
+    </TableHeader>
     {#each permits.data.records as permit}
       <Row {permit} userRole={session.user.role} on:clickDelete={deletePermit} />
     {/each}
