@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Resident } from "$lib/models";
-  import { slide } from "svelte/transition";
   import { createEventDispatcher } from "svelte";
+  import Row from "$lib/components/Row.svelte";
 
   // config
   const dispatch = createEventDispatcher();
@@ -11,7 +11,6 @@
 
   // model
   const fullName = resident.firstName + " " + resident.lastName;
-  let isExpanded = false;
 
   // styles
   const twGreenStatus = "bg-green-200 text-green-500";
@@ -20,19 +19,8 @@
   const permissionText = resident.unlimDays ? "Unlimited" : "Limited";
 </script>
 
-<div class="bg-white flex flex-col gap-2 rounded shadow-md px-2 lg:px-8 py-3">
-  <div
-    class="flex flex-row justify-between"
-    on:click={() => (isExpanded = !isExpanded)}
-    on:keypress={() => (isExpanded = !isExpanded)}
-  >
-    <div class="text-xs basis-3">
-      {#if !isExpanded}
-        <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
-      {:else}
-        <iconify-icon icon="material-symbols:keyboard-arrow-up-rounded" />
-      {/if}
-    </div>
+<Row>
+  <svelte:fragment slot="cells">
     <div class="text-xs text-zinc-800 basis-20">{resident.id}</div>
     <div class="text-xs text-zinc-800 basis-32">{fullName}</div>
     <div class="hidden lg:inline lg:basis-24 lg:flex lg:flex-row">
@@ -41,31 +29,24 @@
       </span>
     </div>
     <div class="text-xs text-zinc-800 basis-8">{resident.amtParkingDaysUsed}</div>
+  </svelte:fragment>
+  <svelte:fragment slot="header">
+    <div class="text-xs font-bold">{fullName}</div>
+    <div class="text-xs text-gray-500">{resident.phone}</div>
+    <div class="text-xs text-gray-500">{resident.email}</div>
+  </svelte:fragment>
+  <div slot="bottom-content" class="flex flex-row justify-around">
+    <button
+      class="basis-20 border border-green-500 rounded-md text-center text-green-500"
+      on:click={() => dispatch("clickEdit", resident)}
+    >
+      Edit
+    </button>
+    <button
+      class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
+      on:click={() => dispatch("clickDelete", resident)}
+    >
+      Delete
+    </button>
   </div>
-  {#if isExpanded}
-    <div transition:slide|local class="flex flex-col gap-y-5">
-      <div>
-        <div class="text-xs font-bold">{fullName}</div>
-        <div class="text-xs text-gray-500">{resident.phone}</div>
-        <div class="text-xs text-gray-500">{resident.email}</div>
-        <hr class="my-3" />
-      </div>
-      <div>
-        <div class="flex flex-row justify-around">
-          <button
-            class="basis-20 border border-green-500 rounded-md text-center text-green-500"
-            on:click={() => dispatch("clickEdit", resident)}
-          >
-            Edit
-          </button>
-          <button
-            class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
-            on:click={() => dispatch("clickDelete", resident)}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  {/if}
-</div>
+</Row>
