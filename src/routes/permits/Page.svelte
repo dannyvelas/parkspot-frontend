@@ -6,21 +6,13 @@
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/strings";
-  import { page } from "$app/stores";
   import Row from "./Row.svelte";
-  import Search from "$lib/components/Search.svelte";
-  import Pagination from "$lib/components/Pagination.svelte";
-  import TableHeader from "$lib/components/TableHeader.svelte";
+  import Table from "$lib/components/Table.svelte";
 
   // props
   export let listName: permitList;
   export let permits: Result<ListWithMetadata<Permit>>;
   export let session: Session;
-  const currPageNum = Number($page.url.searchParams.get("page")) || 1;
-
-  // model
-  let lastSearch = $page.url.searchParams.get("search") || "";
-  let bannerError = "";
 
   // events
   const deletePermit = async (event: CustomEvent<Permit>) => {
@@ -38,12 +30,6 @@
       alert(`Deleted permit ${event.detail.id}`);
     }
   };
-
-  // helpers
-  const pageToHref = (pageNum: number) => {
-    const searchParam = lastSearch === "" ? "" : `search=${lastSearch}&`;
-    return `/permits/${listName}?${searchParam}page=${pageNum}`;
-  };
 </script>
 
 <header class="mb-4">
@@ -54,31 +40,19 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
-  {#if bannerError != ""}
-    <div>
-      <p>{bannerError}. Please try again later.</p>
-    </div>
-  {/if}
-  <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
-    <Search twClasses="grow" {lastSearch} />
-    <div class="flex flex-row items-center gap-x-2">
-      <span class="text-xs text-green-400">Create</span>
-      <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
-    </div>
-  </div>
-
-  <div class="flex flex-col gap-2">
-    <TableHeader>
+  <Table totalAmount={permits.data.metadata.totalAmount} path="/permits/{listName}">
+    <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
       <div class="text-xs hidden md:inline md:basis-12">ID</div>
       <div class="text-xs hidden md:inline md:basis-20">Resident ID</div>
       <div class="text-xs basis-20 md:basis-1/3">Vehicle</div>
       <div class="text-xs basis-20">License</div>
       <div class="text-xs basis-16">Status</div>
-    </TableHeader>
-    {#each permits.data.records as permit}
-      <Row {permit} userRole={session.user.role} on:clickDelete={deletePermit} />
-    {/each}
-  </div>
-  <Pagination totalAmount={permits.data.metadata.totalAmount} {pageToHref} {currPageNum} />
+    </svelte:fragment>
+    <svelte:fragment slot="rows">
+      {#each permits.data.records as permit}
+        <Row {permit} userRole={session.user.role} on:clickDelete={deletePermit} />
+      {/each}
+    </svelte:fragment>
+  </Table>
 {/if}

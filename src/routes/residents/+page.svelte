@@ -1,22 +1,14 @@
 <script lang="ts">
   import type { PageData } from "./$types";
   import type { Resident } from "$lib/models";
-  import { isOk } from "$lib/functional";
   import { Request } from "$lib/api";
-  import { page } from "$app/stores";
   import { getLatestToken } from "$lib/auth";
+  import { isOk } from "$lib/functional";
   import Row from "./Row.svelte";
-  import Search from "$lib/components/Search.svelte";
-  import Pagination from "$lib/components/Pagination.svelte";
-  import TableHeader from "$lib/components/TableHeader.svelte";
+  import Table from "$lib/components/Table.svelte";
 
   // props
   export let data: PageData;
-  const currPageNum = Number($page.url.searchParams.get("page")) || 1;
-
-  // model
-  let lastSearch = $page.url.searchParams.get("search") || "";
-  let bannerError = "";
 
   // events
   const deleteResident = async (event: CustomEvent<Resident>) => {
@@ -37,12 +29,6 @@
       alert(`Deleted resident ${event.detail.id}`);
     }
   };
-
-  // helpers
-  const pageToHref = (pageNum: number) => {
-    const searchParam = lastSearch === "" ? "" : `search=${lastSearch}&`;
-    return `/residents?${searchParam}page=${pageNum}`;
-  };
 </script>
 
 <svelte:head>
@@ -57,29 +43,18 @@
 {#if !isOk(data.residents)}
   {data.residents.message}
 {:else}
-  {#if bannerError != ""}
-    <div>
-      <p>{bannerError}. Please try again later.</p>
-    </div>
-  {/if}
-  <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
-    <Search twClasses="grow" {lastSearch} />
-    <div class="flex flex-row items-center gap-x-2">
-      <span class="text-xs text-green-400">Create</span>
-      <iconify-icon icon="ph:plus-circle-bold" class="text-green-400" />
-    </div>
-  </div>
-  <div class="flex flex-col gap-2">
-    <TableHeader>
+  <Table totalAmount={data.residents.data.metadata.totalAmount} path="/residents">
+    <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
       <div class="text-xs basis-20">ID</div>
       <div class="text-xs basis-32">Name</div>
       <div class="text-xs hidden lg:inline lg:basis-24">Unlimited Days?</div>
       <div class="text-xs basis-8">Days</div>
-    </TableHeader>
-    {#each data.residents.data.records as resident}
-      <Row {resident} on:clickDelete={deleteResident} />
-    {/each}
-  </div>
-  <Pagination totalAmount={data.residents.data.metadata.totalAmount} {pageToHref} {currPageNum} />
+    </svelte:fragment>
+    <svelte:fragment slot="rows">
+      {#each data.residents.data.records as resident}
+        <Row {resident} on:clickDelete={deleteResident} />
+      {/each}
+    </svelte:fragment>
+  </Table>
 {/if}
