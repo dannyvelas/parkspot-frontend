@@ -4,9 +4,7 @@
   import Pagination from "$lib/components/Pagination.svelte";
 
   // props
-  type T = $$Generic;
   export let totalAmount: number;
-  export let path: string;
 
   // model
   const lastSearch = $page.url.searchParams.get("search") || "";
@@ -16,7 +14,7 @@
   // helpers
   const pageToHref = (pageNum: number) => {
     const searchParam = lastSearch === "" ? "" : `search=${lastSearch}&`;
-    return `${path}?${searchParam}page=${pageNum}`;
+    return `${$page.url.pathname}?${searchParam}page=${pageNum}`;
   };
 </script>
 

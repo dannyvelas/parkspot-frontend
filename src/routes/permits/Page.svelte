@@ -40,7 +40,7 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
-  <Table totalAmount={permits.data.metadata.totalAmount} path="/permits/{listName}">
+  <Table totalAmount={permits.data.metadata.totalAmount}>
     <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
       <div class="text-xs hidden md:inline md:basis-12">ID</div>
