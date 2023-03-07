@@ -32,51 +32,22 @@
   <div class="flex flex-row gap-x-4">
     {#if session}
       <button on:click={() => dispatch("openSidebar")}>
-        <iconify-icon icon="charm:menu-hamburger" />
+        <iconify-icon class="text-white inline-block align-middle" icon="charm:menu-hamburger" />
       </button>
     {/if}
-    <a href="/"><img alt="ParkSpot Logo" src={logo} /></a>
+    <a href="/"><img class="h-auto w-28" alt="ParkSpot Logo" src={logo} /></a>
   </div>
   {#if session}
-    <div class="cursor-default relative">
+    <button class="cursor-default relative" on:click={() => (dropdownOpen = !dropdownOpen)}>
       <span class="hidden md:inline text-xs text-white">{session.user.firstName}</span>
-      <iconify-icon
-        icon="dashicons:arrow-down-alt2"
-        on:click|preventDefault={() => (dropdownOpen = !dropdownOpen)}
-        on:keypress={() => (dropdownOpen = !dropdownOpen)}
-      />
+      <iconify-icon class="text-white inline-block align-middle" icon="dashicons:arrow-down-alt2" />
       {#if dropdownOpen}
         <div class="absolute bg-stone-50 shadow z-0 right-0">
-          <p class="dropdown-el" on:click={logout} on:keypress={logout}>Logout</p>
+          <p class="text-xs my-2 mx-3" on:click={logout} on:keypress={logout}>Logout</p>
         </div>
       {/if}
-    </div>
+    </button>
   {:else}
-    <a href="/login" class:active={$page.url.pathname === "/login"}>Login</a>
+    <a href="/login" class="text-white" class:active={$page.url.pathname === "/login"}>Login</a>
   {/if}
 </nav>
-
-<style>
-  iconify-icon {
-    color: white;
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  img {
-    width: 140px;
-    height: auto;
-  }
-
-  a {
-    color: white;
-    text-decoration: none;
-    font-family: "Work Sans", sans-serif;
-    font-weight: 300;
-  }
-
-  .dropdown-el {
-    font-size: 0.75rem;
-    margin: 0.5rem 0.75rem;
-  }
-</style>
