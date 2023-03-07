@@ -17,8 +17,17 @@
     { name: "Visitors", path: "/visitors", icon: "material-symbols:badge-outline" },
   ];
 
+  // helpers
+  function getTopLevel(route: string): string {
+    if (!route) {
+      return "";
+    }
+    const trimmedStart = route[0] === "/" ? route.slice(1) : route;
+    return trimmedStart.split("/")[0];
+  }
+
   // animations
-  export function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
+  function horizontalSlide(node: HTMLElement, { delay = 0 } = {}) {
     const style = getComputedStyle(node);
     return {
       delay,
@@ -37,16 +46,19 @@
     <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
   </button>
   {#each sidebarItems as sidebarItem}
-    <div class="sidebar-wrapper" class:active={$page.url.pathname === sidebarItem.path}>
+    <div
+      class="sidebar-wrapper"
+      class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
+    >
       <a
         href={sidebarItem.path}
         class="sidebar-link"
-        class:active={$page.url.pathname === sidebarItem.path}
+        class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
         on:click={() => dispatch("closeSidebar")}
       >
         <iconify-icon
           class="circle"
-          class:active={$page.url.pathname === sidebarItem.path}
+          class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
           icon={sidebarItem.icon}
         />
         <span>{sidebarItem.name}</span>
