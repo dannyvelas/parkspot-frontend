@@ -8,14 +8,12 @@
   export let lastSearch: string;
 
   // model
-  let currSearch = $page.url.searchParams.get("search") || "";
+  let currSearch = lastSearch;
   const currPageNum = Number($page.url.searchParams.get("page")) || 1;
   let bannerError = "";
 
   // events
   const handleSearch = async () => {
-    const lastSearch = $page.url.searchParams.get("search") || "";
-
     if (currSearch === lastSearch) {
       return;
     }
