@@ -15,8 +15,8 @@
   // styles
   const twGreenStatus = "bg-green-200 text-green-500";
   const twRedStatus = "bg-rose-200 text-rose-500";
-  const twPermissionColors = resident.unlimDays ? twGreenStatus : twRedStatus;
-  const permissionText = resident.unlimDays ? "Unlimited" : "Limited";
+  $: twPermissionColors = resident.unlimDays ? twGreenStatus : twRedStatus;
+  $: permissionText = resident.unlimDays ? "Unlimited" : "Limited";
 </script>
 
 <Row>
