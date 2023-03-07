@@ -10,12 +10,13 @@ export const load: PageLoad = async (loadInput) => {
   const session = onlyRole("admin", parentData.session);
   const accessToken = !browser ? session.accessToken : await getLatestToken();
   const page = loadInput.url.searchParams.get("page") || "1";
+  const search = loadInput.url.searchParams.get("search") || "";
 
   const residents = await new Request(listWithMetadataDecoder(residentDecoder))
-    .addParams({ page, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
+    .addParams({ page, search, limit: String(MAX_AMT_PER_PAGE) })
     .setAccessToken(accessToken)
     .setFetchFn(loadInput.fetch)
     .get("api/residents");
 
-  return { residents, session };
+  return { residents, session, lastSearch: search };
 };

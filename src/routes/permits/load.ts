@@ -9,6 +9,7 @@ import { listWithMetadataDecoder, permitDecoder } from "$lib/models";
 
 type OutputData = {
   permits: Result<ListWithMetadata<Permit>>;
+  lastSearch: string;
 };
 
 export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
@@ -24,7 +25,7 @@ export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
       .setFetchFn(loadInput.fetch)
       .get(endpoint);
 
-    return { permits };
+    return { permits, lastSearch: search };
   };
 
   return loadFn;
