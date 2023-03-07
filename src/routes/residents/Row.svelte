@@ -10,7 +10,7 @@
   export let resident: Resident;
 
   // model
-  const fullName = resident.firstName + " " + resident.lastName;
+  $: fullName = resident.firstName + " " + resident.lastName;
 
   // styles
   const twGreenStatus = "bg-green-200 text-green-500";
