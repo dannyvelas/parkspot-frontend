@@ -23,35 +23,29 @@
   }
 
   function decBounds() {
-    if (leftBound === 1) {
-      return;
-    }
-    if (rightBound - leftBound >= rangeSize) {
-      // if the visible range is smaller than `rangeSize` because we're near the end,
-      // then, if we scroll to the left, by not decrementing the right bound, we can make the
-      // visible range size get closer or equal to `rangeSize`
-      rightBound = rightBound - 1;
-    }
-    leftBound = leftBound - 1;
+    const decAmount = leftBound <= rangeSize ? leftBound - 1 : rangeSize;
+    leftBound = leftBound - decAmount;
+    rightBound = leftBound + rangeSize > amtPages ? amtPages : leftBound + rangeSize;
   }
 
   function incBounds() {
-    if (rightBound === amtPages) {
-      return;
-    }
-    leftBound = leftBound + 1;
-    rightBound = rightBound + 1;
+    const amtPagesRemaining = amtPages - rightBound;
+    const incAmount = amtPagesRemaining < rangeSize ? amtPagesRemaining : rangeSize;
+    rightBound = rightBound + incAmount;
+    leftBound = rightBound - rangeSize <= 0 ? 1 : rightBound - rangeSize;
   }
 </script>
 
 {#if pageLinks.length > 1}
-  <nav class="flex flex-row justify-center align-center gap-2">
-    <button on:click={decBounds}>
-      <iconify-icon
-        class="text-green-400"
-        icon="material-symbols:arrow-circle-left-outline-rounded"
-      />
-    </button>
+  <nav class="flex flex-row justify-center align-center gap-2 m-6">
+    {#if leftBound > 1}
+      <button on:click={decBounds}>
+        <iconify-icon
+          class="text-green-400"
+          icon="material-symbols:arrow-circle-left-outline-rounded"
+        />
+      </button>
+    {/if}
     <ul class="list-none flex flex-row gap-2">
       {#each pageLinks as pageLink}
         {#if pageLink >= leftBound && pageLink <= rightBound}
@@ -61,11 +55,13 @@
         {/if}
       {/each}
     </ul>
-    <button on:click={incBounds}>
-      <iconify-icon
-        class="text-green-400"
-        icon="material-symbols:arrow-circle-right-outline-rounded"
-      />
-    </button>
+    {#if rightBound < amtPages}
+      <button on:click={incBounds}>
+        <iconify-icon
+          class="text-green-400"
+          icon="material-symbols:arrow-circle-right-outline-rounded"
+        />
+      </button>
+    {/if}
   </nav>
 {/if}
