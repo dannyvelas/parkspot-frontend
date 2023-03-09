@@ -45,7 +45,6 @@
 </script>
 
 {#if pageLinks.length > 1}
-  <button on:click={() => console.log(leftBound)}>Hi</button>
   <nav class="flex flex-row justify-center align-center gap-2">
     <button on:click={decBounds}>
       <iconify-icon
