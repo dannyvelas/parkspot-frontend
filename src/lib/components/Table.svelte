@@ -5,16 +5,16 @@
 
   // props
   export let totalAmount: number;
-  export let lastSearch: string;
+  export let search: string;
+  export let pageNum: number;
 
   // model
-  let currSearch = lastSearch;
-  const currPageNum = Number($page.url.searchParams.get("page")) || 1;
+  let currSearch = search;
   let bannerError = "";
 
   // events
   const handleSearch = async () => {
-    if (currSearch === lastSearch) {
+    if (currSearch === search) {
       return;
     }
 
@@ -31,7 +31,7 @@
 
   // helpers
   const pageToHref = (pageNum: number) => {
-    const searchParam = lastSearch === "" ? "" : `search=${lastSearch}&`;
+    const searchParam = search === "" ? "" : `search=${search}&`;
     return `${$page.url.pathname}?${searchParam}page=${pageNum}`;
   };
 </script>
@@ -77,4 +77,4 @@
   </div>
   <slot name="rows" />
 </div>
-<Pagination {totalAmount} {pageToHref} {currPageNum} />
+<Pagination {totalAmount} {pageNum} {pageToHref} />

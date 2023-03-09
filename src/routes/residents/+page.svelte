@@ -43,7 +43,11 @@
 {#if !isOk(data.residents)}
   {data.residents.message}
 {:else}
-  <Table totalAmount={data.residents.data.metadata.totalAmount} lastSearch={data.lastSearch}>
+  <Table
+    totalAmount={data.residents.data.metadata.totalAmount}
+    search={data.search}
+    pageNum={data.pageNum}
+  >
     <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
       <div class="text-xs basis-20">ID</div>

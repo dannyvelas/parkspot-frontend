@@ -9,23 +9,24 @@ import { listWithMetadataDecoder, permitDecoder } from "$lib/models";
 
 type OutputData = {
   permits: Result<ListWithMetadata<Permit>>;
-  lastSearch: string;
+  search: string;
+  pageNum: number;
 };
 
 export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
   const loadFn: PageLoad<OutputData> = async (loadInput) => {
     const parentData = await loadInput.parent();
     const accessToken = !browser ? parentData.session.accessToken : await getLatestToken();
-    const page = loadInput.url.searchParams.get("page") || "1";
+    const page = Number(loadInput.url.searchParams.get("page")) || 1;
     const search = loadInput.url.searchParams.get("search") || "";
 
     const permits = await new Request(listWithMetadataDecoder(permitDecoder))
-      .addParams({ page, search, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
+      .addParams({ page: String(page), search, limit: String(MAX_AMT_PER_PAGE), reversed: "true" })
       .setAccessToken(accessToken)
       .setFetchFn(loadInput.fetch)
       .get(endpoint);
 
-    return { permits, lastSearch: search };
+    return { permits, search, pageNum: page };
   };
 
   return loadFn;

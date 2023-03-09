@@ -3,10 +3,15 @@
 
   // props
   export let totalAmount: number;
+  export let pageNum: number;
   export let pageToHref: (a: number) => string;
-  export let currPageNum: number;
 
-  $: pageNums = Array.from({ length: getAmtPages(totalAmount) }, (_, i) => i + 1);
+  // model
+  const rangeSize = 5;
+  $: amtPages = getAmtPages(totalAmount);
+  $: pageLinks = Array.from({ length: amtPages }, (_, i) => i + 1);
+  $: leftBound = pageNum;
+  $: rightBound = pageNum + rangeSize > amtPages ? amtPages : pageNum + rangeSize;
 
   function getAmtPages(totalAmount: number) {
     const int_div = totalAmount / MAX_AMT_PER_PAGE;
@@ -18,33 +23,17 @@
   }
 </script>
 
-{#if pageNums.length > 1}
-  <h3>Pages:</h3>
+{#if pageLinks.length > 1}
+  <button on:click={() => console.log(leftBound)}>Hi</button>
   <nav>
-    <ul class="pagination">
-      {#each pageNums as pageNum}
-        <li class="page-item" class:active={currPageNum == pageNum}>
-          <a href={pageToHref(pageNum)}>{pageNum}</a>
-        </li>
+    <ul class="list-none flex flex-row justify-center">
+      {#each pageLinks as pageLink}
+        {#if pageLink >= leftBound && pageLink <= rightBound}
+          <li class="m-2" class:active={pageNum == pageLink}>
+            <a href={pageToHref(pageLink)}>{pageLink}</a>
+          </li>
+        {/if}
       {/each}
     </ul>
   </nav>
 {/if}
-
-<style>
-  .pagination {
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .page-item {
-    margin: 5px;
-  }
-
-  h3 {
-    text-align: center;
-  }
-</style>

@@ -13,7 +13,8 @@
   export let listName: permitList;
   export let permits: Result<ListWithMetadata<Permit>>;
   export let session: Session;
-  export let lastSearch: string;
+  export let search: string;
+  export let pageNum: number;
 
   // events
   const deletePermit = async (event: CustomEvent<Permit>) => {
@@ -41,7 +42,7 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
-  <Table totalAmount={permits.data.metadata.totalAmount} {lastSearch}>
+  <Table totalAmount={permits.data.metadata.totalAmount} {search} {pageNum}>
     <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
       <div class="text-xs hidden md:inline md:basis-12">ID</div>

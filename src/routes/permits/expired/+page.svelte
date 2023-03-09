@@ -5,9 +5,4 @@
   export let data: PageData;
 </script>
 
-<Page
-  listName="expired"
-  permits={data.permits}
-  lastSearch={data.lastSearch}
-  session={data.session}
-/>
+<Page listName="expired" {...data} />

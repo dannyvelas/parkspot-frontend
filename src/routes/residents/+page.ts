@@ -9,14 +9,14 @@ export const load: PageLoad = async (loadInput) => {
   const parentData = await loadInput.parent();
   const session = onlyRole("admin", parentData.session);
   const accessToken = !browser ? session.accessToken : await getLatestToken();
-  const page = loadInput.url.searchParams.get("page") || "1";
+  const page = Number(loadInput.url.searchParams.get("page")) || 1;
   const search = loadInput.url.searchParams.get("search") || "";
 
   const residents = await new Request(listWithMetadataDecoder(residentDecoder))
-    .addParams({ page, search, limit: String(MAX_AMT_PER_PAGE) })
+    .addParams({ page: String(page), search, limit: String(MAX_AMT_PER_PAGE) })
     .setAccessToken(accessToken)
     .setFetchFn(loadInput.fetch)
     .get("api/residents");
 
-  return { residents, session, lastSearch: search };
+  return { session, residents, search, pageNum: page };
 };
