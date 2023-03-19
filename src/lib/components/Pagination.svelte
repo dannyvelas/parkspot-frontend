@@ -37,7 +37,7 @@
 </script>
 
 {#if pageLinks.length > 1}
-  <nav class="flex flex-row justify-center align-center gap-2 m-6">
+  <nav class="flex flex-row justify-center align-center gap-2 mt-6">
     {#if leftBound > 1}
       <button on:click={decBounds}>
         <iconify-icon
