@@ -1,8 +1,7 @@
 <script context="module" lang="ts">
-  let onTop: HTMLDivElement; //keeping track of which open modal is on top
-  let modal = {}; //all modals get registered here for easy future access
+  let modal = { open: () => {} };
 
-  // 	returns an object for the modal specified by `id`, which contains the API functions (`open` and `close` )
+  // 	returns an object, which contains the API functions (`open` and `close`)
   export function getModal() {
     return modal;
   }
@@ -14,23 +13,25 @@
   let topDiv: HTMLDivElement;
   let visible = false;
 
-  function keyPress(ev: KeyboardEvent) {
-    //only respond if the current modal is the top one
-    if (ev.key == "Escape") close(); //ESC
-  }
-
-  /**  API **/
-  function open() {
-    if (visible) return;
-    onTop = topDiv;
-    window.addEventListener("keydown", keyPress);
+  // api
+  modal.open = () => {
+    if (visible) {
+      return;
+    }
+    window.addEventListener("keydown", closeOnEscape);
 
     //this prevents scrolling of the main window on larger screens
     document.body.style.overflow = "hidden";
 
     visible = true;
+
     //Move the modal in the DOM to be the last child of <BODY> so that it can be on top of everything
     document.body.appendChild(topDiv);
+  };
+
+  // events
+  function closeOnEscape(ev: KeyboardEvent) {
+    if (ev.key == "Escape") close();
   }
 
   function close() {
@@ -38,20 +39,16 @@
       return;
     }
 
-    window.removeEventListener("keydown", keyPress);
+    window.removeEventListener("keydown", closeOnEscape);
 
-    if (onTop == null) {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = "";
 
     visible = false;
   }
 
-  //expose the API
-  modal = { open, close };
-
+  // lifecycle
   onDestroy(() => {
-    window.removeEventListener("keydown", keyPress);
+    window.removeEventListener("keydown", closeOnEscape);
   });
 </script>
 
