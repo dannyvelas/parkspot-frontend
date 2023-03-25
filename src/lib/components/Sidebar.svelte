@@ -21,6 +21,11 @@
 
   // api
   openSidebar = () => {
+    if (visible) {
+      return;
+    }
+    window.addEventListener("keydown", closeOnEscape);
+
     //this prevents scrolling of the main window on larger screens
     document.body.style.overflow = "hidden";
 
@@ -29,9 +34,19 @@
 
   // events
   function closeSidebar() {
+    if (!visible) {
+      return;
+    }
+
+    window.removeEventListener("keydown", closeOnEscape);
+
     document.body.style.overflow = "";
 
     visible = false;
+  }
+
+  function closeOnEscape(ev: KeyboardEvent) {
+    if (ev.key == "Escape") closeSidebar();
   }
 
   // helpers
