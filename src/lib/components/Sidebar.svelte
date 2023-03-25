@@ -29,7 +29,6 @@
 
   // events
   function closeSidebar() {
-    //this prevents scrolling of the main window on larger screens
     document.body.style.overflow = "";
 
     visible = false;
