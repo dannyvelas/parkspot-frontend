@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  export let sidebar = { open: () => {} };
+  export let openSidebar = () => {};
 </script>
 
 <script lang="ts">
@@ -20,7 +20,7 @@
   ];
 
   // api
-  sidebar.open = () => {
+  openSidebar = () => {
     //this prevents scrolling of the main window on larger screens
     document.body.style.overflow = "hidden";
 
