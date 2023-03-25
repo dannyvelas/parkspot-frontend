@@ -1,20 +1,16 @@
 <script context="module" lang="ts">
-  let modal = { open: () => {} };
-
-  // 	returns an object, which contains the API functions (`open` and `close`)
-  export function getModal() {
-    return modal;
-  }
+  export let openModal = () => {};
 </script>
 
 <script lang="ts">
   import { onDestroy } from "svelte";
+  import { browser } from "$app/environment";
 
   let topDiv: HTMLDivElement;
   let visible = false;
 
   // api
-  modal.open = () => {
+  openModal = () => {
     if (visible) {
       return;
     }
@@ -30,11 +26,7 @@
   };
 
   // events
-  function closeOnEscape(ev: KeyboardEvent) {
-    if (ev.key == "Escape") close();
-  }
-
-  function close() {
+  function closeModal() {
     if (!visible) {
       return;
     }
@@ -46,39 +38,35 @@
     visible = false;
   }
 
+  function closeOnEscape(ev: KeyboardEvent) {
+    if (ev.key == "Escape") closeModal();
+  }
+
   // lifecycle
   onDestroy(() => {
-    window.removeEventListener("keydown", closeOnEscape);
+    if (browser) {
+      window.removeEventListener("keydown", closeOnEscape);
+    }
   });
 </script>
 
-<div id="topModal" class:visible bind:this={topDiv} on:click={() => close()}>
-  <div id="modal" on:click|stopPropagation={() => {}}>
-    <svg id="close" on:click={() => close()} viewBox="0 0 12 12">
-      <circle cx="6" cy="6" r="6" />
-      <line x1="3" y1="3" x2="9" y2="9" />
-      <line x1="9" y1="3" x2="3" y2="9" />
-    </svg>
-    <div id="modal-content">
-      <slot />
+{#if visible}
+  <div
+    class="fixed z-10 inset-0 bg-gray-800 opacity-25 flex justify-center items-center"
+    bind:this={topDiv}
+    on:click={closeModal}
+    on:keypress={closeOnEscape}
+  >
+    <div id="modal" on:click|stopPropagation={() => {}} on:keypress|stopPropagation={() => {}}>
+      <div id="modal-content">
+        <button on:click={closeModal}>close</button>
+        <slot />
+      </div>
     </div>
   </div>
-</div>
+{/if}
 
 <style>
-  #topModal {
-    visibility: hidden;
-    z-index: 9999;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #4448;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   #modal {
     position: relative;
     border-radius: 6px;
@@ -88,29 +76,6 @@
     padding: 1em;
   }
 
-  .visible {
-    visibility: visible !important;
-  }
-
-  #close {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    fill: #f44;
-    transition: transform 0.3s;
-  }
-
-  #close:hover {
-    transform: scale(2);
-  }
-
-  #close line {
-    stroke: #fff;
-    stroke-width: 2;
-  }
   #modal-content {
     max-width: calc(100vw - 20px);
     max-height: calc(100vh - 20px);
