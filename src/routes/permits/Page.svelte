@@ -8,7 +8,7 @@
   import { capitalize } from "$lib/strings";
   import Row from "./Row.svelte";
   import Table from "$lib/components/Table.svelte";
-  import Modal, { getModal } from "$lib/components/Modal.svelte";
+  import Modal, { openModal } from "$lib/components/Modal.svelte";
   import PermitEdit from "./PermitEdit.svelte";
 
   // props
@@ -39,9 +39,8 @@
   };
 
   const openEditPane = async (event: CustomEvent<Permit>) => {
-    console.log("hi");
     editingPermit = event.detail;
-    getModal().open();
+    openModal();
   };
 </script>
 
@@ -54,7 +53,11 @@
   {permits.message}
 {:else if isOk(permits)}
   <Modal>
-    <h1>{editingPermit?.id}</h1>
+    {#if editingPermit}
+      <PermitEdit permit={editingPermit} />
+    {:else}
+      <p>Error: permit not found</p>
+    {/if}
   </Modal>
   <Table totalAmount={permits.data.metadata.totalAmount} {search} {pageNum}>
     <svelte:fragment slot="header-cells">

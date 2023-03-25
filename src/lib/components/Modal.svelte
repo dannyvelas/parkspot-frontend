@@ -8,7 +8,7 @@
 
   let visible = false;
 
-  // api
+  // events
   openModal = () => {
     if (visible) {
       return;
@@ -21,7 +21,6 @@
     visible = true;
   };
 
-  // events
   function closeModal() {
     if (!visible) {
       return;
@@ -48,13 +47,19 @@
 
 {#if visible}
   <div
-    class="fixed z-10 inset-0 bg-gray-800 opacity-25 flex justify-center items-center"
+    class="fixed z-10 inset-0 bg-gray-800 bg-opacity-25 flex justify-center items-center"
     on:click={closeModal}
     on:keypress={closeOnEscape}
   >
-    <div id="modal" on:click|stopPropagation={() => {}} on:keypress|stopPropagation={() => {}}>
-      <div id="modal-content">
-        <button on:click={closeModal}>close</button>
+    <div
+      class="bg-white rounded-md p-2"
+      on:click|stopPropagation={() => {}}
+      on:keypress|stopPropagation={() => {}}
+    >
+      <button on:click={closeModal}>
+        <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
+      </button>
+      <div id="modal-content" class="overflow-auto">
         <slot />
       </div>
     </div>
@@ -62,18 +67,8 @@
 {/if}
 
 <style>
-  #modal {
-    position: relative;
-    border-radius: 6px;
-    background: white;
-    border: 2px solid #000;
-    filter: drop-shadow(5px 5px 5px #555);
-    padding: 1em;
-  }
-
   #modal-content {
     max-width: calc(100vw - 20px);
     max-height: calc(100vh - 20px);
-    overflow: auto;
   }
 </style>
