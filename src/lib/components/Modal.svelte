@@ -6,7 +6,6 @@
   import { onDestroy } from "svelte";
   import { browser } from "$app/environment";
 
-  let topDiv: HTMLDivElement;
   let visible = false;
 
   // api
@@ -20,9 +19,6 @@
     document.body.style.overflow = "hidden";
 
     visible = true;
-
-    //Move the modal in the DOM to be the last child of <BODY> so that it can be on top of everything
-    document.body.appendChild(topDiv);
   };
 
   // events
@@ -53,7 +49,6 @@
 {#if visible}
   <div
     class="fixed z-10 inset-0 bg-gray-800 opacity-25 flex justify-center items-center"
-    bind:this={topDiv}
     on:click={closeModal}
     on:keypress={closeOnEscape}
   >
