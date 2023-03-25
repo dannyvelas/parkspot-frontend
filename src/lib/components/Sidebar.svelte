@@ -5,10 +5,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { cubicIn } from "svelte/easing";
-  import { createEventDispatcher } from "svelte";
-
-  // config
-  const dispatch = createEventDispatcher();
 
   // model
   let visible = false;
@@ -19,7 +15,7 @@
     { name: "Visitors", path: "/visitors", icon: "material-symbols:badge-outline" },
   ];
 
-  // api
+  // events
   openSidebar = () => {
     if (visible) {
       return;
@@ -32,7 +28,6 @@
     visible = true;
   };
 
-  // events
   function closeSidebar() {
     if (!visible) {
       return;
@@ -92,7 +87,7 @@
           href={sidebarItem.path}
           class="sidebar-link"
           class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-          on:click={() => dispatch("closeSidebar")}
+          on:click={closeSidebar}
         >
           <iconify-icon
             class="circle"
