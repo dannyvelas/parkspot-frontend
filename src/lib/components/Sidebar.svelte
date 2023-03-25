@@ -1,9 +1,5 @@
 <script context="module" lang="ts">
-  let sidebar = { open: () => {} };
-
-  export function getSidebar() {
-    return sidebar;
-  }
+  export let sidebar = { open: () => {} };
 </script>
 
 <script lang="ts">

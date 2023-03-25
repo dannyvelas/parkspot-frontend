@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from "./$types";
   import Nav from "$lib/components/Nav.svelte";
-  import Sidebar, { getSidebar } from "$lib/components/Sidebar.svelte";
+  import Sidebar, { sidebar } from "$lib/components/Sidebar.svelte";
   import "../app.css";
 
   // props
@@ -11,7 +11,7 @@
 <div>
   <Sidebar />
 
-  <Nav on:openSidebar={() => getSidebar().open()} session={data.session} />
+  <Nav on:openSidebar={() => sidebar.open()} session={data.session} />
 
   <main class="px-4 md:px-10">
     <slot />
