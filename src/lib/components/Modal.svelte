@@ -1,33 +1,27 @@
 <script context="module" lang="ts">
-  let onTop; //keeping track of which open modal is on top
-  const modals = {}; //all modals get registered here for easy future access
+  let onTop: HTMLDivElement; //keeping track of which open modal is on top
+  let modal = {}; //all modals get registered here for easy future access
 
   // 	returns an object for the modal specified by `id`, which contains the API functions (`open` and `close` )
-  export function getModal(id = "") {
-    return modals[id];
+  export function getModal() {
+    return modal;
   }
 </script>
 
 <script lang="ts">
   import { onDestroy } from "svelte";
 
-  let topDiv;
+  let topDiv: HTMLDivElement;
   let visible = false;
-  let prevOnTop;
-  let closeCallback;
 
-  export let id = "";
-
-  function keyPress(ev) {
+  function keyPress(ev: KeyboardEvent) {
     //only respond if the current modal is the top one
-    if (ev.key == "Escape" && onTop == topDiv) close(); //ESC
+    if (ev.key == "Escape") close(); //ESC
   }
 
   /**  API **/
-  function open(callback) {
-    closeCallback = callback;
+  function open() {
     if (visible) return;
-    prevOnTop = onTop;
     onTop = topDiv;
     window.addEventListener("keydown", keyPress);
 
@@ -39,20 +33,24 @@
     document.body.appendChild(topDiv);
   }
 
-  function close(retVal) {
-    if (!visible) return;
+  function close() {
+    if (!visible) {
+      return;
+    }
+
     window.removeEventListener("keydown", keyPress);
-    onTop = prevOnTop;
-    if (onTop == null) document.body.style.overflow = "";
+
+    if (onTop == null) {
+      document.body.style.overflow = "";
+    }
+
     visible = false;
-    if (closeCallback) closeCallback(retVal);
   }
 
   //expose the API
-  modals[id] = { open, close };
+  modal = { open, close };
 
   onDestroy(() => {
-    delete modals[id];
     window.removeEventListener("keydown", keyPress);
   });
 </script>
