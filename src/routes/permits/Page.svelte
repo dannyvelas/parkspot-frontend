@@ -8,6 +8,8 @@
   import { capitalize } from "$lib/strings";
   import Row from "./Row.svelte";
   import Table from "$lib/components/Table.svelte";
+  import Modal, { getModal } from "$lib/components/Modal.svelte";
+  import PermitEdit from "./PermitEdit.svelte";
 
   // props
   export let listName: permitList;
@@ -15,6 +17,9 @@
   export let session: Session;
   export let search: string;
   export let pageNum: number;
+
+  // model
+  let editingPermit: Permit | undefined;
 
   // events
   const deletePermit = async (event: CustomEvent<Permit>) => {
@@ -32,6 +37,12 @@
       alert(`Deleted permit ${event.detail.id}`);
     }
   };
+
+  const openEditPane = async (event: CustomEvent<Permit>) => {
+    console.log("hi");
+    editingPermit = event.detail;
+    getModal().open();
+  };
 </script>
 
 <header class="mb-4">
@@ -42,6 +53,9 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
+  <Modal>
+    <h1>{editingPermit?.id}</h1>
+  </Modal>
   <Table totalAmount={permits.data.metadata.totalAmount} {search} {pageNum}>
     <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
@@ -53,7 +67,12 @@
     </svelte:fragment>
     <svelte:fragment slot="rows">
       {#each permits.data.records as permit}
-        <Row {permit} userRole={session.user.role} on:clickDelete={deletePermit} />
+        <Row
+          {permit}
+          userRole={session.user.role}
+          on:clickDelete={deletePermit}
+          on:clickEdit={openEditPane}
+        />
       {/each}
     </svelte:fragment>
   </Table>
