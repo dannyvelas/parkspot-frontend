@@ -59,7 +59,11 @@
   }
 </script>
 
-<div class="fixed {visible ? 'visible' : 'invisible'} z-10 inset-0 bg-gray-800 opacity-25" />
+<div
+  class="fixed {visible ? 'visible' : 'invisible'} z-10 inset-0 bg-gray-800 opacity-25"
+  on:click={closeSidebar}
+  on:keypress={closeSidebar}
+/>
 <nav
   transition:horizontalSlide
   class="fixed {visible ? 'visible' : 'invisible'} z-20 min-h-full bg-white flex flex-col"
