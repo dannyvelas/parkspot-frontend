@@ -1,3 +1,11 @@
+<script context="module" lang="ts">
+  let sidebar = { open: () => {} };
+
+  export function getSidebar() {
+    return sidebar;
+  }
+</script>
+
 <script lang="ts">
   import { page } from "$app/stores";
   import { cubicIn } from "svelte/easing";
@@ -6,16 +14,30 @@
   // config
   const dispatch = createEventDispatcher();
 
-  // props
-  export let twClasses: string;
-
   // model
+  let visible = false;
   const sidebarItems = [
     { name: "Dashboard", path: "/dashboard", icon: "material-symbols:dashboard-outline-rounded" },
     { name: "Permits", path: "/permits/all", icon: "clarity:details-line" },
     { name: "Residents", path: "/residents", icon: "uit:house-user" },
     { name: "Visitors", path: "/visitors", icon: "material-symbols:badge-outline" },
   ];
+
+  // api
+  sidebar.open = () => {
+    //this prevents scrolling of the main window on larger screens
+    document.body.style.overflow = "hidden";
+
+    visible = true;
+  };
+
+  // events
+  function closeSidebar() {
+    //this prevents scrolling of the main window on larger screens
+    document.body.style.overflow = "";
+
+    visible = false;
+  }
 
   // helpers
   function getTopLevel(route: string): string {
@@ -41,8 +63,12 @@
   }
 </script>
 
-<nav transition:horizontalSlide class="{twClasses} bg-white flex flex-col">
-  <button class="text-left" on:click={() => dispatch("closeSidebar")}>
+<div class="fixed {visible ? 'visible' : 'invisible'} z-10 inset-0 bg-gray-800 opacity-25" />
+<nav
+  transition:horizontalSlide
+  class="fixed {visible ? 'visible' : 'invisible'} z-20 min-h-full bg-white flex flex-col"
+>
+  <button class="text-left" on:click={closeSidebar}>
     <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
   </button>
   {#each sidebarItems as sidebarItem}
