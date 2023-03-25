@@ -12,10 +12,15 @@
 
   // events
   function closeSidebar() {
+    document.body.style.overflow = "";
+
     sidebarIsOpen = false;
   }
 
   function openSidebar() {
+    //this prevents scrolling of the main window on larger screens
+    document.body.style.overflow = "hidden";
+
     sidebarIsOpen = true;
   }
 </script>
@@ -26,7 +31,9 @@
   {/if}
 
   <div
-    class="fixed w-full h-screen {sidebarIsOpen ? 'block' : 'hidden'} z-10 bg-gray-800 opacity-25"
+    class="fixed w-full h-screen {sidebarIsOpen
+      ? 'visible'
+      : 'invisible'} z-10 inset-0 bg-gray-800 opacity-25"
     on:click={closeSidebar}
     on:keypress={closeSidebar}
   />
