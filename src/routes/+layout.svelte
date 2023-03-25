@@ -31,9 +31,7 @@
   {/if}
 
   <div
-    class="fixed w-full h-screen {sidebarIsOpen
-      ? 'visible'
-      : 'invisible'} z-10 inset-0 bg-gray-800 opacity-25"
+    class="fixed {sidebarIsOpen ? 'visible' : 'invisible'} z-10 inset-0 bg-gray-800 opacity-25"
     on:click={closeSidebar}
     on:keypress={closeSidebar}
   />
