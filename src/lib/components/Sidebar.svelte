@@ -58,39 +58,38 @@
   }
 </script>
 
-<div
-  class="fixed {visible ? 'visible' : 'invisible'} z-10 inset-0 bg-gray-800 opacity-25"
-  on:click={closeSidebar}
-  on:keypress={closeSidebar}
-/>
-<nav
-  transition:horizontalSlide
-  class="fixed {visible ? 'visible' : 'invisible'} z-20 min-h-full bg-white flex flex-col"
->
-  <button class="text-left" on:click={closeSidebar}>
-    <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
-  </button>
-  {#each sidebarItems as sidebarItem}
-    <div
-      class="sidebar-wrapper"
-      class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-    >
-      <a
-        href={sidebarItem.path}
-        class="sidebar-link"
+{#if visible}
+  <div
+    class="fixed z-10 inset-0 bg-gray-800 opacity-25"
+    on:click={closeSidebar}
+    on:keypress={closeSidebar}
+  />
+  <nav transition:horizontalSlide class="fixed z-20 min-h-full bg-white flex flex-col">
+    <button class="text-left" on:click={closeSidebar}>
+      <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
+    </button>
+    {#each sidebarItems as sidebarItem}
+      <div
+        class="sidebar-wrapper"
         class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-        on:click={() => dispatch("closeSidebar")}
       >
-        <iconify-icon
-          class="circle"
+        <a
+          href={sidebarItem.path}
+          class="sidebar-link"
           class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-          icon={sidebarItem.icon}
-        />
-        <span>{sidebarItem.name}</span>
-      </a>
-    </div>
-  {/each}
-</nav>
+          on:click={() => dispatch("closeSidebar")}
+        >
+          <iconify-icon
+            class="circle"
+            class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
+            icon={sidebarItem.icon}
+          />
+          <span>{sidebarItem.name}</span>
+        </a>
+      </div>
+    {/each}
+  </nav>
+{/if}
 
 <style>
   nav {
