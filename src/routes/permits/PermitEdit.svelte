@@ -4,7 +4,7 @@
   export let permit: Permit;
 </script>
 
-<div class="bg-white rounded flex flex-col mx-auto w-64 gap-4 px-2 py-1">
+<div class="bg-white rounded flex flex-col mx-auto w-52 md:w-64 gap-4 px-2 py-1">
   <p class="text-center font-bold text-lg">Edit Permit</p>
   <input class="text-gray-500 border rounded p-2" value={permit.id} readonly />
   <input class="text-gray-500 border rounded p-2" value={permit.residentID} readonly />
