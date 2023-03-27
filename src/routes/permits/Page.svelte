@@ -7,6 +7,8 @@
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/strings";
   import Row from "./Row.svelte";
+  import Search from "$lib/components/Search.svelte";
+  import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
   import Modal, { openModal } from "$lib/components/Modal.svelte";
   import PermitEdit from "./PermitEdit.svelte";
@@ -38,8 +40,12 @@
     }
   };
 
-  const openEditPane = async (event: CustomEvent<Permit>) => {
+  const openEditModal = async (event: CustomEvent<Permit>) => {
     editingPermit = event.detail;
+    openModal();
+  };
+
+  const openCreateModal = async () => {
     openModal();
   };
 </script>
@@ -59,6 +65,10 @@
       <p>Error: permit not found</p>
     {/if}
   </Modal>
+  <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
+    <Search {search} />
+    <CreateBtn on:click={openCreateModal} />
+  </div>
   <Table totalAmount={permits.data.metadata.totalAmount} {search} {pageNum}>
     <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
@@ -74,7 +84,7 @@
           {permit}
           userRole={session.user.role}
           on:clickDelete={deletePermit}
-          on:clickEdit={openEditPane}
+          on:clickEdit={openEditModal}
         />
       {/each}
     </svelte:fragment>
