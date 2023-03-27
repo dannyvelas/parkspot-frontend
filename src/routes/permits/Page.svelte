@@ -11,7 +11,7 @@
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
   import Modal, { getModal } from "$lib/components/Modal.svelte";
-  import PermitEdit from "./PermitEdit.svelte";
+  import EditPermit from "./EditPermit.svelte";
 
   // props
   export let listName: permitList;
@@ -70,7 +70,7 @@
 {:else if isOk(permits)}
   <Modal id="edit">
     {#if editPermit}
-      <PermitEdit permit={editPermit} />
+      <EditPermit permit={editPermit} />
     {:else}
       <p>Error: permit not found</p>
     {/if}
