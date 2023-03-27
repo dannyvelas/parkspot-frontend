@@ -1,15 +1,27 @@
 <script context="module" lang="ts">
-  export let openModal = () => {};
+  type ModalCtrl = {
+    open: () => void;
+  };
+
+  const modals: Map<String, ModalCtrl> = new Map();
+
+  export function getModal(id = ""): ModalCtrl | undefined {
+    return modals.get(id);
+  }
 </script>
 
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { browser } from "$app/environment";
 
+  // props
+  export let id = ""; // default id of Modal with no argument is ""
+
+  // model
   let visible = false;
 
   // events
-  openModal = () => {
+  function openModal() {
     if (visible) {
       return;
     }
@@ -19,7 +31,7 @@
     document.body.style.overflow = "hidden";
 
     visible = true;
-  };
+  }
 
   function closeModal() {
     if (!visible) {
@@ -33,12 +45,15 @@
     visible = false;
   }
 
+  modals.set(id, { open: openModal });
+
   function closeOnEscape(ev: KeyboardEvent) {
     if (ev.key == "Escape") closeModal();
   }
 
   // lifecycle
   onDestroy(() => {
+    modals.delete(id);
     if (browser) {
       window.removeEventListener("keydown", closeOnEscape);
     }

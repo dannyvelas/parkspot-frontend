@@ -10,7 +10,7 @@
   import Search from "$lib/components/Search.svelte";
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
-  import Modal, { openModal } from "$lib/components/Modal.svelte";
+  import Modal, { getModal } from "$lib/components/Modal.svelte";
   import PermitEdit from "./PermitEdit.svelte";
 
   // props
@@ -21,7 +21,7 @@
   export let pageNum: number;
 
   // model
-  let editingPermit: Permit | undefined;
+  let editPermit: Permit | undefined;
 
   // events
   const deletePermit = async (event: CustomEvent<Permit>) => {
@@ -41,12 +41,22 @@
   };
 
   const openEditModal = async (event: CustomEvent<Permit>) => {
-    editingPermit = event.detail;
-    openModal();
+    editPermit = event.detail;
+    const editModal = getModal("edit");
+    if (!editModal) {
+      console.error("edit modal not found");
+      return;
+    }
+    editModal.open();
   };
 
   const openCreateModal = async () => {
-    openModal();
+    const createModal = getModal("create");
+    if (!createModal) {
+      console.error("create modal not found");
+      return;
+    }
+    createModal.open();
   };
 </script>
 
@@ -58,12 +68,15 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
-  <Modal>
-    {#if editingPermit}
-      <PermitEdit permit={editingPermit} />
+  <Modal id="edit">
+    {#if editPermit}
+      <PermitEdit permit={editPermit} />
     {:else}
       <p>Error: permit not found</p>
     {/if}
+  </Modal>
+  <Modal id="create">
+    <p>well hello there</p>
   </Modal>
   <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
     <Search {search} />
