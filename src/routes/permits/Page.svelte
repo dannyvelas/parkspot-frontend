@@ -61,8 +61,6 @@
   <Modal id="edit">
     {#if editPermit}
       <EditPermit permit={editPermit} />
-    {:else}
-      <p>Error: permit not found</p>
     {/if}
   </Modal>
   <Modal id="create">
