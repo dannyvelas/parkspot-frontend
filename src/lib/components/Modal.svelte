@@ -67,7 +67,7 @@
     on:keypress={closeOnEscape}
   >
     <div
-      class="bg-white rounded-md p-2 overflow-auto"
+      class="bg-white rounded-md px-4 py-3 overflow-auto"
       id="modal-window"
       on:click|stopPropagation={() => {}}
       on:keypress|stopPropagation={() => {}}
