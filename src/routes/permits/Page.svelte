@@ -88,7 +88,7 @@
       <div class="text-xs basis-16">Status</div>
     </svelte:fragment>
     <svelte:fragment slot="rows">
-      {#each permits.data.records as permit}
+      {#each permits.data.records as permit (permit.id)}
         <Row
           {permit}
           userRole={session.user.role}
