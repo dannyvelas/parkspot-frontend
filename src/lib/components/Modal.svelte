@@ -67,22 +67,21 @@
     on:keypress={closeOnEscape}
   >
     <div
-      class="bg-white rounded-md p-2"
+      class="bg-white rounded-md p-2 overflow-auto"
+      id="modal-window"
       on:click|stopPropagation={() => {}}
       on:keypress|stopPropagation={() => {}}
     >
       <button on:click={closeModal}>
         <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
       </button>
-      <div id="modal-content" class="overflow-auto">
-        <slot />
-      </div>
+      <slot />
     </div>
   </div>
 {/if}
 
 <style>
-  #modal-content {
+  #modal-window {
     max-width: calc(100vw - 20px);
     max-height: calc(100vh - 20px);
   }
