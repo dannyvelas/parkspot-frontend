@@ -2,8 +2,6 @@
   import type { Result } from "$lib/functional";
   import type { Permit, ListWithMetadata, permitList } from "$lib/models";
   import type { Session } from "$lib/auth";
-  import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
   import { capitalize } from "$lib/strings";
   import Row from "./Row.svelte";
@@ -12,6 +10,7 @@
   import Table from "$lib/components/Table.svelte";
   import Modal, { getModal } from "$lib/components/Modal.svelte";
   import EditPermit from "./EditPermit.svelte";
+  import DeletePermit from "./DeletePermit.svelte";
 
   // props
   export let listName: permitList;
@@ -22,40 +21,35 @@
 
   // model
   let editPermit: Permit | undefined;
+  let deletePermit: Permit | undefined;
 
   // events
-  const deletePermit = async (event: CustomEvent<Permit>) => {
-    if (confirm(`Are you sure you want to delete ${event.detail.id}?`)) {
-      const delRes = await new Request()
-        .setAccessToken(await getLatestToken())
-        .delete(`api/permit/${event.detail.id}`);
-      if (!isOk(delRes)) {
-        alert(`Error deleting permit ${event.detail.id}. Please try again later`);
-        return;
-      }
-
-      permits.data!.records = permits.data!.records.filter((p) => p.id != event.detail.id);
-
-      alert(`Deleted permit ${event.detail.id}`);
-    }
-  };
-
-  const openEditModal = async (event: CustomEvent<Permit>) => {
+  const openEditModal = (event: CustomEvent<Permit>) => {
     editPermit = event.detail;
     getModal("edit")?.open();
   };
 
-  const openCreateModal = async () => {
+  const openCreateModal = () => {
     getModal("create")?.open();
   };
 
-  const updatePermit = async (event: CustomEvent<Permit>) => {
+  const openDeleteModal = (event: CustomEvent<Permit>) => {
+    deletePermit = event.detail;
+    getModal("delete")?.open();
+  };
+
+  const updatePermit = (event: CustomEvent<Permit>) => {
     permits.data!.records = permits.data!.records.map((currPermit) => {
       if (currPermit.id === event.detail.id) {
         return event.detail;
       }
       return currPermit;
     });
+  };
+
+  const removePermit = (event: CustomEvent<Permit>) => {
+    permits.data!.records = permits.data!.records.filter((p) => p.id != event.detail.id);
+    getModal("delete")?.close();
   };
 </script>
 
@@ -67,13 +61,18 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
+  <Modal id="create">
+    <p>well hello there</p>
+  </Modal>
   <Modal id="edit">
     {#if editPermit}
       <EditPermit permit={editPermit} on:permitUpdated={updatePermit} />
     {/if}
   </Modal>
-  <Modal id="create">
-    <p>well hello there</p>
+  <Modal id="delete">
+    {#if deletePermit}
+      <DeletePermit permit={deletePermit} on:permitDeleted={removePermit} />
+    {/if}
   </Modal>
   <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
     <Search {search} />
@@ -93,7 +92,7 @@
         <Row
           {permit}
           userRole={session.user.role}
-          on:clickDelete={deletePermit}
+          on:clickDelete={openDeleteModal}
           on:clickEdit={openEditModal}
         />
       {/each}
