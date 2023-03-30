@@ -48,6 +48,15 @@
   const openCreateModal = async () => {
     getModal("create")?.open();
   };
+
+  const updatePermit = async (event: CustomEvent<Permit>) => {
+    permits.data!.records = permits.data!.records.map((currPermit) => {
+      if (currPermit.id === event.detail.id) {
+        return event.detail;
+      }
+      return currPermit;
+    });
+  };
 </script>
 
 <header class="mb-4">
@@ -60,7 +69,7 @@
 {:else if isOk(permits)}
   <Modal id="edit">
     {#if editPermit}
-      <EditPermit permit={editPermit} />
+      <EditPermit permit={editPermit} on:permitUpdated={updatePermit} />
     {/if}
   </Modal>
   <Modal id="create">
