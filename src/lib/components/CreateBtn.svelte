@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="flex flex-row items-center gap-x-2"
+  class="flex flex-row items-center gap-x-2 cursor-default"
   on:click={() => dispatch("click")}
   on:keydown={() => dispatch("click")}
 >
