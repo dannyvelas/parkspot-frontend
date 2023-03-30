@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
   type ModalCtrl = {
     open: () => void;
+    close: () => void;
   };
 
   const modals: Map<String, ModalCtrl> = new Map();
@@ -45,7 +46,7 @@
     visible = false;
   }
 
-  modals.set(id, { open: openModal });
+  modals.set(id, { open: openModal, close: closeModal });
 
   function closeOnEscape(ev: KeyboardEvent) {
     if (ev.key == "Escape") closeModal();
