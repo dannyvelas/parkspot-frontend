@@ -5,6 +5,7 @@
   import { isOk } from "$lib/functional";
   import { permitDecoder } from "$lib/models";
   import { createEventDispatcher } from "svelte";
+  import Banner from "$lib/components/Banner.svelte";
 
   // config
   const dispatch = createEventDispatcher();
@@ -13,7 +14,7 @@
   export let permit: Permit;
 
   // model
-  let banner = { isError: false, msg: "" };
+  let bannerCfg = { isError: false, msg: "" };
 
   // events
   async function handleSubmit() {
@@ -21,32 +22,23 @@
       .setAccessToken(await getLatestToken())
       .put(`api/permit`, permit);
     if (!isOk(editRes)) {
-      banner = { isError: true, msg: editRes.message };
+      bannerCfg = { isError: true, msg: editRes.message };
       return;
     }
 
     permit = editRes.data;
-    banner = { isError: false, msg: "Permit updated" };
+    bannerCfg = { isError: false, msg: "Permit updated" };
 
     dispatch("permitUpdated", permit);
   }
-
-  // styles
-  $: bannerColors = banner.isError
-    ? "bg-rose-200 border-rose-500"
-    : "bg-green-200 border-green-500";
 </script>
 
 <form
   class="bg-white rounded flex flex-col mx-auto w-52 md:w-64 gap-4 px-2 py-1"
   on:submit|preventDefault={handleSubmit}
 >
+  <Banner banner={bannerCfg} />
   <p class="text-center font-bold text-lg">Edit Permit</p>
-  {#if banner.msg != ""}
-    <div class="min-w-full {bannerColors} rounded-md border p-2">
-      <p class="text-sm">{banner.msg}</p>
-    </div>
-  {/if}
   <input class="text-gray-500 border rounded p-2" bind:value={permit.id} readonly />
   <input class="text-gray-500 border rounded p-2" bind:value={permit.residentID} readonly />
   <input
