@@ -4,6 +4,10 @@
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
   import { permitDecoder } from "$lib/models";
+  import { createEventDispatcher } from "svelte";
+
+  // config
+  const dispatch = createEventDispatcher();
 
   // props
   export let permit: Permit;
@@ -23,6 +27,8 @@
 
     permit = editRes.data;
     banner = { isError: false, msg: "Permit updated" };
+
+    dispatch("permitUpdated", permit);
   }
 
   // styles
