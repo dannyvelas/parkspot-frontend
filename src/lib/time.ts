@@ -27,3 +27,16 @@ export const detailDate = (d: Date): string => {
     minute: "2-digit",
   });
 };
+
+export const getStartOfToday = () => {
+  const tempDate = new Date();
+  tempDate.setHours(0, 0, 0, 0);
+  return tempDate;
+};
+
+export const getEndOfTomorrow = () => {
+  const tempDate = new Date();
+  tempDate.setDate(tempDate.getDate() + 1);
+  tempDate.setHours(23, 59, 59, 0);
+  return tempDate;
+};
