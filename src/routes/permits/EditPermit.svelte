@@ -3,25 +3,32 @@
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
+  import { permitDecoder } from "$lib/models";
 
   // props
   export let permit: Permit;
 
   // model
-  let errMsg = "";
+  let banner = { isError: false, msg: "" };
 
   // events
   async function handleSubmit() {
-    const editRes = await new Request()
+    const editRes = await new Request(permitDecoder)
       .setAccessToken(await getLatestToken())
-      .put(`api/permit/${permit.id}`, permit);
+      .put(`api/permit`, permit);
     if (!isOk(editRes)) {
-      errMsg = editRes.message;
+      banner = { isError: true, msg: editRes.message };
       return;
     }
 
-    alert(`Edited permit ${permit.id}`);
+    permit = editRes.data;
+    banner = { isError: false, msg: "Permit updated" };
   }
+
+  // styles
+  $: bannerColors = banner.isError
+    ? "bg-rose-200 border-rose-500"
+    : "bg-green-200 border-green-500";
 </script>
 
 <form
@@ -29,9 +36,9 @@
   on:submit|preventDefault={handleSubmit}
 >
   <p class="text-center font-bold text-lg">Edit Permit</p>
-  {#if errMsg != ""}
-    <div class="min-w-full bg-rose-200 rounded-md border border-rose-500 p-2">
-      <p class="text-sm">{errMsg}</p>
+  {#if banner.msg != ""}
+    <div class="min-w-full {bannerColors} rounded-md border p-2">
+      <p class="text-sm">{banner.msg}</p>
     </div>
   {/if}
   <input class="text-gray-500 border rounded p-2" bind:value={permit.id} readonly />
