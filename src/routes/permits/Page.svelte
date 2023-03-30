@@ -42,21 +42,11 @@
 
   const openEditModal = async (event: CustomEvent<Permit>) => {
     editPermit = event.detail;
-    const editModal = getModal("edit");
-    if (!editModal) {
-      console.error("edit modal not found");
-      return;
-    }
-    editModal.open();
+    getModal("edit")?.open();
   };
 
   const openCreateModal = async () => {
-    const createModal = getModal("create");
-    if (!createModal) {
-      console.error("create modal not found");
-      return;
-    }
-    createModal.open();
+    getModal("create")?.open();
   };
 </script>
 
