@@ -34,7 +34,7 @@
 </script>
 
 <form
-  class="bg-white rounded flex flex-col mx-auto w-52 md:w-64 gap-4 px-2 py-1"
+  class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
   on:submit|preventDefault={handleSubmit}
 >
   <Banner banner={bannerCfg} />
