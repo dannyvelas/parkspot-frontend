@@ -29,8 +29,12 @@
   // events
   async function handleSubmit() {
     const formData = new FormData(this);
+    if (carSelection !== "newCar") {
+      formData.set("carID", carSelection);
+    }
     formData.set("startDate", startDate);
     formData.set("endDate", endDate);
+
     submitWithToken(this, { formData });
   }
 
@@ -69,6 +73,8 @@
 
 <form
   class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
+  method="POST"
+  action="/permit"
   on:submit|preventDefault={handleSubmit}
 >
   <Banner />
