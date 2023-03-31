@@ -9,6 +9,7 @@
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
   import Modal, { getModal } from "$lib/components/Modal.svelte";
+  import CreatePermit from "./CreatePermit.svelte";
   import EditPermit from "./EditPermit.svelte";
   import DeletePermit from "./DeletePermit.svelte";
 
@@ -62,7 +63,7 @@
   {permits.message}
 {:else if isOk(permits)}
   <Modal id="create">
-    <p>well hello there</p>
+    <CreatePermit user={session.user} />
   </Modal>
   <Modal id="edit">
     {#if editPermit}
