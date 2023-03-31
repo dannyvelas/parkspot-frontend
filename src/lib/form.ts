@@ -50,8 +50,8 @@ export async function submitWithToken(form: HTMLFormElement, opts?: opts) {
     body: justFormData,
     headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
   });
-  const result: ActionResult = await response.json();
 
+  const result: ActionResult = await response.json();
   if (result.type === "success") {
     await invalidateAll();
     if (opts?.resetForm === undefined || opts.resetForm === true) {

@@ -3,14 +3,15 @@
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
-  import { permitDecoder, listWithMetadataDecoder, carDecoder, residentDecoder } from "$lib/models";
+  import { listWithMetadataDecoder, carDecoder, residentDecoder } from "$lib/models";
   import { getStartOfToday, getEndOfTomorrow } from "$lib/time";
-  import { createEventDispatcher } from "svelte";
+  import { submitWithToken } from "$lib/form";
   import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
   import Litepicker from "$lib/components/Litepicker.svelte";
 
   // config
-  const dispatch = createEventDispatcher();
+  const startOfToday = getStartOfToday();
+  const endOfTomorrow = getEndOfTomorrow();
 
   // props
   export let user: User;
@@ -19,49 +20,35 @@
   let carSelection = "";
   let residentCars: Car[] = [];
   let isException = false;
-  const startOfToday = getStartOfToday();
-  const endOfTomorrow = getEndOfTomorrow();
 
-  const permitReq = {
-    residentID: user.role === "resident" ? user.id : "",
-    carID: "",
-    licensePlate: "",
-    color: "",
-    make: "",
-    model: "",
-    startDate: startOfToday.toISOString(),
-    endDate: endOfTomorrow.toISOString(),
-    exceptionReason: "",
-  };
+  // form fields
+  let residentID = user.role === "resident" ? user.id : "";
+  let startDate = startOfToday.toISOString();
+  let endDate = endOfTomorrow.toISOString();
 
   // events
   async function handleSubmit() {
-    const result = await new Request(permitDecoder)
-      .setAccessToken(await getLatestToken())
-      .post("api/permit", permitReq);
-    if (!isOk(result)) {
-      updateBanner(true, result.message);
-      return;
-    }
-
-    dispatch("permitCreated", result.data);
+    const formData = new FormData(this);
+    formData.set("startDate", startDate);
+    formData.set("endDate", endDate);
+    submitWithToken(this, { formData });
   }
 
   function updateDates(event: CustomEvent<{ date1: any; date2: any }>) {
-    permitReq.startDate = event.detail.date1.toJSDate().toISOString();
+    startDate = event.detail.date1.toJSDate().toISOString();
 
     // make permit valid for the entirety of date2
     event.detail.date2.setHours(23, 59, 59);
-    permitReq.endDate = event.detail.date2.toJSDate().toISOString();
+    endDate = event.detail.date2.toJSDate().toISOString();
   }
 
   async function downloadResidentCars() {
-    if (!permitReq.residentID) {
+    if (!residentID) {
       return;
     }
     const residentRes = await new Request(residentDecoder)
       .setAccessToken(await getLatestToken())
-      .get(`api/resident/${permitReq.residentID}`);
+      .get(`api/resident/${residentID}`);
     if (!isOk(residentRes)) {
       updateBanner(true, residentRes.message);
       return;
@@ -78,12 +65,6 @@
     clearBanner();
     residentCars = carRes.data.records;
   }
-
-  function setCarID(event: Event) {
-    const el = event.target as HTMLSelectElement;
-    if (el.value === "newCar") {
-    }
-  }
 </script>
 
 <form
@@ -95,8 +76,9 @@
   <input
     required
     class="border rounded p-2"
+    name="residentID"
     placeholder="Enter Resident ID"
-    bind:value={permitReq.residentID}
+    bind:value={residentID}
     readonly={user.role == "resident"}
     on:blur={downloadResidentCars}
   />
@@ -108,14 +90,10 @@
     <option value="newCar">Add a new car</option>
   </select>
   {#if carSelection === "newCar"}
-    <input
-      class="border rounded p-2"
-      placeholder="Enter License Plate"
-      bind:value={permitReq.licensePlate}
-    />
-    <input class="border rounded p-2" placeholder="Enter Color" bind:value={permitReq.color} />
-    <input class="border rounded p-2" placeholder="Enter Make" bind:value={permitReq.make} />
-    <input class="border rounded p-2" placeholder="Enter Model" bind:value={permitReq.model} />
+    <input class="border rounded p-2" name="licensePlate" placeholder="Enter License Plate" />
+    <input class="border rounded p-2" name="color" placeholder="Enter Color" />
+    <input class="border rounded p-2" name="make" placeholder="Enter Make" />
+    <input class="border rounded p-2" name="model" placeholder="Enter Model" />
   {/if}
   <Litepicker startDate={startOfToday} endDate={endOfTomorrow} on:selected={updateDates} />
   {#if user.role === "admin"}
@@ -126,8 +104,8 @@
     {#if isException}
       <textarea
         class="border rounded p-2 resize-none"
+        name="exceptionReason"
         placeholder="Reason for exception"
-        bind:value={permitReq.exceptionReason}
       />
     {/if}
   {/if}
