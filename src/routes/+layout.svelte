@@ -8,12 +8,10 @@
   export let data: PageData;
 </script>
 
-<div>
-  <Sidebar />
+<Sidebar />
 
-  <Nav on:openSidebar={() => openSidebar()} session={data.session} />
+<Nav on:openSidebar={() => openSidebar()} session={data.session} />
 
-  <main class="px-4 md:px-10">
-    <slot />
-  </main>
-</div>
+<main class="px-4 md:px-10">
+  <slot />
+</main>
