@@ -1,13 +1,28 @@
-<script lang="ts">
-  // model
-  export let banner = { isError: false, msg: "" };
-
-  // styles
-  $: colors = banner.isError ? "bg-rose-200 border-rose-500" : "bg-green-200 border-green-500";
+<script lang="ts" context="module">
+  export let updateBanner = (_: boolean, __: string) => {};
+  export let clearBanner = () => {};
 </script>
 
-{#if banner.msg != ""}
+<script lang="ts">
+  // model
+  export let isError = false;
+  export let message = "";
+
+  // api
+  updateBanner = (b: boolean, s: string) => {
+    isError = b;
+    message = s;
+  };
+  clearBanner = () => {
+    message = "";
+  };
+
+  // styles
+  $: colors = isError ? "bg-rose-200 border-rose-500" : "bg-green-200 border-green-500";
+</script>
+
+{#if message != ""}
   <div class="min-w-full {colors} rounded-md border p-2">
-    <p class="text-sm">{banner.msg}</p>
+    <p class="text-sm">{message}</p>
   </div>
 {/if}
