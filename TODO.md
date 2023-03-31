@@ -13,6 +13,8 @@
 - [x] see active and all parking permits
 - [x] create visitors
 - [x] delete visitor
+- [ ] change UI so that permit requests require a pre-existing car
+- [ ] add check to make sure that contractors can't visit forever to sveltekit side
 ## Minor Missing From Spec
 - [x] nav bar at top of admin page
 - [x] style logout button in navbar to be side-by-side with Go Back To Dashboard
@@ -59,23 +61,24 @@
 - [x] (NOT NECESSARY) make error messages more abstracted and user friendly in login page
 - [x] (DEPLOY) make `credentials=true` in fetch options, only work in dev if it's not necessary in prod. (it is necessary in prod)
 - [✗] (HARD) logout when token expires
+- [x] move getLatestToken outside of auth/store module
+- [x] stop resident/[id] and resident/dashboard from being overlapping
+- [x] make counts update when permits are deleted. also when permits are searched
+- [✗] (NOT IMPORTANT) find a way to only define list styles once. (wont do bc using tw now)
+- [✗] (NOT IMPORTANT) test how different the user experience is without client side rendering (wont do bc i'm already not using csr)
+- [✗] make args to api funcs: put, post, get...an object (wont do bc the API of calling api funcs has already been re-factored to be much better)
+- [x] deprecate resident days page
+- [ ] making a delete operation a modal
 - [ ] every form-submit with `submitWithToken()` refreshes the access token. this is because `submitWithToken` calls `invalidateAll()` which makes the `+layout.server.ts` re-run. this re-fresh is often unnecessary as the `getLatestToken()` function already re-freshes the access token as needed. this unnecessary re-fresh is bad for performance as it triggers a backend api call. find a way to prevent it from happening.
-- [ ] make args to api funcs: put, post, get...an object
 - [ ] return cookies from api, that way we can forward refresh cookie from login.server.ts
 - [ ] remove newRefresh and newAccess once they won't be used once api returns cookies
-- [ ] move getLatestToken outside of auth/store module
 - [ ] (DEPLOY) re-direct all `www.parkspotapp.com` requests to `parkspotapp.com`, that way, you only have to have one domain
 - [ ] define litepicker once
-- [ ] deprecate resident days page
 - [ ] make color be a dropdown
-- [ ] stop resident/[id] and resident/dashboard from being overlapping
 - [ ] fix status codes of invalids to be NOT 400s sometimes
-- [ ] make counts update when permits are deleted. also when permits are searched
 - [ ] probably remove ability for residents to re-print all of their permits
 - [ ] don't let people go to ?page=43 where 43 > total amount of pages
 - [ ] make page amounts re-fresh when items are deleted from list
-- [ ] (NOT IMPORTANT) find a way to only define list styles once
-- [ ] (NOT IMPORTANT) test how different the user experience is without client side rendering
 ## Probably not going to do
 - [✗] is it insecure to have a variable boolean flag in frontend code that sets whether a token should be refreshed? a hacker might be in the reset-password page, go into the code, and change that flag from false to true. this would allow them to visit that page on an expired token and the form submission to work anyway because the token would be refreshed. if so, figure out a way to change this. i don't think it's insecure
 - [✗] add banner to parent component of nav when logout error happens
