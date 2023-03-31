@@ -5,7 +5,10 @@
   let isExpanded = false;
 </script>
 
-<div class="bg-white flex flex-col gap-2 rounded shadow-md px-2 lg:px-8 py-3">
+<div
+  class="bg-white flex flex-col gap-2 rounded shadow-md px-2 lg:px-8 py-3"
+  transition:slide|local
+>
   <div
     class="flex flex-row justify-between"
     on:click={() => (isExpanded = !isExpanded)}
