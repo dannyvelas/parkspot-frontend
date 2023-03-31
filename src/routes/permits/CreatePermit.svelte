@@ -105,9 +105,14 @@
     <option value="newCar">Add a new car</option>
   </select>
   {#if carSelection === "newCar"}
-    <input class="border rounded p-2" placeholder="Enter new color" bind:value={permitReq.color} />
-    <input class="border rounded p-2" placeholder="Enter new make" bind:value={permitReq.make} />
-    <input class="border rounded p-2" placeholder="Enter new model" bind:value={permitReq.model} />
+    <input
+      class="border rounded p-2"
+      placeholder="Enter License Plate"
+      bind:value={permitReq.licensePlate}
+    />
+    <input class="border rounded p-2" placeholder="Enter Color" bind:value={permitReq.color} />
+    <input class="border rounded p-2" placeholder="Enter Make" bind:value={permitReq.make} />
+    <input class="border rounded p-2" placeholder="Enter Model" bind:value={permitReq.model} />
   {/if}
   <Litepicker startDate={startOfToday} endDate={endOfTomorrow} on:selected={updateDates} />
   {#if user.role === "admin"}
