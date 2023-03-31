@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { createEventDispatcher } from "svelte";
 
   // config
@@ -9,7 +9,7 @@
   export let startDate: Date;
   export let endDate: Date;
 
-  // init
+  // lifecycle
   onMount(async () => {
     const { Litepicker } = await import("litepicker");
     const litepicker = new Litepicker({
@@ -25,6 +25,13 @@
     litepicker.on("selected", (date1, date2) => {
       dispatch("selected", { date1, date2 });
     });
+  });
+
+  onDestroy(() => {
+    const lpElements = document.getElementsByClassName("litepicker");
+    for (let i = 0; i < lpElements.length; i++) {
+      lpElements[i].remove();
+    }
   });
 </script>
 
