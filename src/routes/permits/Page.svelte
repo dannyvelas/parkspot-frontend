@@ -24,21 +24,25 @@
   let editPermit: Permit | undefined;
   let deletePermit: Permit | undefined;
 
-  // events
+  // modal open events
+  const openCreateModal = () => {
+    getModal("create")?.open();
+  };
   const openEditModal = (event: CustomEvent<Permit>) => {
     editPermit = event.detail;
     getModal("edit")?.open();
   };
-
-  const openCreateModal = () => {
-    getModal("create")?.open();
-  };
-
   const openDeleteModal = (event: CustomEvent<Permit>) => {
     deletePermit = event.detail;
     getModal("delete")?.open();
   };
 
+  // modal dispatch events
+  const addPermit = (event: CustomEvent<Permit>) => {
+    permits.data!.records = [event.detail, ...permits.data!.records];
+    permits.data!.metadata.totalAmount = permits.data!.metadata.totalAmount + 1;
+    getModal("create")?.close();
+  };
   const updatePermit = (event: CustomEvent<Permit>) => {
     permits.data!.records = permits.data!.records.map((currPermit) => {
       if (currPermit.id === event.detail.id) {
@@ -47,7 +51,6 @@
       return currPermit;
     });
   };
-
   const removePermit = (event: CustomEvent<Permit>) => {
     permits.data!.records = permits.data!.records.filter((p) => p.id != event.detail.id);
     getModal("delete")?.close();
@@ -63,7 +66,7 @@
   {permits.message}
 {:else if isOk(permits)}
   <Modal id="create">
-    <CreatePermit user={session.user} />
+    <CreatePermit user={session.user} on:permitCreated={addPermit} />
   </Modal>
   <Modal id="edit">
     {#if editPermit}

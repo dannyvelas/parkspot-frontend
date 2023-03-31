@@ -46,7 +46,7 @@
     }
 
     clearBanner();
-    dispatch("createdPermit", result.data);
+    dispatch("permitCreated", result.data);
   }
 
   function updateDates(event: CustomEvent<{ date1: any; date2: any }>) {
