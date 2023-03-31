@@ -4,7 +4,7 @@
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
   import { createEventDispatcher } from "svelte";
-  import Banner from "$lib/components/Banner.svelte";
+  import Banner, { updateBanner } from "$lib/components/Banner.svelte";
 
   // config
   const dispatch = createEventDispatcher();
@@ -12,16 +12,13 @@
   // props
   export let permit: Permit;
 
-  // model
-  let bannerCfg = { isError: false, msg: "" };
-
   // events
   async function handleSubmit() {
     const delRes = await new Request()
       .setAccessToken(await getLatestToken())
       .delete(`api/permit/${permit.id}`);
     if (!isOk(delRes)) {
-      bannerCfg = { isError: true, msg: delRes.message };
+      updateBanner(true, delRes.message);
       return;
     }
 
@@ -33,7 +30,7 @@
   class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
   on:submit|preventDefault={handleSubmit}
 >
-  <Banner banner={bannerCfg} />
+  <Banner />
   <p class="text-center">Delete the following permit?</p>
   <table>
     <tr>

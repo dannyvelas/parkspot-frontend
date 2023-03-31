@@ -6,7 +6,7 @@
   import { permitDecoder, listWithMetadataDecoder, carDecoder, residentDecoder } from "$lib/models";
   import { getStartOfToday, getEndOfTomorrow } from "$lib/time";
   import { createEventDispatcher } from "svelte";
-  import Banner from "$lib/components/Banner.svelte";
+  import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
   import Litepicker from "$lib/components/Litepicker.svelte";
 
   // config
@@ -16,7 +16,6 @@
   export let user: User;
 
   // model
-  let bannerCfg = { isError: false, msg: "" };
   let carSelection = "";
   let residentCars: Car[] = [];
   let isException = false;
@@ -41,7 +40,7 @@
       .setAccessToken(await getLatestToken())
       .post("api/permit", permitReq);
     if (!isOk(result)) {
-      bannerCfg = { isError: true, msg: result.message };
+      updateBanner(true, result.message);
       return;
     }
 
@@ -61,7 +60,7 @@
       .setAccessToken(await getLatestToken())
       .get(`api/resident/${permitReq.residentID}`);
     if (!isOk(residentRes)) {
-      bannerCfg = { isError: true, msg: residentRes.message };
+      updateBanner(true, residentRes.message);
       return;
     }
 
@@ -69,11 +68,11 @@
       .setAccessToken(await getLatestToken())
       .get(`api/resident/${residentRes.data.id}/cars`);
     if (!isOk(carRes)) {
-      bannerCfg = { isError: true, msg: carRes.message };
+      updateBanner(true, carRes.message);
       return;
     }
 
-    bannerCfg.msg = "";
+    clearBanner();
     residentCars = carRes.data.records;
   }
 
@@ -88,7 +87,7 @@
   class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
   on:submit|preventDefault={handleSubmit}
 >
-  <Banner banner={bannerCfg} />
+  <Banner />
   <p class="text-center font-bold text-lg">Create Permit</p>
   <input
     required
