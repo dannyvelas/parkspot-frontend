@@ -3,13 +3,14 @@
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
-  import { listWithMetadataDecoder, carDecoder, residentDecoder } from "$lib/models";
+  import { listWithMetadataDecoder, carDecoder, residentDecoder, permitDecoder } from "$lib/models";
   import { getStartOfToday, getEndOfTomorrow } from "$lib/time";
-  import { submitWithToken } from "$lib/form";
+  import { createEventDispatcher } from "svelte";
   import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
   import Litepicker from "$lib/components/Litepicker.svelte";
 
   // config
+  const dispatch = createEventDispatcher();
   const startOfToday = getStartOfToday();
   const endOfTomorrow = getEndOfTomorrow();
 
@@ -35,7 +36,17 @@
     formData.set("startDate", startDate);
     formData.set("endDate", endDate);
 
-    submitWithToken(this, { formData });
+    const formObject = Object.fromEntries(formData.entries());
+    const result = await new Request(permitDecoder)
+      .setAccessToken(await getLatestToken())
+      .post("api/permit", formObject);
+    if (!isOk(result)) {
+      updateBanner(true, result.message);
+      return;
+    }
+
+    clearBanner();
+    dispatch("createdPermit", result.data);
   }
 
   function updateDates(event: CustomEvent<{ date1: any; date2: any }>) {
