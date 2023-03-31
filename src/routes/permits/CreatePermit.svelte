@@ -56,6 +56,9 @@
   }
 
   async function downloadResidentCars() {
+    if (!permitReq.residentID) {
+      return;
+    }
     const residentRes = await new Request(residentDecoder)
       .setAccessToken(await getLatestToken())
       .get(`api/resident/${permitReq.residentID}`);
