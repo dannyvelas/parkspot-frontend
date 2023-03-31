@@ -35,4 +35,4 @@
   });
 </script>
 
-<input class="border rounded p-2 text-center" required type="text" name="dates" id="litepicker" />
+<input readonly id="litepicker" class="border rounded p-2 text-center" />
