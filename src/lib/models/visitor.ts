@@ -19,10 +19,3 @@ export const visitorDecoder: decoders.Decoder<Visitor> = decoders.object({
   accessStart: decoders.iso8601,
   accessEnd: decoders.iso8601,
 });
-
-export const preview = (visitor: Visitor) => {
-  return `
-    ${visitor.residentID}
-    ${visitor.firstName}
-    ${visitor.lastName}`;
-};

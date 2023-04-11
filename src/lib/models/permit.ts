@@ -29,21 +29,3 @@ export const permitDecoder: decoders.Decoder<Permit> = decoders.object({
   affectsDays: decoders.boolean,
   exceptionReason: decoders.maybe(decoders.string),
 });
-
-export const preview = (permit: Permit) => {
-  return `
-    ${permit.id}
-    ${permit.residentID}
-    ${permit.licensePlate}
-    ${permit.color}
-    ${permit.make}
-    ${permit.model}`;
-};
-
-export type NewPermitReq = {
-  residentID: string;
-  carID: string;
-  startDate: string;
-  endDate: string;
-  exceptionReason: string;
-};
