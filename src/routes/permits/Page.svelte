@@ -45,7 +45,9 @@
   };
   const updatePermit = (event: CustomEvent<Permit>) => {
     const index = permits.data!.records.findIndex((p) => p.id === event.detail.id);
-    permits.data!.records[index] = event.detail;
+    if (index > 0) {
+      permits.data!.records[index] = event.detail;
+    }
   };
   const removePermit = (event: CustomEvent<Permit>) => {
     permits.data!.records = permits.data!.records.filter((p) => p.id != event.detail.id);
