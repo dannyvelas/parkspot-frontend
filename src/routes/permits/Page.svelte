@@ -51,6 +51,7 @@
   };
   const removePermit = (event: CustomEvent<Permit>) => {
     permits.data!.records = permits.data!.records.filter((p) => p.id != event.detail.id);
+    permits.data!.metadata.totalAmount = permits.data!.metadata.totalAmount - 1;
     getModal("delete")?.close();
   };
 </script>
