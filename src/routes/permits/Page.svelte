@@ -8,7 +8,7 @@
   import Search from "$lib/components/Search.svelte";
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
-  import Modal, { getModal } from "$lib/components/Modal.svelte";
+  import ListModals, { openCreate, openEdit, openDelete } from "$lib/components/ListModals.svelte";
   import CreatePermit from "./CreatePermit.svelte";
   import EditPermit from "./EditPermit.svelte";
   import DeletePermit from "./DeletePermit.svelte";
@@ -20,40 +20,9 @@
   export let search: string;
   export let pageNum: number;
 
-  // model
-  let editPermit: Permit | undefined;
-  let deletePermit: Permit | undefined;
-
-  // modal open events
-  const openCreateModal = () => {
-    getModal("create")?.open();
-  };
-  const openEditModal = (event: CustomEvent<Permit>) => {
-    editPermit = event.detail;
-    getModal("edit")?.open();
-  };
-  const openDeleteModal = (event: CustomEvent<Permit>) => {
-    deletePermit = event.detail;
-    getModal("delete")?.open();
-  };
-
-  // modal dispatch events
-  const addPermit = (event: CustomEvent<Permit>) => {
-    permits.data!.records = [event.detail, ...permits.data!.records];
-    permits.data!.metadata.totalAmount = permits.data!.metadata.totalAmount + 1;
-    getModal("create")?.close();
-  };
-  const updatePermit = (event: CustomEvent<Permit>) => {
-    const index = permits.data!.records.findIndex((p) => p.id === event.detail.id);
-    if (index > 0) {
-      permits.data!.records[index] = event.detail;
-    }
-  };
-  const removePermit = (event: CustomEvent<Permit>) => {
-    permits.data!.records = permits.data!.records.filter((p) => p.id != event.detail.id);
-    permits.data!.metadata.totalAmount = permits.data!.metadata.totalAmount - 1;
-    getModal("delete")?.close();
-  };
+  function refreshList() {
+    permits.data = permits.data;
+  }
 </script>
 
 <header class="mb-4">
@@ -64,22 +33,17 @@
 {#if !isOk(permits)}
   {permits.message}
 {:else if isOk(permits)}
-  <Modal id="create">
-    <CreatePermit user={session.user} on:permitCreated={addPermit} />
-  </Modal>
-  <Modal id="edit">
-    {#if editPermit}
-      <EditPermit permit={editPermit} on:permitUpdated={updatePermit} />
-    {/if}
-  </Modal>
-  <Modal id="delete">
-    {#if deletePermit}
-      <DeletePermit permit={deletePermit} on:permitDeleted={removePermit} />
-    {/if}
-  </Modal>
+  <ListModals
+    list={permits.data}
+    user={session.user}
+    createModal={CreatePermit}
+    editModal={EditPermit}
+    deleteModal={DeletePermit}
+    on:modalUpdate={refreshList}
+  />
   <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
     <Search {search} />
-    <CreateBtn on:click={openCreateModal} />
+    <CreateBtn on:click={openCreate} />
   </div>
   <Table totalAmount={permits.data.metadata.totalAmount} {search} {pageNum}>
     <svelte:fragment slot="header-cells">
@@ -95,8 +59,8 @@
         <Row
           {permit}
           userRole={session.user.role}
-          on:clickDelete={openDeleteModal}
-          on:clickEdit={openEditModal}
+          on:clickDelete={openDelete}
+          on:clickEdit={openEdit}
         />
       {/each}
     </svelte:fragment>

@@ -10,19 +10,19 @@
   const dispatch = createEventDispatcher();
 
   // props
-  export let permit: Permit;
+  export let item: Permit;
 
   // events
   async function handleSubmit() {
     const delRes = await new Request()
       .setAccessToken(await getLatestToken())
-      .delete(`api/permit/${permit.id}`);
+      .delete(`api/permit/${item.id}`);
     if (!isOk(delRes)) {
       updateBanner(true, delRes.message);
       return;
     }
 
-    dispatch("permitDeleted", permit);
+    dispatch("deleted", item);
   }
 </script>
 
@@ -34,22 +34,22 @@
   <p class="text-center">Delete the following permit?</p>
   <table>
     <tr>
-      <td class="font-bold">ID</td><td>{permit.id}</td>
+      <td class="font-bold">ID</td><td>{item.id}</td>
     </tr>
     <tr>
-      <td class="font-bold">Resident ID</td><td>{permit.residentID}</td>
+      <td class="font-bold">Resident ID</td><td>{item.residentID}</td>
     </tr>
     <tr>
-      <td class="font-bold">License Plate</td><td>{permit.licensePlate}</td>
+      <td class="font-bold">License Plate</td><td>{item.licensePlate}</td>
     </tr>
     <tr>
-      <td class="font-bold">Color</td><td>{permit.color}</td>
+      <td class="font-bold">Color</td><td>{item.color}</td>
     </tr>
     <tr>
-      <td class="font-bold">Make</td><td>{permit.make}</td>
+      <td class="font-bold">Make</td><td>{item.make}</td>
     </tr>
     <tr>
-      <td class="font-bold">Model</td><td>{permit.model}</td>
+      <td class="font-bold">Model</td><td>{item.model}</td>
     </tr>
   </table>
   <button type="submit" class="bg-rose-400 text-white text-center border rounded px-4 py-1">
