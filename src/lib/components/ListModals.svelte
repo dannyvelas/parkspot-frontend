@@ -49,6 +49,7 @@
     dispatch("modalUpdate");
   };
   const updateItem = () => {
+    // no need to update item; it should have already been updated by ref in editModal comp
     dispatch("modalUpdate");
   };
   const removeItem = (event: CustomEvent<Item>) => {

@@ -21,6 +21,7 @@
   export let pageNum: number;
 
   function refreshList() {
+    // ListModals updates permits.data by ref; here we ask svelte to render such changes
     permits.data = permits.data;
   }
 </script>
