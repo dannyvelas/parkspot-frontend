@@ -19,11 +19,3 @@ export const residentDecoder: decoders.Decoder<Resident> = decoders.object({
   unlimDays: decoders.boolean,
   amtParkingDaysUsed: decoders.number,
 });
-
-export const preview = (resident: Resident) => {
-  return `
-    ${resident.id}
-    ${resident.firstName}
-    ${resident.lastName}
-  `;
-};
