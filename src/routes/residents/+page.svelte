@@ -1,34 +1,22 @@
 <script lang="ts">
   import type { PageData } from "./$types";
-  import type { Resident } from "$lib/models";
-  import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
-  import Row from "./Row.svelte";
+  import Row from "./components/Row.svelte";
+  import Search from "$lib/components/Search.svelte";
+  import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
+  import ListModals, { openCreate, openEdit, openDelete } from "$lib/components/ListModals.svelte";
+  import CreateResident from "./components/CreateResident.svelte";
+  import EditResident from "./components/EditResident.svelte";
+  import DeleteResident from "./components/DeleteResident.svelte";
 
   // props
   export let data: PageData;
 
-  // events
-  const deleteResident = async (event: CustomEvent<Resident>) => {
-    if (confirm(`Are you sure you want to delete ${event.detail.id}?`)) {
-      const delRes = await new Request()
-        .setAccessToken(await getLatestToken())
-        .delete(`api/resident/${event.detail.id}`);
-      if (!isOk(delRes)) {
-        alert(`Error deleting resident ${event.detail.id}. Please try again later`);
-        return;
-      }
-
-      data.residents.data!.records = data.residents.data!.records.filter(
-        (r) => r.id != event.detail.id
-      );
-      data.residents.data!.metadata.totalAmount = data.residents.data!.metadata.totalAmount - 1;
-
-      alert(`Deleted resident ${event.detail.id}`);
-    }
-  };
+  function refreshList() {
+    // ListModals updates permits.data by ref; here we ask svelte to render such changes
+    data.residents.data = data.residents.data;
+  }
 </script>
 
 <svelte:head>
@@ -43,6 +31,18 @@
 {#if !isOk(data.residents)}
   {data.residents.message}
 {:else}
+  <ListModals
+    list={data.residents.data}
+    user={data.session.user}
+    createModal={CreateResident}
+    editModal={EditResident}
+    deleteModal={DeleteResident}
+    on:modalUpdate={refreshList}
+  />
+  <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
+    <Search search={data.search} />
+    <CreateBtn on:click={openCreate} />
+  </div>
   <Table
     totalAmount={data.residents.data.metadata.totalAmount}
     search={data.search}
@@ -57,7 +57,7 @@
     </svelte:fragment>
     <svelte:fragment slot="rows">
       {#each data.residents.data.records as resident}
-        <Row {resident} on:clickDelete={deleteResident} />
+        <Row {resident} on:clickDelete={openDelete} on:clickEdit={openEdit} />
       {/each}
     </svelte:fragment>
   </Table>
