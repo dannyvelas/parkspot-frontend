@@ -26,6 +26,7 @@
   };
 </script>
 
+<!-- ref: https://flowbite.com/docs/forms/search-input/-->
 <form class="grow" on:submit={handleSearch}>
   <label class="relative block flex">
     <iconify-icon
