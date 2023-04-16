@@ -114,7 +114,7 @@
   {#if user.role === "admin"}
     <div class="text-center">
       <label for="isException">Exception: </label>
-      <input type="checkbox" bind:checked={isException} />
+      <input id="isException" type="checkbox" bind:checked={isException} />
     </div>
     {#if isException}
       <textarea
