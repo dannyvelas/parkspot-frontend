@@ -22,7 +22,7 @@
   export let user: User;
   export let list: ListWithMetadata<Item>;
   export let createModal: ComponentType<
-    SvelteComponentTyped<{ user: User }, { created: CustomEvent<Item> }>
+    SvelteComponentTyped<{ user: User } | {}, { created: CustomEvent<Item> }>
   >;
   export let editModal: ComponentType<SvelteComponentTyped<{ item: T }, { updated: CustomEvent }>>;
   export let deleteModal: ComponentType<
