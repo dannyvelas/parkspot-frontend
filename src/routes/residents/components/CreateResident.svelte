@@ -33,7 +33,7 @@
 >
   <Banner />
   <p class="text-center font-bold text-lg">Create Resident</p>
-  <input required class="border rounded p-2" name="residentID" placeholder="Enter Resident ID" />
+  <input required class="border rounded p-2" name="id" placeholder="Enter Resident ID" />
   <input required class="border rounded p-2" name="firstName" placeholder="Enter First Name" />
   <input required class="border rounded p-2" name="lastName" placeholder="Enter Last Name" />
   <input required class="border rounded p-2" name="phone" placeholder="Enter Phone" />
