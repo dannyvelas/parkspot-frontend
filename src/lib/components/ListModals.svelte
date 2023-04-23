@@ -21,9 +21,7 @@
   type T = $$Generic;
   export let user: User;
   export let list: ListWithMetadata<Item>;
-  export let createModal: ComponentType<
-    SvelteComponentTyped<{ user: User } | {}, { created: CustomEvent<Item> }>
-  >;
+  export let createModal: ComponentType<SvelteComponentTyped<any, { created: CustomEvent<Item> }>>;
   export let editModal: ComponentType<SvelteComponentTyped<{ item: T }, { updated: CustomEvent }>>;
   export let deleteModal: ComponentType<
     SvelteComponentTyped<{ item: T }, { deleted: CustomEvent<Item> }>
