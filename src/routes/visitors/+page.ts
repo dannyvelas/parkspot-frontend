@@ -2,13 +2,14 @@ import type { PageLoad } from "./$types";
 import { MAX_AMT_PER_PAGE } from "$lib/constants";
 import { Request } from "$lib/api";
 import { listWithMetadataDecoder, visitorDecoder } from "$lib/models";
-import { onlyRole, getLatestToken } from "$lib/auth";
+import { getLatestToken } from "$lib/auth";
 import { browser } from "$app/environment";
+import { redirect } from "@sveltejs/kit";
 
 export const load: PageLoad = async (loadInput) => {
   const parentData = await loadInput.parent();
-  const session = onlyRole("admin", parentData.session);
-  const accessToken = !browser ? session.accessToken : await getLatestToken();
+  if (!parentData.session) throw redirect(307, "/login");
+  const accessToken = !browser ? parentData.session.accessToken : await getLatestToken();
   const page = Number(loadInput.url.searchParams.get("page")) || 1;
   const search = loadInput.url.searchParams.get("search") || "";
 
@@ -18,5 +19,5 @@ export const load: PageLoad = async (loadInput) => {
     .setFetchFn(loadInput.fetch)
     .get("api/visitors");
 
-  return { session, visitors, search, pageNum: page };
+  return { session: parentData.session, visitors, search, pageNum: page };
 };
