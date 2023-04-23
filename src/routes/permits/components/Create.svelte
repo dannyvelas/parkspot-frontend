@@ -4,15 +4,12 @@
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
   import { listWithMetadataDecoder, carDecoder, residentDecoder, permitDecoder } from "$lib/models";
-  import { getStartOfToday, getEndOfTomorrow } from "$lib/time";
   import { createEventDispatcher } from "svelte";
   import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
-  import Litepicker from "$lib/components/Litepicker.svelte";
+  import Litepicker, { getStartDate, getEndDate } from "$lib/components/Litepicker.svelte";
 
   // config
   const dispatch = createEventDispatcher();
-  const startOfToday = getStartOfToday();
-  const endOfTomorrow = getEndOfTomorrow();
 
   // props
   export let user: User;
@@ -24,8 +21,6 @@
 
   // form fields
   let residentID = user.role === "resident" ? user.id : "";
-  let startDate = startOfToday.toISOString();
-  let endDate = endOfTomorrow.toISOString();
 
   // events
   async function handleSubmit() {
@@ -33,8 +28,8 @@
     if (carSelection !== "newCar") {
       formData.set("carID", carSelection);
     }
-    formData.set("startDate", startDate);
-    formData.set("endDate", endDate);
+    formData.set("startDate", getStartDate().toISOString());
+    formData.set("endDate", getEndDate().toISOString());
 
     const formObject = Object.fromEntries(formData.entries());
     const result = await new Request(permitDecoder)
@@ -47,14 +42,6 @@
 
     clearBanner();
     dispatch("created", result.data);
-  }
-
-  function updateDates(event: CustomEvent<{ date1: any; date2: any }>) {
-    startDate = event.detail.date1.toJSDate().toISOString();
-
-    // make permit valid for the entirety of date2
-    event.detail.date2.setHours(23, 59, 59);
-    endDate = event.detail.date2.toJSDate().toISOString();
   }
 
   async function downloadResidentCars() {
@@ -110,7 +97,7 @@
     <input class="border rounded p-2" name="make" placeholder="Enter Make" />
     <input class="border rounded p-2" name="model" placeholder="Enter Model" />
   {/if}
-  <Litepicker startDate={startOfToday} endDate={endOfTomorrow} on:selected={updateDates} />
+  <Litepicker />
   {#if user.role === "admin"}
     <div class="text-center">
       <label for="isException">Exception: </label>

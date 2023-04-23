@@ -1,13 +1,19 @@
+<script lang="ts" context="module">
+  export let getStartDate = (): Date => new Date();
+  export let getEndDate = (): Date => new Date();
+</script>
+
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-  import { createEventDispatcher } from "svelte";
-
-  // config
-  const dispatch = createEventDispatcher();
+  import { getStartOfToday, getEndOfTomorrow } from "$lib/time";
 
   // props
-  export let startDate: Date;
-  export let endDate: Date;
+  let startDate = getStartOfToday();
+  let endDate = getEndOfTomorrow();
+
+  // API
+  getStartDate = () => startDate;
+  getEndDate = () => endDate;
 
   // lifecycle
   onMount(async () => {
@@ -23,7 +29,10 @@
     litepicker.setEndDate(endDate);
 
     litepicker.on("selected", (date1, date2) => {
-      dispatch("selected", { date1, date2 });
+      startDate = date1.toJSDate();
+
+      date2.setHours(23, 59, 59); // for entirety of date2
+      endDate = date2.toJSDate();
     });
   });
 
