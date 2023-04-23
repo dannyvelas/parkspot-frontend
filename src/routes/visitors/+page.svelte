@@ -41,7 +41,9 @@
   />
   <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
     <Search search={data.search} />
-    <CreateBtn on:click={openCreate} />
+    {#if data.session.user.role === "resident"}
+      <CreateBtn on:click={openCreate} />
+    {/if}
   </div>
   <Table
     totalAmount={data.visitors.data.metadata.totalAmount}
@@ -50,10 +52,9 @@
   >
     <svelte:fragment slot="header-cells">
       <div class="text-xs basis-3" />
-      <div class="text-xs basis-20">ID</div>
       <div class="text-xs basis-32">Name</div>
-      <div class="text-xs hidden lg:inline lg:basis-24">Unlimited Days?</div>
-      <div class="text-xs basis-8">Days</div>
+      <div class="text-xs basis-20">Resident ID</div>
+      <div class="text-xs hidden md:inline md:basis-20">Relation</div>
     </svelte:fragment>
     <svelte:fragment slot="rows">
       {#each data.visitors.data.records as visitor}
