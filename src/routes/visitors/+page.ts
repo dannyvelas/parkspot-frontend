@@ -1,23 +1,22 @@
 import type { PageLoad } from "./$types";
-import { redirect } from "@sveltejs/kit";
-import { visitorDecoder } from "$lib/models";
-import { loadList } from "$lib/load";
+import { MAX_AMT_PER_PAGE } from "$lib/constants";
+import { Request } from "$lib/api";
+import { listWithMetadataDecoder, visitorDecoder } from "$lib/models";
+import { onlyRole, getLatestToken } from "$lib/auth";
+import { browser } from "$app/environment";
 
 export const load: PageLoad = async (loadInput) => {
   const parentData = await loadInput.parent();
-  if (!parentData.session) throw redirect(307, "/login");
+  const session = onlyRole("admin", parentData.session);
+  const accessToken = !browser ? session.accessToken : await getLatestToken();
   const page = Number(loadInput.url.searchParams.get("page")) || 1;
+  const search = loadInput.url.searchParams.get("search") || "";
 
-  const result = await loadList({
-    endpoint: "api/visitors",
-    decoder: visitorDecoder,
-    reversed: false,
-    page,
-    accessToken: parentData.session.accessToken,
-  });
+  const visitors = await new Request(listWithMetadataDecoder(visitorDecoder))
+    .addParams({ page: String(page), search, limit: String(MAX_AMT_PER_PAGE) })
+    .setAccessToken(accessToken)
+    .setFetchFn(loadInput.fetch)
+    .get("api/visitors");
 
-  return {
-    result,
-    session: parentData.session,
-  };
+  return { session, visitors, search, pageNum: page };
 };

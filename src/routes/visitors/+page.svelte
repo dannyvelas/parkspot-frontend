@@ -1,90 +1,64 @@
 <script lang="ts">
-  import type { Visitor } from "$lib/models";
   import type { PageData } from "./$types";
-  import type { Result } from "$lib/functional";
-  import { visitorDecoder, previewVisitor } from "$lib/models";
   import { isOk } from "$lib/functional";
-  import { afterNavigate } from "$app/navigation";
-  import List from "./List.svelte";
+  import Row from "./components/Row.svelte";
   import Search from "$lib/components/Search.svelte";
-  import Pagination from "$lib/components/Pagination.svelte";
-  import { page } from "$app/stores";
-
-  // config
-  const currPageNum = Number($page.url.searchParams.get("page")) || 1;
+  import CreateBtn from "$lib/components/CreateBtn.svelte";
+  import Table from "$lib/components/Table.svelte";
+  import ListModals, { openCreate, openEdit, openDelete } from "$lib/components/ListModals.svelte";
+  import Create from "./components/Create.svelte";
+  import Edit from "./components/Edit.svelte";
+  import Delete from "./components/Delete.svelte";
 
   // props
   export let data: PageData;
-  $: result = data.result;
-  $: session = data.session;
 
-  // model
-  let initialVisitors: Array<Visitor>;
-  let bannerError = "";
-
-  // init
-  afterNavigate(() => {
-    initialVisitors = (result.data && result.data.records) || [];
-  });
-
-  // events
-  const handleSearch = async (event: CustomEvent<Result<Visitor[]>>) => {
-    if (!isOk(event.detail)) {
-      result.data!.records = initialVisitors;
-      bannerError = `Error searching: ${event.detail.message}`;
-      return;
-    }
-
-    result.data!.records = event.detail.data;
-    bannerError = "";
-  };
+  function refreshList() {
+    // ListModals updates permits.data by ref; here we ask svelte to render such changes
+    data.visitors.data = data.visitors.data;
+  }
 </script>
 
 <svelte:head>
-  <title>All Visitors</title>
+  <title>Visitors</title>
 </svelte:head>
 
-<h1>All Visitors</h1>
+<header class="mb-4">
+  <h1 class="text-base">Visitors</h1>
+  <div class="text-xs text-gray-400">{data.visitors.data?.metadata.totalAmount || 0} total</div>
+</header>
 
-{#if !isOk(result)}
-  {result.message}
+{#if !isOk(data.visitors)}
+  {data.visitors.message}
 {:else}
-  <div class="stack-container">
-    {#if bannerError != ""}
-      <div>
-        <p>Error searching: {bannerError}. Please try again later.</p>
-      </div>
-    {/if}
-    <Search
-      initialList={initialVisitors}
-      decoder={visitorDecoder}
-      preview={previewVisitor}
-      totalAmount={result.data.metadata.totalAmount}
-      endpoint={`api/visitors`}
-      on:result={handleSearch}
-    />
-    <List
-      user={session.user}
-      visitors={result.data.records}
-      totalAmount={result.data.metadata.totalAmount}
-    />
-    <Pagination
-      totalAmount={result.data.metadata.totalAmount}
-      pageToHref={(pageNum) => `visitors?page=${pageNum}`}
-      {currPageNum}
-    />
+  <ListModals
+    list={data.visitors.data}
+    user={data.session.user}
+    createModal={Create}
+    editModal={Edit}
+    deleteModal={Delete}
+    on:modalUpdate={refreshList}
+  />
+  <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
+    <Search search={data.search} />
+    <CreateBtn on:click={openCreate} />
   </div>
+  <Table
+    totalAmount={data.visitors.data.metadata.totalAmount}
+    search={data.search}
+    pageNum={data.pageNum}
+  >
+    <svelte:fragment slot="header-cells">
+      <div class="text-xs basis-3" />
+      <div class="text-xs basis-20">ID</div>
+      <div class="text-xs basis-32">Name</div>
+      <div class="text-xs hidden lg:inline lg:basis-24">Unlimited Days?</div>
+      <div class="text-xs basis-8">Days</div>
+    </svelte:fragment>
+    <svelte:fragment slot="rows">
+      {#each data.visitors.data.records as visitor}
+        <Row {visitor} on:clickDelete={openDelete} on:clickEdit={openEdit} />
+      {/each}
+    </svelte:fragment>
+  </Table>
 {/if}
-
-<style>
-  .stack-container {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  h1 {
-    text-align: center;
-  }
-</style>
