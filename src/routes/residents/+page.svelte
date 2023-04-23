@@ -6,9 +6,9 @@
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
   import ListModals, { openCreate, openEdit, openDelete } from "$lib/components/ListModals.svelte";
-  import CreateResident from "./components/CreateResident.svelte";
-  import EditResident from "./components/EditResident.svelte";
-  import DeleteResident from "./components/DeleteResident.svelte";
+  import Create from "./components/Create.svelte";
+  import Edit from "./components/Edit.svelte";
+  import Delete from "./components/Delete.svelte";
 
   // props
   export let data: PageData;
@@ -34,9 +34,9 @@
   <ListModals
     list={data.residents.data}
     user={data.session.user}
-    createModal={CreateResident}
-    editModal={EditResident}
-    deleteModal={DeleteResident}
+    createModal={Create}
+    editModal={Edit}
+    deleteModal={Delete}
     on:modalUpdate={refreshList}
   />
   <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">

@@ -9,9 +9,9 @@
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
   import ListModals, { openCreate, openEdit, openDelete } from "$lib/components/ListModals.svelte";
-  import CreatePermit from "./CreatePermit.svelte";
-  import EditPermit from "./EditPermit.svelte";
-  import DeletePermit from "./DeletePermit.svelte";
+  import Create from "./Create.svelte";
+  import Edit from "./Edit.svelte";
+  import Delete from "./Delete.svelte";
 
   // props
   export let listName: permitList;
@@ -37,9 +37,9 @@
   <ListModals
     list={permits.data}
     user={session.user}
-    createModal={CreatePermit}
-    editModal={EditPermit}
-    deleteModal={DeletePermit}
+    createModal={Create}
+    editModal={Edit}
+    deleteModal={Delete}
     on:modalUpdate={refreshList}
   />
   <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
