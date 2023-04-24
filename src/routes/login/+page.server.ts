@@ -1,28 +1,17 @@
 import type { Actions } from "./$types";
-import * as decoders from "decoders";
 import { sessionDecoder } from "$lib/auth";
 import { newRefresh } from "$lib/server/auth";
-import { validate } from "$lib/form";
 import { fail } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { Request } from "$lib/api";
 import { PUBLIC_ENV } from "$env/static/public";
 
-const formDecoder = decoders.object({
-  id: decoders.string,
-  password: decoders.string,
-});
-
 export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    const formRes = validate(formDecoder, formObject);
-    if (!isOk(formRes)) {
-      return fail(400, { error: formRes.message });
-    }
 
-    const result = await new Request(sessionDecoder).post("api/login", formRes.data);
+    const result = await new Request(sessionDecoder).post("api/login", formObject);
     if (!isOk(result)) {
       let error = "Unhandled error. Please notify the administration or try again later.";
       if (result.message.includes("Unauthorized")) {
