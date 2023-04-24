@@ -8,6 +8,7 @@
   const dispatch = createEventDispatcher();
 
   // props
+  export let userRole: string;
   export let visitor: Visitor;
 
   // model
@@ -37,17 +38,13 @@
     </div>
   </svelte:fragment>
   <div slot="bottom-content" class="flex flex-row justify-around">
-    <button
-      class="basis-20 border border-green-500 rounded-md text-center text-green-500"
-      on:click={() => dispatch("clickEdit", visitor)}
-    >
-      Edit
-    </button>
-    <button
-      class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
-      on:click={() => dispatch("clickDelete", visitor)}
-    >
-      Delete
-    </button>
+    {#if userRole === "resident"}
+      <button
+        class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
+        on:click={() => dispatch("clickDelete", visitor)}
+      >
+        Delete
+      </button>
+    {/if}
   </div>
 </Row>

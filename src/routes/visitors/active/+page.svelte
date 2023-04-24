@@ -5,9 +5,8 @@
   import Search from "$lib/components/Search.svelte";
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
-  import ListModals, { openCreate, openEdit, openDelete } from "$lib/components/ListModals.svelte";
+  import ListModals, { openCreate, openDelete } from "$lib/components/ListModals.svelte";
   import Create from "./components/Create.svelte";
-  import Edit from "./components/Edit.svelte";
   import Delete from "./components/Delete.svelte";
 
   // props
@@ -35,7 +34,7 @@
     list={data.visitors.data}
     user={data.session.user}
     createModal={Create}
-    editModal={Edit}
+    editModal={undefined}
     deleteModal={Delete}
     on:modalUpdate={refreshList}
   />
@@ -58,7 +57,7 @@
     </svelte:fragment>
     <svelte:fragment slot="rows">
       {#each data.visitors.data.records as visitor}
-        <Row {visitor} on:clickDelete={openDelete} on:clickEdit={openEdit} />
+        <Row {visitor} userRole={data.session.user.role} on:clickDelete={openDelete} />
       {/each}
     </svelte:fragment>
   </Table>

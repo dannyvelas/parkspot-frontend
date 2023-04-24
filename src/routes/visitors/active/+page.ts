@@ -17,7 +17,7 @@ export const load: PageLoad = async (loadInput) => {
     .addParams({ page: String(page), search, limit: String(MAX_AMT_PER_PAGE) })
     .setAccessToken(accessToken)
     .setFetchFn(loadInput.fetch)
-    .get("api/visitors");
+    .get("api/visitors/active");
 
   return { session: parentData.session, visitors, search, pageNum: page };
 };
