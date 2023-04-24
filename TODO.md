@@ -13,7 +13,6 @@
 - [x] see active and all parking permits
 - [x] create visitors
 - [x] delete visitor
-- [ ] change UI so that permit requests require a pre-existing car
 - [ ] add check to make sure that contractors can't visit forever to sveltekit side
 ## Minor Missing From Spec
 - [x] nav bar at top of admin page
@@ -21,12 +20,9 @@
 - [x] delete residents
 - [x] edit residents
 - [x] search residents
-- [ ] sort residents by amt parking days
-- [ ] isException column
-- [ ] nav bar at bottom of list pages
 - [ ] add support for security accounts
-- [ ] ability for admin to see all visitors (not just active)
-- [ ] ability for admin to search all visitors (not just active)
+- [ ] isException column
+- [ ] ability for admin to see/search all visitors (not just active)
 ## Low priority
 - [x] right now, every permit page except for the all permits page will only query for the first page of permits, and when a user searches, it will only search that first page of permits. The permits on all other pages never get searched. Change the search on these pages such that if there's only one page, the behavior stays the same. If there's more than one page, have it perform the same type of API search the all permits page uses.
 - [x] move dashboard func to lib directory
@@ -68,12 +64,18 @@
 - [✗] (NOT IMPORTANT) test how different the user experience is without client side rendering (wont do bc i'm already not using csr)
 - [✗] make args to api funcs: put, post, get...an object (wont do bc the API of calling api funcs has already been re-factored to be much better)
 - [x] deprecate resident days page
-- [ ] making a delete operation a modal
-- [ ] every form-submit with `submitWithToken()` refreshes the access token. this is because `submitWithToken` calls `invalidateAll()` which makes the `+layout.server.ts` re-run. this re-fresh is often unnecessary as the `getLatestToken()` function already re-freshes the access token as needed. this unnecessary re-fresh is bad for performance as it triggers a backend api call. find a way to prevent it from happening.
+- [x] making a delete operation a modal
+- [x] every form-submit with `submitWithToken()` refreshes the access token. this is because `submitWithToken` calls `invalidateAll()` which makes the `+layout.server.ts` re-run. this re-fresh is often unnecessary as the `getLatestToken()` function already re-freshes the access token as needed. this unnecessary re-fresh is bad for performance as it triggers a backend api call. find a way to prevent it from happening (found a way, not using form actions anymore)
+- [x] define litepicker once
+- [ ] date modal is inaccessible if error banner is there
+- [ ] it seems like updating a resident twice-in-a-row doesn't work. it only works if you close the edit modal and open it again
+- [ ] make `form` a component (used in create/edit modals as well as login/resetpassword)
+- [ ] permits that will be active in the future are labeled as `expired` even they are not
+- [ ] on login page, password input looks a little bigger than username input on small screens
+- [ ] new permits get added to top of current page, not top of page1 as they're supposed to
 - [ ] return cookies from api, that way we can forward refresh cookie from login.server.ts
 - [ ] remove newRefresh and newAccess once they won't be used once api returns cookies
 - [ ] (DEPLOY) re-direct all `www.parkspotapp.com` requests to `parkspotapp.com`, that way, you only have to have one domain
-- [ ] define litepicker once
 - [ ] make color be a dropdown
 - [ ] fix status codes of invalids to be NOT 400s sometimes
 - [ ] probably remove ability for residents to re-print all of their permits
