@@ -2,26 +2,16 @@ import type { Actions } from "./$types";
 import { messageDecoder } from "$lib/models";
 import { fail } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
-import { post } from "$lib/api";
+import { Request } from "$lib/api";
 
 export const actions: Actions = {
   default: async (event) => {
     const formData = await event.request.formData();
     const formObject = Object.fromEntries(formData.entries());
-    if (!formObject.hasOwnProperty("id")) {
-      return fail(400, {
-        response: "Program error, please notify the administration to fix this.",
-      });
-    } else if (!formObject.id) {
-      return fail(400, { response: "Missing fields: id" });
-    }
 
-    const postRes = await post(
-      `api/password-reset-email`,
-      { id: formObject.id },
-      messageDecoder,
-      ""
-    );
+    const postRes = await new Request(messageDecoder).post(`api/password-reset-email`, {
+      id: formObject.id,
+    });
     if (!isOk(postRes)) {
       return fail(400, { response: postRes.message });
     }
