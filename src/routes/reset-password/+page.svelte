@@ -1,55 +1,39 @@
 <script lang="ts">
-  import { submitWithToken } from "$lib/form";
-  import { tokenStore } from "$lib/auth";
   import type { PageData } from "./$types";
+  import { messageDecoder } from "$lib/models";
+  import { isOk } from "$lib/functional";
+  import { Request } from "$lib/api";
+  import Password from "$lib/components/Password.svelte";
+  import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
 
   // props
   export let data: PageData;
-  export let form: Record<string, any> | undefined;
-
-  // model
-  let passwordsShown = false;
-  $: passwordType = passwordsShown ? "text" : "password";
 
   // events
-  function handleSubmit() {
-    tokenStore.set(data.accessToken);
-    submitWithToken(this, { allowRefresh: false });
+  async function handleSubmit() {
+    const formData = new FormData(this);
+    const formObject = Object.fromEntries(formData.entries());
+
+    const putRes = await new Request(messageDecoder)
+      .setAccessToken(data.accessToken)
+      .put(`api/account/password`, formObject);
+    if (!isOk(putRes)) {
+      updateBanner(
+        true,
+        "Error: it seems like this link has expired. Please go back to the forgot password" +
+          " page for a new reset password email."
+      );
+      return;
+    }
+
+    clearBanner();
   }
 </script>
 
+<Banner />
 <h1>Enter Your New Password</h1>
-{#if form?.response}
-  <div style="text-align: center">
-    <p>{form.response}</p>
-  </div>
-{/if}
-<form method="POST" on:submit|preventDefault={handleSubmit}>
-  <input required type={passwordType} name="password" placeholder="New Password" />
-  <input required type={passwordType} name="confirmPassword" placeholder="New Password Again" />
-  <div style="margin:20px;">
-    <label for="showPasswords">Show Passwords: </label>
-    <input type="checkbox" id="showPasswords" bind:checked={passwordsShown} />
-  </div>
+<form class="flex flex-col mx-auto w-52 md:w-64 gap-4" on:submit|preventDefault={handleSubmit}>
+  <Password name="password" placeholder="New Password" />
+  <Password name="confirmPassword" placeholder="Confirm Password" />
   <button type="submit">Reset Password</button>
 </form>
-
-<style>
-  h1 {
-    text-align: center;
-  }
-
-  form {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  input {
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-</style>
