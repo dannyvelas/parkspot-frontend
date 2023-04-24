@@ -8,7 +8,7 @@
   export let data: PageData;
 </script>
 
-<Sidebar />
+<Sidebar userRole={data.session?.user.role} />
 
 <Nav on:openSidebar={() => openSidebar()} session={data.session} />
 

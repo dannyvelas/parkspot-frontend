@@ -6,9 +6,12 @@
   import { page } from "$app/stores";
   import { cubicIn } from "svelte/easing";
 
+  // props
+  export let userRole: string | undefined;
+
   // model
   let visible = false;
-  const sidebarItems = [
+  let sidebarItems = [
     { name: "Dashboard", path: "/dashboard", icon: "material-symbols:dashboard-outline-rounded" },
     { name: "Permits", path: "/permits/all", icon: "clarity:details-line" },
     { name: "Residents", path: "/residents", icon: "uit:house-user" },
@@ -79,24 +82,26 @@
       <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
     </button>
     {#each sidebarItems as sidebarItem}
-      <div
-        class="sidebar-wrapper"
-        class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-      >
-        <a
-          href={sidebarItem.path}
-          class="sidebar-link"
+      {#if userRole !== "resident" || sidebarItem.name !== "Residents"}
+        <div
+          class="sidebar-wrapper"
           class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-          on:click={closeSidebar}
         >
-          <iconify-icon
-            class="circle"
+          <a
+            href={sidebarItem.path}
+            class="sidebar-link"
             class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-            icon={sidebarItem.icon}
-          />
-          <span>{sidebarItem.name}</span>
-        </a>
-      </div>
+            on:click={closeSidebar}
+          >
+            <iconify-icon
+              class="circle"
+              class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
+              icon={sidebarItem.icon}
+            />
+            <span>{sidebarItem.name}</span>
+          </a>
+        </div>
+      {/if}
     {/each}
   </nav>
 {/if}
