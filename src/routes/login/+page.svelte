@@ -1,12 +1,9 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import Password from "$lib/components/Password.svelte";
 
   // props
   export let form: Record<string, any> | undefined;
-
-  // model
-  let passwordsShown = false;
-  $: passwordType = passwordsShown ? "text" : "password";
 </script>
 
 <svelte:head>
@@ -17,31 +14,13 @@
     <p>{form.error}</p>
   </div>
 {/if}
-<form method="POST" use:enhance>
-  <input required name="id" type="username" placeholder="Username" />
-  <input required name="password" type={passwordType} placeholder="Password" />
-  <div style="margin:20px;">
-    <label for="showPasswords">Show Passwords: </label>
-    <input type="checkbox" id="showPasswords" bind:checked={passwordsShown} />
+<form method="POST" class="flex flex-col mx-auto w-52 md:w-64 gap-4" use:enhance>
+  <input required class="border rounded p-2" name="id" type="username" placeholder="Username" />
+  <Password name="password" placeholder="Password" />
+  <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">
+    Log in
+  </button>
+  <div class="text-center">
+    <a href="/forgot-password" class="text-green-500 underline">Forgot your Password?</a>
   </div>
-  <button type="submit">Log in</button>
 </form>
-<div style="text-align: center; margin:20px">
-  <a href="/forgot-password">Forgot your Password?</a>
-</div>
-
-<style>
-  form {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  input {
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-</style>
