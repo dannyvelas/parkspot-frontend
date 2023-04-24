@@ -12,7 +12,7 @@
     { name: "Dashboard", path: "/dashboard", icon: "material-symbols:dashboard-outline-rounded" },
     { name: "Permits", path: "/permits/all", icon: "clarity:details-line" },
     { name: "Residents", path: "/residents", icon: "uit:house-user" },
-    { name: "Visitors", path: "/visitors", icon: "material-symbols:badge-outline" },
+    { name: "Visitors", path: "/visitors/active", icon: "material-symbols:badge-outline" },
   ];
 
   // events
