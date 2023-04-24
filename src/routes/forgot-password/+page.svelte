@@ -5,35 +5,24 @@
   export let form: Record<string, any> | undefined;
 </script>
 
-<h1>Request a Password Reset Email</h1>
-<h2>Enter your Account ID</h2>
+<h1 class="font-bold text-center m-4">Reset Password</h1>
 {#if form?.response}
   <div style="text-align: center">
     <p>{form.response}</p>
   </div>
 {/if}
-<form method="POST" use:enhance>
-  <input required name="id" type="text" placeholder="T8100123" />
-  <button type="submit" style="margin:10px;">Send Email To Reset Password</button>
+<form method="POST" class="flex flex-col mx-auto w-52 md:w-64 gap-4" use:enhance>
+  <div class="flex flex-col">
+    <label for="username">Enter Username:</label>
+    <input
+      required
+      class="grow border rounded p-2"
+      id="username"
+      name="id"
+      placeholder="T8100123"
+    />
+  </div>
+  <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">
+    Send Email To Reset Password
+  </button>
 </form>
-
-<style>
-  h1,
-  h2 {
-    text-align: center;
-  }
-
-  form {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  input[type="text"] {
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-</style>
