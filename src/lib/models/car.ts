@@ -1,6 +1,7 @@
 import * as decoders from "decoders";
 
 export type Car = {
+  residentID: string;
   id: string;
   licensePlate: string;
   color: string;
@@ -10,6 +11,7 @@ export type Car = {
 };
 
 export const carDecoder: decoders.Decoder<Car> = decoders.object({
+  residentID: decoders.string,
   id: decoders.string,
   licensePlate: decoders.string,
   color: decoders.string,
