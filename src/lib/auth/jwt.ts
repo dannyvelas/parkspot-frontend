@@ -9,7 +9,7 @@ export const getLatestToken = async () => {
   if (expiringSoon(get(tokenStore))) {
     const sessionRes = await new Request(sessionDecoder).post("api/refresh-tokens");
     if (!isOk(sessionRes)) {
-      // logout user if referesh request failed
+      // logout user if refresh request failed
       const postRes = await fetch("/logout", { method: "POST" });
       if (!postRes.ok) {
         console.error("Error logging out after fetching latest token");
