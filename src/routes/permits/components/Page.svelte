@@ -44,7 +44,9 @@
   />
   <div class="flex flex-row gap-x-1 md:gap-x-4 mb-4">
     <Search {search} />
-    <CreateBtn on:click={openCreate} />
+    {#if session.user.role === "admin" || session.user.role === "resident"}
+      <CreateBtn on:click={openCreate} />
+    {/if}
   </div>
   <Table totalAmount={permits.data.metadata.totalAmount} {search} {pageNum}>
     <svelte:fragment slot="header-cells">
