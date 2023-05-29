@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { User, Car } from "$lib/models";
+  //import { onMount } from "svelte";
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
@@ -16,11 +17,27 @@
 
   // model
   let carSelection = "";
-  let residentCars: Car[] = [];
   let isException = false;
-
-  // form fields
+  let residentCars: Car[] = [];
   let residentID = user.role === "resident" ? user.id : "";
+
+  // init
+  if (user.role === "resident") {
+    seedResidentCars();
+  }
+
+  async function seedResidentCars() {
+    const carRes = await new Request(listWithMetadataDecoder(carDecoder))
+      .setAccessToken(await getLatestToken())
+      .get(`api/resident/${residentID}/cars`);
+    if (!isOk(carRes)) {
+      updateBanner(true, carRes.message);
+      return [];
+    }
+
+    clearBanner();
+    residentCars = carRes.data.records;
+  }
 
   // events
   async function handleSubmit() {
@@ -58,7 +75,7 @@
 
     const carRes = await new Request(listWithMetadataDecoder(carDecoder))
       .setAccessToken(await getLatestToken())
-      .get(`api/resident/${residentRes.data.id}/cars`);
+      .get(`api/resident/${residentID}/cars`);
     if (!isOk(carRes)) {
       updateBanner(true, carRes.message);
       return;
@@ -75,15 +92,17 @@
 >
   <Banner />
   <p class="text-center font-bold text-lg">Create Permit</p>
-  <input
-    required
-    class="border rounded p-2"
-    name="residentID"
-    placeholder="Enter Resident ID"
-    bind:value={residentID}
-    readonly={user.role == "resident"}
-    on:blur={downloadResidentCars}
-  />
+  {#if user.role !== "resident"}
+    <input
+      required
+      class="border rounded p-2"
+      name="residentID"
+      placeholder="Enter Resident ID"
+      bind:value={residentID}
+      readonly={user.role == "resident"}
+      on:blur={downloadResidentCars}
+    />
+  {/if}
   <select class="border rounded p-2" bind:value={carSelection}>
     <option value="" disabled selected>Select Car</option>
     {#each residentCars as car}
