@@ -26,6 +26,7 @@
     seedResidentCars();
   }
 
+  // events
   async function seedResidentCars() {
     const carRes = await new Request(listWithMetadataDecoder(carDecoder))
       .setAccessToken(await getLatestToken())
@@ -39,7 +40,6 @@
     residentCars = carRes.data.records;
   }
 
-  // events
   async function handleSubmit() {
     const formData = new FormData(this);
     if (carSelection !== "newCar") {
@@ -61,7 +61,12 @@
     dispatch("created", result.data);
   }
 
-  async function downloadResidentCars() {
+  async function safeSeedResidentCars() {
+    await checkResidentExists();
+    seedResidentCars();
+  }
+
+  async function checkResidentExists() {
     if (!residentID) {
       return;
     }
@@ -72,17 +77,6 @@
       updateBanner(true, residentRes.message);
       return;
     }
-
-    const carRes = await new Request(listWithMetadataDecoder(carDecoder))
-      .setAccessToken(await getLatestToken())
-      .get(`api/resident/${residentID}/cars`);
-    if (!isOk(carRes)) {
-      updateBanner(true, carRes.message);
-      return;
-    }
-
-    clearBanner();
-    residentCars = carRes.data.records;
   }
 </script>
 
@@ -99,8 +93,7 @@
       name="residentID"
       placeholder="Enter Resident ID"
       bind:value={residentID}
-      readonly={user.role == "resident"}
-      on:blur={downloadResidentCars}
+      on:blur={safeSeedResidentCars}
     />
   {/if}
   <select class="border rounded p-2" bind:value={carSelection}>
