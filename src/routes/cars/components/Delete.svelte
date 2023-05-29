@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { Visitor } from "$lib/models";
+  import type { Car } from "$lib/models";
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
-  import { monthDayYearDate } from "$lib/time";
   import { createEventDispatcher } from "svelte";
   import Banner, { updateBanner } from "$lib/components/Banner.svelte";
 
@@ -11,13 +10,13 @@
   const dispatch = createEventDispatcher();
 
   // props
-  export let item: Visitor;
+  export let item: Car;
 
   // events
   async function handleSubmit() {
     const delRes = await new Request()
       .setAccessToken(await getLatestToken())
-      .delete(`api/visitor/${item.id}`);
+      .delete(`api/car/${item.id}`);
     if (!isOk(delRes)) {
       updateBanner(true, delRes.message);
       return;
@@ -32,22 +31,22 @@
   on:submit|preventDefault={handleSubmit}
 >
   <Banner />
-  <p class="text-center">Delete the following visitor?</p>
+  <p class="text-center">Delete the following car?</p>
   <table>
     <tr>
-      <td class="font-bold">First</td><td>{item.firstName}</td>
+      <td class="font-bold">License Plate</td><td>{item.licensePlate}</td>
     </tr>
     <tr>
-      <td class="font-bold">Last</td><td>{item.lastName}</td>
+      <td class="font-bold">Color</td><td>{item.color}</td>
     </tr>
     <tr>
-      <td class="font-bold">Access Start</td><td>{monthDayYearDate(item.accessStart)}</td>
+      <td class="font-bold">Make</td><td>{item.make}</td>
     </tr>
     <tr>
-      <td class="font-bold">Access End</td><td>{monthDayYearDate(item.accessEnd)}</td>
+      <td class="font-bold">model</td><td>{item.model}</td>
     </tr>
   </table>
   <button type="submit" class="bg-rose-400 text-white text-center border rounded px-4 py-1">
-    Delete Visitor
+    Delete Car
   </button>
 </form>

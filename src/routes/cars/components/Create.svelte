@@ -2,31 +2,20 @@
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
-  import { visitorDecoder } from "$lib/models";
-  import { getEndOfTime } from "$lib/time";
+  import { carDecoder } from "$lib/models";
   import { createEventDispatcher } from "svelte";
   import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
-  import Litepicker, { getStartDate, getEndDate } from "$lib/components/Litepicker.svelte";
 
   // config
   const dispatch = createEventDispatcher();
 
-  // model
-  let relationship = "fam/fri";
-  let isForever = false;
-  $: if (relationship === "contractor") isForever = false;
-
   // events
   async function handleSubmit() {
     const formData = new FormData(this);
-    formData.set("accessStart", getStartDate().toISOString());
-    const endDate = isForever ? getEndOfTime() : getEndDate();
-    formData.set("accessEnd", endDate.toISOString());
-
     const formObject = Object.fromEntries(formData.entries());
-    const result = await new Request(visitorDecoder)
+    const result = await new Request(carDecoder)
       .setAccessToken(await getLatestToken())
-      .post("api/visitor", formObject);
+      .post("api/car", formObject);
     if (!isOk(result)) {
       updateBanner(true, result.message);
       return;
@@ -42,23 +31,17 @@
   on:submit|preventDefault={handleSubmit}
 >
   <Banner />
-  <p class="text-center font-bold text-lg">Create Visitor</p>
-  <input required class="border rounded p-2" name="firstName" placeholder="Enter First Name" />
-  <input required class="border rounded p-2" name="lastName" placeholder="Enter Last Name" />
-  <select class="border rounded p-2" name="relationship" bind:value={relationship}>
-    <option value="fam/fri">Friend</option>
-    <option value="contractor">Contractor</option>
-  </select>
-  {#if relationship !== "contractor"}
-    <div class="text-center">
-      <label for="isForever">Forever:</label>
-      <input type="checkbox" name="isForever" id="isForever" bind:checked={isForever} />
-    </div>
-  {/if}
-  {#if !isForever}
-    <Litepicker />
-  {/if}
+  <p class="text-center font-bold text-lg">Create Car</p>
+  <input
+    required
+    class="border rounded p-2"
+    name="licensePlate"
+    placeholder="Enter License Plate"
+  />
+  <input required class="border rounded p-2" name="color" placeholder="Enter Color" />
+  <input required class="border rounded p-2" name="make" placeholder="Enter Make" />
+  <input required class="border rounded p-2" name="model" placeholder="Enter Model" />
   <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">
-    Create Visitor
+    Create Car
   </button>
 </form>

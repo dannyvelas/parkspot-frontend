@@ -5,9 +5,10 @@
   import Search from "$lib/components/Search.svelte";
   import CreateBtn from "$lib/components/CreateBtn.svelte";
   import Table from "$lib/components/Table.svelte";
-  import ListModals, { openCreate, openDelete } from "$lib/components/ListModals.svelte";
+  import ListModals, { openCreate, openDelete, openEdit } from "$lib/components/ListModals.svelte";
   import Create from "./components/Create.svelte";
   import Delete from "./components/Delete.svelte";
+  import Edit from "./components/Edit.svelte";
 
   // props
   export let data: PageData;
@@ -34,7 +35,7 @@
     list={data.cars.data}
     user={data.session.user}
     createModal={Create}
-    editModal={undefined}
+    editModal={Edit}
     deleteModal={Delete}
     on:modalUpdate={refreshList}
   />
@@ -60,7 +61,12 @@
     </svelte:fragment>
     <svelte:fragment slot="rows">
       {#each data.cars.data.records as car}
-        <Row {car} userRole={data.session.user.role} on:clickDelete={openDelete} />
+        <Row
+          {car}
+          userRole={data.session.user.role}
+          on:clickDelete={openDelete}
+          on:clickEdit={openEdit}
+        />
       {/each}
     </svelte:fragment>
   </Table>
