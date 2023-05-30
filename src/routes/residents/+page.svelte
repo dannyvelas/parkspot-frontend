@@ -56,7 +56,7 @@
       <div class="text-xs basis-8">Days</div>
     </svelte:fragment>
     <svelte:fragment slot="rows">
-      {#each data.residents.data.records as resident}
+      {#each data.residents.data.records as resident (resident.id)}
         <Row {resident} on:clickDelete={openDelete} on:clickEdit={openEdit} />
       {/each}
     </svelte:fragment>
