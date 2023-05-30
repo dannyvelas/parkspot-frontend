@@ -60,7 +60,7 @@
       <div class="text-xs basis-20 md:hidden">Vehicle</div>
     </svelte:fragment>
     <svelte:fragment slot="rows">
-      {#each data.cars.data.records as car}
+      {#each data.cars.data.records as car (car.id)}
         <Row
           {car}
           userRole={data.session.user.role}
