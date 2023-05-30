@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { User, Car } from "$lib/models";
-  //import { onMount } from "svelte";
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
@@ -62,11 +61,6 @@
   }
 
   async function safeSeedResidentCars() {
-    await checkResidentExists();
-    seedResidentCars();
-  }
-
-  async function checkResidentExists() {
     if (!residentID) {
       return;
     }
@@ -77,6 +71,8 @@
       updateBanner(true, residentRes.message);
       return;
     }
+
+    seedResidentCars();
   }
 </script>
 
