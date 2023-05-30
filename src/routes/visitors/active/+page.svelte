@@ -56,7 +56,7 @@
       <div class="text-xs hidden md:inline md:basis-20">Relation</div>
     </svelte:fragment>
     <svelte:fragment slot="rows">
-      {#each data.visitors.data.records as visitor}
+      {#each data.visitors.data.records as visitor (visitor.id)}
         <Row {visitor} userRole={data.session.user.role} on:clickDelete={openDelete} />
       {/each}
     </svelte:fragment>
