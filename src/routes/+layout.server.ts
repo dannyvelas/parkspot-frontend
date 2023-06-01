@@ -17,7 +17,7 @@ export const load: LayoutServerLoad = async (loadInput) => {
     return {};
   }
 
-  // TODO: send to fronted a new cookie via header
+  // TODO: send to frontend a new cookie via header
   return {
     session: {
       accessToken: sessionRes.data.accessToken,
