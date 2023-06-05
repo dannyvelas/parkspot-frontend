@@ -3,6 +3,10 @@ import { PUBLIC_ENV } from "$env/static/public";
 import { json } from "@sveltejs/kit";
 
 export const POST: RequestHandler = (event) => {
-  event.cookies.delete("refresh", { expires: new Date(0), secure: PUBLIC_ENV == "prod" });
+  event.cookies.delete("refresh", {
+    expires: new Date(0),
+    secure: PUBLIC_ENV == "prod",
+    domain: "park-spot.co",
+  });
   return json({ message: "Successfully logged-out user" });
 };
