@@ -4,7 +4,7 @@
   import { isOk } from "$lib/functional";
   import { Request } from "$lib/api";
   import Password from "$lib/components/Password.svelte";
-  import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
+  import Banner, { updateBanner } from "$lib/components/Banner.svelte";
 
   // props
   export let data: PageData;
@@ -26,7 +26,10 @@
       return;
     }
 
-    clearBanner();
+    updateBanner(
+      false,
+      "Success! Your password has been reset. You can try logging in now with the new password."
+    );
   }
 </script>
 
