@@ -29,6 +29,7 @@ export const actions: Actions = {
     event.cookies.set("refresh", refreshToken, {
       sameSite: "strict",
       secure: PUBLIC_ENV == "prod",
+      domain: "park-spot.co",
     });
 
     return { user: result.data.user, accessToken: result.data.accessToken };
