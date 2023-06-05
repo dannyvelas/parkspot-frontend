@@ -4,6 +4,7 @@
   import { minimalDate, detailDate } from "$lib/time";
   import { createEventDispatcher } from "svelte";
   import Row from "$lib/components/Row.svelte";
+  import Tag from "./Tag.svelte";
 
   // config
   const dispatch = createEventDispatcher();
@@ -11,14 +12,6 @@
   // props
   export let permit: Permit;
   export let userRole: string;
-
-  // model
-  const now = new Date().getTime();
-  const isActive = permit.startDate.getTime() < now && permit.endDate.getTime() > now;
-
-  // styles
-  const twGreenStatus = "bg-green-200 text-green-500";
-  const twRedStatus = "bg-rose-200 text-rose-500";
 </script>
 
 <Row>
@@ -31,13 +24,7 @@
       <span class="hidden lg:inline">{capitalize(permit.model)}</span>
     </div>
     <div class="text-xs text-zinc-800 basis-20">{permit.licensePlate}</div>
-    <div
-      class="{isActive
-        ? twGreenStatus
-        : twRedStatus} text-xs text-center rounded-lg basis-16 py-0.5"
-    >
-      {isActive ? "Active" : "Expired"}
-    </div>
+    <Tag startDate={permit.startDate} endDate={permit.endDate} />
   </svelte:fragment>
   <svelte:fragment slot="header">
     <div class="text-xs font-bold">Permit {permit.id}</div>
