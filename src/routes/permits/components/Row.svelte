@@ -73,7 +73,7 @@
     <div class="flex flex-row justify-around">
       <a
         class="basis-20 border border-sky-500 rounded-md text-center text-sky-500"
-        href="/permit/{permit.id}/display"
+        href="/permit/{permit.id}"
       >
         Reprint
       </a>
