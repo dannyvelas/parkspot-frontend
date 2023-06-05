@@ -32,7 +32,7 @@
       .get(`api/resident/${residentID}/cars`);
     if (!isOk(carRes)) {
       updateBanner(true, carRes.message);
-      return [];
+      return;
     }
 
     clearBanner();
