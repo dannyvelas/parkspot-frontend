@@ -16,7 +16,7 @@
 
     const putRes = await new Request(messageDecoder)
       .setAccessToken(data.accessToken)
-      .put(`api/account/password`, formObject);
+      .put(`api/user/password`, formObject);
     if (!isOk(putRes)) {
       updateBanner(
         true,
@@ -31,9 +31,11 @@
 </script>
 
 <Banner />
-<h1>Enter Your New Password</h1>
+<h1 class="font-bold text-center m-4">Enter Your New Password</h1>
 <form class="flex flex-col mx-auto w-52 md:w-64 gap-4" on:submit|preventDefault={handleSubmit}>
   <Password name="password" placeholder="New Password" />
   <Password name="confirmPassword" placeholder="Confirm Password" />
-  <button type="submit">Reset Password</button>
+  <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">
+    Reset Password
+  </button>
 </form>
