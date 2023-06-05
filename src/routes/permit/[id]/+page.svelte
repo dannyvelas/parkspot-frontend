@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from "./$types";
   import { isOk } from "$lib/functional";
-  import { dateToYmd, tsToDate } from "$lib/time";
+  import { monthDayYearDate, detailDate } from "$lib/time";
 
   export let data: PageData;
   $: result = data.result;
@@ -24,15 +24,15 @@
       <p style="font-size:40px">Resident ID: {result.data.residentID}</p>
     </div>
     <div class="section">
-      <p style="font-size:40px">Start Date: {dateToYmd(result.data.startDate)}</p>
-      <p style="font-size:40px">End Date: {dateToYmd(result.data.endDate)}</p>
+      <p style="font-size:40px">Start Date: {monthDayYearDate(result.data.startDate)}</p>
+      <p style="font-size:40px">End Date: {monthDayYearDate(result.data.endDate)}</p>
       <p style="font-size:40px">
-        {result.data.car.color}
-        {result.data.car.make}
-        {result.data.car.model} &#58; {result.data.car.licensePlate}
+        {result.data.color}
+        {result.data.make}
+        {result.data.model} &#58; {result.data.licensePlate}
       </p>
     </div>
-    <p>Requested &#58; {tsToDate(result.data.requestTS)}</p>
+    <p>Requested &#58; {detailDate(new Date(result.data.requestTS * 1000))}</p>
   {/if}
 </div>
 
