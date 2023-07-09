@@ -4,7 +4,7 @@ import { newRefresh } from "$lib/server/auth";
 import { fail } from "@sveltejs/kit";
 import { isOk } from "$lib/functional";
 import { Request } from "$lib/api";
-import { PUBLIC_ENV } from "$env/static/public";
+import { PUBLIC_ENV, PUBLIC_COOKIEDOMAIN } from "$env/static/public";
 
 export const actions: Actions = {
   default: async (event) => {
@@ -29,7 +29,7 @@ export const actions: Actions = {
     event.cookies.set("refresh", refreshToken, {
       sameSite: "strict",
       secure: PUBLIC_ENV == "prod",
-      domain: "park-spot.co",
+      domain: PUBLIC_COOKIEDOMAIN,
     });
 
     return { user: result.data.user, accessToken: result.data.accessToken };
