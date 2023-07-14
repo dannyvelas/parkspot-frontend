@@ -39,7 +39,7 @@
     </div>
   </div>
   <div slot="bottom-content" class="flex flex-row justify-around">
-    {#if userRole === "resident"}
+    {#if userRole === "resident" || userRole === "admin"}
       <button
         class="basis-20 border border-green-500 rounded-md text-center text-green-500"
         on:click={() => dispatch("clickEdit", car)}
