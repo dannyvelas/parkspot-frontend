@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { User } from "$lib/models";
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth";
   import { isOk } from "$lib/functional";
@@ -8,6 +9,12 @@
 
   // config
   const dispatch = createEventDispatcher();
+
+  // props
+  export let user: User;
+
+  // model
+  let residentID = user.role === "resident" ? user.id : "";
 
   // events
   async function handleSubmit() {
@@ -32,6 +39,15 @@
 >
   <Banner />
   <p class="text-center font-bold text-lg">Create Car</p>
+  {#if user.role !== "resident"}
+    <input
+      required
+      class="border rounded p-2"
+      name="residentID"
+      placeholder="Enter Resident ID"
+      bind:value={residentID}
+    />
+  {/if}
   <input
     required
     class="border rounded p-2"
