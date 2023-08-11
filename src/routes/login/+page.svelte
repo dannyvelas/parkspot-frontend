@@ -14,7 +14,7 @@
     <p>{form.error}</p>
   </div>
 {/if}
-<form method="POST" class="flex flex-col mx-auto w-52 md:w-64 gap-4" use:enhance>
+<form method="POST" class="flex flex-col mx-auto w-64 gap-4" use:enhance>
   <input required class="border rounded p-2" name="id" type="username" placeholder="Username" />
   <Password name="password" placeholder="Password" />
   <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">
