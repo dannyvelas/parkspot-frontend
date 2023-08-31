@@ -47,6 +47,7 @@
   <input class="border rounded p-2" placeholder="Enter new email" bind:value={item.email} />
   <input
     class="border rounded p-2"
+    type="number"
     placeholder="Enter new amount of days used"
     bind:value={item.amtParkingDaysUsed}
   />
