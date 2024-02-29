@@ -7,6 +7,7 @@ export const POST: RequestHandler = (event) => {
     expires: new Date(0),
     secure: PUBLIC_ENV == "prod",
     domain: PUBLIC_COOKIEDOMAIN,
+    path: "/",
   });
   return json({ message: "Successfully logged-out user" });
 };

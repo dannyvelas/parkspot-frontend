@@ -30,6 +30,7 @@ export const actions: Actions = {
       sameSite: "strict",
       secure: PUBLIC_ENV == "prod",
       domain: PUBLIC_COOKIEDOMAIN,
+      path: "/",
     });
 
     return { user: result.data.user, accessToken: result.data.accessToken };
