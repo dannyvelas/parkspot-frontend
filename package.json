@@ -2,8 +2,8 @@
   "name": "v2",
   "version": "0.0.1",
   "engines": {
-    "node": "16.x",
-    "npm": "8.x"
+    "node": "20.x",
+    "npm": "10.x"
   },
   "scripts": {
     "start": "node build/index.js",
