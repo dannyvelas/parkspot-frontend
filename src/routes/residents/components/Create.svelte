@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth";
+  import { getLatestToken } from "$lib/auth/jwt";
   import { isOk } from "$lib/functional";
   import { residentDecoder } from "$lib/models";
   import { createEventDispatcher } from "svelte";

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Permit } from "$lib/models";
   import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth";
+  import { getLatestToken } from "$lib/auth/jwt";
   import { isOk } from "$lib/functional";
   import { createEventDispatcher } from "svelte";
   import Banner, { updateBanner } from "$lib/components/Banner.svelte";

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Visitor } from "$lib/models";
   import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth";
+  import { getLatestToken } from "$lib/auth/jwt";
   import { isOk } from "$lib/functional";
   import { monthDayYearDate } from "$lib/time";
   import { createEventDispatcher } from "svelte";

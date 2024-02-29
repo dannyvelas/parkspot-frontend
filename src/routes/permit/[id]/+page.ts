@@ -1,7 +1,7 @@
 import type { PageLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 import { Request } from "$lib/api";
-import { getLatestToken } from "$lib/auth";
+import { getLatestToken } from "$lib/auth/jwt";
 import { permitDecoder } from "$lib/models";
 import { browser } from "$app/environment";
 

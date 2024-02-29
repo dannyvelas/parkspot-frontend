@@ -2,7 +2,7 @@ import type { PageLoad } from "./$types";
 import { MAX_AMT_PER_PAGE } from "$lib/constants";
 import { Request } from "$lib/api";
 import { listWithMetadataDecoder, carDecoder } from "$lib/models";
-import { getLatestToken } from "$lib/auth";
+import { getLatestToken } from "$lib/auth/jwt";
 import { browser } from "$app/environment";
 import { redirect } from "@sveltejs/kit";
 

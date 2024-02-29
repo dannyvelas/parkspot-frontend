@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { User, Car } from "$lib/models";
   import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth";
+  import { getLatestToken } from "$lib/auth/jwt";
   import { isOk } from "$lib/functional";
   import { listWithMetadataDecoder, carDecoder, residentDecoder, permitDecoder } from "$lib/models";
   import { createEventDispatcher } from "svelte";

@@ -2,7 +2,8 @@ import type { PageLoad } from "./$types";
 import { MAX_AMT_PER_PAGE } from "$lib/constants";
 import { Request } from "$lib/api";
 import { listWithMetadataDecoder, residentDecoder } from "$lib/models";
-import { onlyRole, getLatestToken } from "$lib/auth";
+import { onlyRole } from "$lib/auth";
+import { getLatestToken } from "$lib/auth/jwt";
 import { browser } from "$app/environment";
 
 export const load: PageLoad = async (loadInput) => {
