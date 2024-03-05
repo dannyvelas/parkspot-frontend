@@ -14,6 +14,15 @@
     <p>{form.error}</p>
   </div>
 {/if}
+<div
+  class="bg-gray-200 max-w-prose p-2 my-4 mx-auto rounded flex flex-row items-center justify-center gap-2"
+>
+  <iconify-icon icon="ph:info-light" />
+  <p>
+    Need information about usernames in Las Vistas?
+    <a href="https://park-spot.co/info-for-residents/" class="underline"> Click here! </a>
+  </p>
+</div>
 <form method="POST" class="flex flex-col mx-auto w-64 gap-4" use:enhance>
   <input required class="border rounded p-2" name="id" type="username" placeholder="Username" />
   <Password name="password" placeholder="Password" />
