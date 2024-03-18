@@ -53,7 +53,7 @@
       <div class="text-xs basis-20">ID</div>
       <div class="text-xs basis-32">Name</div>
       <div class="text-xs hidden lg:inline lg:basis-24">Unlimited Days?</div>
-      <div class="text-xs basis-8">Days</div>
+      <div class="text-xs basis-8">Days Used</div>
     </svelte:fragment>
     <svelte:fragment slot="rows">
       {#each data.residents.data.records as resident (resident.id)}
