@@ -21,7 +21,7 @@
     <slot name="cells" />
   </div>
   {#if isExpanded}
-    <div transition:slide|local class="flex flex-col gap-y-5">
+    <div transition:slide class="flex flex-col gap-y-5">
       <div>
         <slot name="header" />
         <hr class="my-3" />

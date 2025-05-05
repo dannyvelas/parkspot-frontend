@@ -9,7 +9,7 @@
 </script>
 
 <script lang="ts">
-  import type { ComponentType, SvelteComponentTyped } from "svelte";
+  import type { ComponentType, SvelteComponent } from "svelte";
   import type { ListWithMetadata, User } from "$lib/models";
   import { createEventDispatcher } from "svelte";
   import Modal, { getModal } from "$lib/components/Modal.svelte";
@@ -21,12 +21,12 @@
   type T = $$Generic;
   export let user: User;
   export let list: ListWithMetadata<Item>;
-  export let createModal: ComponentType<SvelteComponentTyped<any, { created: CustomEvent<Item> }>>;
+  export let createModal: ComponentType<SvelteComponent<any, { created: CustomEvent<Item> }>>;
   export let editModal:
-    | ComponentType<SvelteComponentTyped<{ item: T }, { updated: CustomEvent }>>
+    | ComponentType<SvelteComponent<{ item: T }, { updated: CustomEvent }>>
     | undefined;
   export let deleteModal: ComponentType<
-    SvelteComponentTyped<{ item: T }, { deleted: CustomEvent<Item> }>
+    SvelteComponent<{ item: T }, { deleted: CustomEvent<Item> }>
   >;
 
   // model

@@ -78,7 +78,7 @@
     on:click={closeSidebar}
     on:keypress={closeSidebar}
   />
-  <nav transition:horizontalSlide class="fixed z-20 min-h-full bg-white flex flex-col">
+  <nav transition:horizontalSlide|global class="fixed z-20 min-h-full bg-white flex flex-col">
     <button class="text-left" on:click={closeSidebar}>
       <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
     </button>
