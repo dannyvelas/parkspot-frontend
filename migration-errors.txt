@@ -1,0 +1,70 @@
+One or more `@migration-task` comments were added to `src/lib/components/Row.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/lib/components/Table.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/cars/+page.svelte`, please check them and complete the migration manually.
+Error while migrating Svelte code [InternalCompileError: `<tr>` cannot be a child of `<table>`. `<table>` only allows these children: `<caption>`, `<colgroup>`, `<tbody>`, `<thead>`, `<tfoot>`, `<style>`, `<script>`, `<template>`. The browser will 'repair' the HTML (by moving, removing, or inserting elements) which breaks Svelte's assumptions about the structure of your components.
+https://svelte.dev/e/node_invalid_placement] {
+  code: 'node_invalid_placement',
+  filename: 'src/routes/cars/components/Delete.svelte',
+  position: [ 901, 990 ],
+  start: { line: 36, column: 4, character: 901 },
+  end: { line: 38, column: 9, character: 990 },
+  frame: '34:   <p class="text-center">Delete the following car?</p>\n' +
+    '35:   <table>\n' +
+    '36:     <tr>\n' +
+    '            ^\n' +
+    '37:       <td class="font-bold">License Plate</td><td>{item.licensePlate}</td>\n' +
+    '38:     </tr>'
+}
+One or more `@migration-task` comments were added to `src/routes/cars/components/Delete.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/cars/components/Row.svelte`, please check them and complete the migration manually.
+Error while migrating Svelte code [InternalCompileError: `<tr>` cannot be a child of `<table>`. `<table>` only allows these children: `<caption>`, `<colgroup>`, `<tbody>`, `<thead>`, `<tfoot>`, `<style>`, `<script>`, `<template>`. The browser will 'repair' the HTML (by moving, removing, or inserting elements) which breaks Svelte's assumptions about the structure of your components.
+https://svelte.dev/e/node_invalid_placement] {
+  code: 'node_invalid_placement',
+  filename: 'src/routes/permits/components/Delete.svelte',
+  position: [ 913, 981 ],
+  start: { line: 36, column: 4, character: 913 },
+  end: { line: 38, column: 9, character: 981 },
+  frame: '34:   <p class="text-center">Delete the following permit?</p>\n' +
+    '35:   <table>\n' +
+    '36:     <tr>\n' +
+    '            ^\n' +
+    '37:       <td class="font-bold">ID</td><td>{item.id}</td>\n' +
+    '38:     </tr>'
+}
+One or more `@migration-task` comments were added to `src/routes/permits/components/Delete.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/permits/components/Page.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/permits/components/Row.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/residents/+page.svelte`, please check them and complete the migration manually.
+Error while migrating Svelte code [InternalCompileError: `<tr>` cannot be a child of `<table>`. `<table>` only allows these children: `<caption>`, `<colgroup>`, `<tbody>`, `<thead>`, `<tfoot>`, `<style>`, `<script>`, `<template>`. The browser will 'repair' the HTML (by moving, removing, or inserting elements) which breaks Svelte's assumptions about the structure of your components.
+https://svelte.dev/e/node_invalid_placement] {
+  code: 'node_invalid_placement',
+  filename: 'src/routes/residents/components/Delete.svelte',
+  position: [ 921, 989 ],
+  start: { line: 36, column: 4, character: 921 },
+  end: { line: 38, column: 9, character: 989 },
+  frame: '34:   <p class="text-center">Delete the following resident?</p>\n' +
+    '35:   <table>\n' +
+    '36:     <tr>\n' +
+    '            ^\n' +
+    '37:       <td class="font-bold">ID</td><td>{item.id}</td>\n' +
+    '38:     </tr>'
+}
+One or more `@migration-task` comments were added to `src/routes/residents/components/Delete.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/residents/components/Row.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/visitors/active/+page.svelte`, please check them and complete the migration manually.
+Error while migrating Svelte code [InternalCompileError: `<tr>` cannot be a child of `<table>`. `<table>` only allows these children: `<caption>`, `<colgroup>`, `<tbody>`, `<thead>`, `<tfoot>`, `<style>`, `<script>`, `<template>`. The browser will 'repair' the HTML (by moving, removing, or inserting elements) which breaks Svelte's assumptions about the structure of your components.
+https://svelte.dev/e/node_invalid_placement] {
+  code: 'node_invalid_placement',
+  filename: 'src/routes/visitors/active/components/Delete.svelte',
+  position: [ 965, 1043 ],
+  start: { line: 37, column: 4, character: 965 },
+  end: { line: 39, column: 9, character: 1043 },
+  frame: '35:   <p class="text-center">Delete the following visitor?</p>\n' +
+    '36:   <table>\n' +
+    '37:     <tr>\n' +
+    '            ^\n' +
+    '38:       <td class="font-bold">First</td><td>{item.firstName}</td>\n' +
+    '39:     </tr>'
+}
+One or more `@migration-task` comments were added to `src/routes/visitors/active/components/Delete.svelte`, please check them and complete the migration manually.
+One or more `@migration-task` comments were added to `src/routes/visitors/active/components/Row.svelte`, please check them and complete the migration manually.
