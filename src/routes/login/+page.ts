@@ -4,7 +4,7 @@ import { redirect } from "@sveltejs/kit";
 export const load: PageLoad = async ({ parent }) => {
   const parentData = await parent();
   if (parentData.session) {
-    throw redirect(307, "/dashboard");
+    redirect(307, "/dashboard");
   }
 
   return {};

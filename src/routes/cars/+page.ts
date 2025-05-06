@@ -8,7 +8,7 @@ import { redirect } from "@sveltejs/kit";
 
 export const load: PageLoad = async (loadInput) => {
   const parentData = await loadInput.parent();
-  if (!parentData.session) throw redirect(307, "/login");
+  if (!parentData.session) redirect(307, "/login");
   const accessToken = !browser ? parentData.session.accessToken : await getLatestToken();
   const page = Number(loadInput.url.searchParams.get("page")) || 1;
   const search = loadInput.url.searchParams.get("search") || "";
