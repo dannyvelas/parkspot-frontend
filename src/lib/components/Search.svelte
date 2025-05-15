@@ -2,11 +2,16 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
 
-  // props
-  export let search: string;
+  
+  interface Props {
+    // props
+    search: string;
+  }
+
+  let { search }: Props = $props();
 
   // model
-  let currSearch = search;
+  let currSearch = $state(search);
 
   // events
   const handleSearch = async () => {
@@ -27,12 +32,12 @@
 </script>
 
 <!-- ref: https://flowbite.com/docs/forms/search-input/-->
-<form class="grow" on:submit={handleSearch}>
+<form class="grow" onsubmit={handleSearch}>
   <label class="relative block flex">
     <iconify-icon
       icon="heroicons:magnifying-glass-solid"
       class="absolute z-0 inset-y-0 left-0 text-green-400 pl-2 flex items-center"
-    />
+></iconify-icon>
     <input
       class="grow pl-7 py-2 bg-white rounded-2xl border border-slate-300 text-xs placeholder:text-slate-400 placeholder:text-xs focus:outline-none"
       placeholder="Search"

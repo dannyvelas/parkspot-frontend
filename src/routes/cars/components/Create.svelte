@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import type { User } from "$lib/models";
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth/jwt";
@@ -10,11 +12,16 @@
   // config
   const dispatch = createEventDispatcher();
 
-  // props
-  export let user: User;
+  
+  interface Props {
+    // props
+    user: User;
+  }
+
+  let { user }: Props = $props();
 
   // model
-  let residentID = user.role === "resident" ? user.id : "";
+  let residentID = $state(user.role === "resident" ? user.id : "");
 
   // events
   async function handleSubmit() {
@@ -35,7 +42,7 @@
 
 <form
   class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
-  on:submit|preventDefault={handleSubmit}
+  onsubmit={preventDefault(handleSubmit)}
 >
   <Banner />
   <p class="text-center font-bold text-lg">Create Car</p>

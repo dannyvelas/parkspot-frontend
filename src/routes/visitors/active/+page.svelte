@@ -9,8 +9,13 @@
   import Create from "./components/Create.svelte";
   import Delete from "./components/Delete.svelte";
 
-  // props
-  export let data: PageData;
+  
+  interface Props {
+    // props
+    data: PageData;
+  }
+
+  let { data = $bindable() }: Props = $props();
 
   function refreshList() {
     // ListModals updates permits.data by ref; here we ask svelte to render such changes
@@ -49,16 +54,19 @@
     search={data.search}
     pageNum={data.pageNum}
   >
-    <svelte:fragment slot="header-cells">
-      <div class="text-xs basis-3" />
+    <!-- @migration-task: migrate this slot by hand, `header-cells` is an invalid identifier -->
+  <svelte:fragment slot="header-cells">
+      <div class="text-xs basis-3"></div>
       <div class="text-xs basis-32">Name</div>
       <div class="text-xs basis-20">Resident ID</div>
       <div class="text-xs hidden md:inline md:basis-20">Relation</div>
     </svelte:fragment>
-    <svelte:fragment slot="rows">
-      {#each data.visitors.data.records as visitor (visitor.id)}
-        <Row {visitor} userRole={data.session.user.role} on:clickDelete={openDelete} />
-      {/each}
-    </svelte:fragment>
+    {#snippet rows()}
+      
+        {#each data.visitors.data.records as visitor (visitor.id)}
+          <Row {visitor} userRole={data.session.user.role} on:clickDelete={openDelete} />
+        {/each}
+      
+      {/snippet}
   </Table>
 {/if}

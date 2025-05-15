@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import type { Car } from "$lib/models";
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth/jwt";
@@ -10,8 +12,13 @@
   // config
   const dispatch = createEventDispatcher();
 
-  // props
-  export let item: Car;
+  
+  interface Props {
+    // props
+    item: Car;
+  }
+
+  let { item = $bindable() }: Props = $props();
 
   // events
   async function handleSubmit() {
@@ -32,7 +39,7 @@
 
 <form
   class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
-  on:submit|preventDefault={handleSubmit}
+  onsubmit={preventDefault(handleSubmit)}
 >
   <Banner />
   <p class="text-center font-bold text-lg">Edit Car</p>

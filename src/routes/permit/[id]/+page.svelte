@@ -3,8 +3,12 @@
   import { isOk } from "$lib/functional";
   import { monthDayYearDate, detailDate } from "$lib/time";
 
-  export let data: PageData;
-  $: result = data.result;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+  let result = $derived(data.result);
 </script>
 
 <svelte:head>

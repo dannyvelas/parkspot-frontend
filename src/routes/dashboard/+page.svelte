@@ -3,7 +3,11 @@
   import { capitalize } from "$lib/strings";
   import { initDictionary, _, locale } from "$lib/i18n";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const capitalRole = capitalize(data.session.user.role);
 

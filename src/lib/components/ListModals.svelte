@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   interface Item {
     id: string | number;
   }
@@ -19,19 +19,29 @@
 
   // props
   type T = $$Generic;
-  export let user: User;
-  export let list: ListWithMetadata<Item>;
-  export let createModal: ComponentType<SvelteComponent<any, { created: CustomEvent<Item> }>>;
-  export let editModal:
+  interface Props {
+    user: User;
+    list: ListWithMetadata<Item>;
+    createModal: ComponentType<SvelteComponent<any, { created: CustomEvent<Item> }>>;
+    editModal: 
     | ComponentType<SvelteComponent<{ item: T }, { updated: CustomEvent }>>
     | undefined;
-  export let deleteModal: ComponentType<
+    deleteModal: ComponentType<
     SvelteComponent<{ item: T }, { deleted: CustomEvent<Item> }>
   >;
+  }
+
+  let {
+    user,
+    list = $bindable(),
+    createModal,
+    editModal,
+    deleteModal
+  }: Props = $props();
 
   // model
-  let editItem: Item | undefined;
-  let deleteItem: Item | undefined;
+  let editItem: Item | undefined = $state();
+  let deleteItem: Item | undefined = $state();
 
   // API: modal open events
   openCreate = () => {
@@ -66,15 +76,18 @@
 </script>
 
 <Modal id="create">
-  <svelte:component this={createModal} {user} on:created={addItem} />
+  {@const SvelteComponent_1 = createModal}
+  <SvelteComponent_1 {user} on:created={addItem} />
 </Modal>
 <Modal id="edit">
   {#if editItem}
-    <svelte:component this={editModal} item={editItem} on:updated={updateItem} />
+    {@const SvelteComponent_2 = editModal}
+    <SvelteComponent_2 item={editItem} on:updated={updateItem} />
   {/if}
 </Modal>
 <Modal id="delete">
   {#if deleteItem}
-    <svelte:component this={deleteModal} item={deleteItem} on:deleted={removeItem} />
+    {@const SvelteComponent_3 = deleteModal}
+    <SvelteComponent_3 item={deleteItem} on:deleted={removeItem} />
   {/if}
 </Modal>

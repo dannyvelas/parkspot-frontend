@@ -1,7 +1,12 @@
 <script lang="ts">
-  // props
-  export let startDate: Date;
-  export let endDate: Date;
+  
+  interface Props {
+    // props
+    startDate: Date;
+    endDate: Date;
+  }
+
+  let { startDate, endDate }: Props = $props();
 
   // model
   const now = new Date().getTime();

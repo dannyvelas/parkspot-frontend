@@ -1,8 +1,13 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
 
-  // props
-  export let form: Record<string, any> | undefined;
+  
+  interface Props {
+    // props
+    form: Record<string, any> | undefined;
+  }
+
+  let { form }: Props = $props();
 </script>
 
 <h1 class="font-bold text-center m-4">Reset Password</h1>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import type { PageData } from "./$types";
   import { messageDecoder } from "$lib/models";
   import { isOk } from "$lib/functional";
@@ -6,8 +8,13 @@
   import Password from "$lib/components/Password.svelte";
   import Banner, { updateBanner } from "$lib/components/Banner.svelte";
 
-  // props
-  export let data: PageData;
+  
+  interface Props {
+    // props
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   // events
   async function handleSubmit() {
@@ -35,7 +42,7 @@
 
 <Banner />
 <h1 class="font-bold text-center m-4">Enter Your New Password</h1>
-<form class="flex flex-col mx-auto w-52 md:w-64 gap-4" on:submit|preventDefault={handleSubmit}>
+<form class="flex flex-col mx-auto w-52 md:w-64 gap-4" onsubmit={preventDefault(handleSubmit)}>
   <Password name="password" placeholder="New Password" />
   <Password name="confirmPassword" placeholder="Confirm Password" />
   <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">

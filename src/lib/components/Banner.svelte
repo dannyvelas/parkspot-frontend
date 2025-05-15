@@ -1,12 +1,17 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export let updateBanner = (_: boolean, __: string) => {};
   export let clearBanner = () => {};
 </script>
 
 <script lang="ts">
-  // model
-  export let isError = false;
-  export let message = "";
+  
+  interface Props {
+    // model
+    isError?: boolean;
+    message?: string;
+  }
+
+  let { isError = $bindable(false), message = $bindable("") }: Props = $props();
 
   // api
   updateBanner = (b: boolean, s: string) => {
@@ -18,7 +23,7 @@
   };
 
   // styles
-  $: colors = isError ? "bg-rose-200 border-rose-500" : "bg-green-200 border-green-500";
+  let colors = $derived(isError ? "bg-rose-200 border-rose-500" : "bg-green-200 border-green-500");
 </script>
 
 {#if message != ""}

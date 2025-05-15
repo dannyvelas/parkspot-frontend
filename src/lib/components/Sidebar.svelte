@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export let openSidebar = () => {};
 </script>
 
@@ -6,11 +6,16 @@
   import { page } from "$app/stores";
   import { cubicIn } from "svelte/easing";
 
-  // props
-  export let userRole: string | undefined;
+  
+  interface Props {
+    // props
+    userRole: string | undefined;
+  }
+
+  let { userRole }: Props = $props();
 
   // model
-  let visible = false;
+  let visible = $state(false);
   let sidebarItems = [
     { name: "Dashboard", path: "/dashboard", icon: "material-symbols:dashboard-outline-rounded" },
     { name: "Permits", path: "/permits/all", icon: "clarity:details-line" },
@@ -75,12 +80,12 @@
 {#if visible}
   <div
     class="fixed z-10 inset-0 bg-gray-800 opacity-25"
-    on:click={closeSidebar}
-    on:keypress={closeSidebar}
-  />
+    onclick={closeSidebar}
+    onkeypress={closeSidebar}
+></div>
   <nav transition:horizontalSlide|global class="fixed z-20 min-h-full bg-white flex flex-col">
-    <button class="text-left" on:click={closeSidebar}>
-      <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
+    <button class="text-left" onclick={closeSidebar}>
+      <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15"></iconify-icon>
     </button>
     {#each sidebarItems as sidebarItem}
       {#if userRole !== "resident" || sidebarItem.name !== "Residents"}
@@ -92,13 +97,13 @@
             href={sidebarItem.path}
             class="sidebar-link"
             class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
-            on:click={closeSidebar}
+            onclick={closeSidebar}
           >
             <iconify-icon
               class="circle"
               class:active={getTopLevel($page.url.pathname) === getTopLevel(sidebarItem.path)}
               icon={sidebarItem.icon}
-            />
+></iconify-icon>
             <span>{sidebarItem.name}</span>
           </a>
         </div>

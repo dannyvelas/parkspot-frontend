@@ -2,8 +2,13 @@
   import { enhance } from "$app/forms";
   import Password from "$lib/components/Password.svelte";
 
-  // props
-  export let form: Record<string, any> | undefined;
+  
+  interface Props {
+    // props
+    form: Record<string, any> | undefined;
+  }
+
+  let { form }: Props = $props();
 </script>
 
 <svelte:head>
@@ -17,7 +22,7 @@
 <div
   class="bg-gray-200 max-w-prose p-2 my-4 mx-auto rounded flex flex-row items-center justify-center gap-2"
 >
-  <iconify-icon icon="ph:info-light" />
+  <iconify-icon icon="ph:info-light"></iconify-icon>
   <p>
     Need information about usernames in Las Vistas?
     <a href="https://park-spot.co/info-for-residents/" class="underline"> Click here! </a>

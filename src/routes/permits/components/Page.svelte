@@ -13,12 +13,23 @@
   import Edit from "./Edit.svelte";
   import Delete from "./Delete.svelte";
 
-  // props
-  export let listName: permitList;
-  export let permits: Result<ListWithMetadata<Permit>>;
-  export let session: Session;
-  export let search: string;
-  export let pageNum: number;
+  
+  interface Props {
+    // props
+    listName: permitList;
+    permits: Result<ListWithMetadata<Permit>>;
+    session: Session;
+    search: string;
+    pageNum: number;
+  }
+
+  let {
+    listName,
+    permits = $bindable(),
+    session,
+    search,
+    pageNum
+  }: Props = $props();
 
   function refreshList() {
     // ListModals updates permits.data by ref; here we ask svelte to render such changes
@@ -49,23 +60,26 @@
     {/if}
   </div>
   <Table totalAmount={permits.data.metadata.totalAmount} {search} {pageNum}>
-    <svelte:fragment slot="header-cells">
-      <div class="text-xs basis-3" />
+    <!-- @migration-task: migrate this slot by hand, `header-cells` is an invalid identifier -->
+  <svelte:fragment slot="header-cells">
+      <div class="text-xs basis-3"></div>
       <div class="text-xs hidden md:inline md:basis-12">ID</div>
       <div class="text-xs hidden md:inline md:basis-20">Resident ID</div>
       <div class="text-xs basis-20 md:basis-1/3">Vehicle</div>
       <div class="text-xs basis-20">License</div>
       <div class="text-xs basis-16">Status</div>
     </svelte:fragment>
-    <svelte:fragment slot="rows">
-      {#each permits.data.records as permit (permit.id)}
-        <Row
-          {permit}
-          userRole={session.user.role}
-          on:clickDelete={openDelete}
-          on:clickEdit={openEdit}
-        />
-      {/each}
-    </svelte:fragment>
+    {#snippet rows()}
+          
+        {#each permits.data.records as permit (permit.id)}
+          <Row
+            {permit}
+            userRole={session.user.role}
+            on:clickDelete={openDelete}
+            on:clickEdit={openEdit}
+          />
+        {/each}
+      
+          {/snippet}
   </Table>
 {/if}

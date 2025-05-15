@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import type { User, Car } from "$lib/models";
   import { Request } from "$lib/api";
   import { getLatestToken } from "$lib/auth/jwt";
@@ -11,14 +13,19 @@
   // config
   const dispatch = createEventDispatcher();
 
-  // props
-  export let user: User;
+  
+  interface Props {
+    // props
+    user: User;
+  }
+
+  let { user }: Props = $props();
 
   // model
-  let carSelection = "";
-  let isException = false;
-  let residentCars: Car[] = [];
-  let residentID = user.role === "resident" ? user.id : "";
+  let carSelection = $state("");
+  let isException = $state(false);
+  let residentCars: Car[] = $state([]);
+  let residentID = $state(user.role === "resident" ? user.id : "");
 
   // init
   if (user.role === "resident") {
@@ -78,7 +85,7 @@
 
 <form
   class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
-  on:submit|preventDefault={handleSubmit}
+  onsubmit={preventDefault(handleSubmit)}
 >
   <Banner />
   <p class="text-center font-bold text-lg">Create Permit</p>
@@ -89,7 +96,7 @@
       name="residentID"
       placeholder="Enter Resident ID"
       bind:value={residentID}
-      on:blur={safeSeedResidentCars}
+      onblur={safeSeedResidentCars}
     />
   {/if}
   <select class="border rounded p-2" bind:value={carSelection}>
@@ -116,7 +123,7 @@
         class="border rounded p-2 resize-none"
         name="exceptionReason"
         placeholder="Reason for exception"
-      />
+></textarea>
     {/if}
   {/if}
   <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">

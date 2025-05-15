@@ -9,29 +9,39 @@
   // config
   const dispatch = createEventDispatcher();
 
-  // props
-  export let permit: Permit;
-  export let userRole: string;
+  
+  interface Props {
+    // props
+    permit: Permit;
+    userRole: string;
+  }
+
+  let { permit, userRole }: Props = $props();
 </script>
 
 <Row>
-  <svelte:fragment slot="cells">
-    <div class="text-xs text-zinc-800 hidden md:inline md:basis-12">{permit.id}</div>
-    <div class="text-xs text-zinc-800 hidden md:inline md:basis-20">{permit.residentID}</div>
-    <div class="text-xs text-zinc-800 basis-20 md:basis-1/3">
-      <span class="hidden lg:inline">{capitalize(permit.color)}</span>
-      <span>{capitalize(permit.make)}</span>
-      <span class="hidden lg:inline">{capitalize(permit.model)}</span>
-    </div>
-    <div class="text-xs text-zinc-800 basis-20">{permit.licensePlate}</div>
-    <Tag startDate={permit.startDate} endDate={permit.endDate} />
-  </svelte:fragment>
-  <svelte:fragment slot="header">
-    <div class="text-xs font-bold">Permit {permit.id}</div>
-    <div class="text-xs text-gray-500">
-      {minimalDate(permit.startDate)} - {minimalDate(permit.endDate)}
-    </div>
-  </svelte:fragment>
+  {#snippet cells()}
+  
+      <div class="text-xs text-zinc-800 hidden md:inline md:basis-12">{permit.id}</div>
+      <div class="text-xs text-zinc-800 hidden md:inline md:basis-20">{permit.residentID}</div>
+      <div class="text-xs text-zinc-800 basis-20 md:basis-1/3">
+        <span class="hidden lg:inline">{capitalize(permit.color)}</span>
+        <span>{capitalize(permit.make)}</span>
+        <span class="hidden lg:inline">{capitalize(permit.model)}</span>
+      </div>
+      <div class="text-xs text-zinc-800 basis-20">{permit.licensePlate}</div>
+      <Tag startDate={permit.startDate} endDate={permit.endDate} />
+    
+  {/snippet}
+  {#snippet header()}
+  
+      <div class="text-xs font-bold">Permit {permit.id}</div>
+      <div class="text-xs text-gray-500">
+        {minimalDate(permit.startDate)} - {minimalDate(permit.endDate)}
+      </div>
+    
+  {/snippet}
+  <!-- @migration-task: migrate this slot by hand, `top-content` is an invalid identifier -->
   <div slot="top-content" class="flex flex-row">
     <div class="basis-1/2 flex flex-col gap-1 truncate">
       <div class="text-xs font-bold text-gray-500 mb-2">Resident</div>
@@ -47,10 +57,12 @@
       <div class="text-xs text-gray-500 truncate">{permit.licensePlate}</div>
     </div>
   </div>
+  <!-- @migration-task: migrate this slot by hand, `middle-content` is an invalid identifier -->
   <div slot="middle-content" class:hidden={!permit.exceptionReason}>
     <div class="text-xs font-bold text-gray-500 mb-2">Exception Reason</div>
     <div class="text-xs">{permit.exceptionReason}</div>
   </div>
+  <!-- @migration-task: migrate this slot by hand, `bottom-content` is an invalid identifier -->
   <div slot="bottom-content">
     <div class="text-xs font-bold text-gray-500">Requested Date</div>
     <div class="text-xs">
@@ -67,13 +79,13 @@
       {#if userRole === "admin"}
         <button
           class="basis-20 border border-green-500 rounded-md text-center text-green-500"
-          on:click={() => dispatch("clickEdit", permit)}
+          onclick={() => dispatch("clickEdit", permit)}
         >
           Edit
         </button>
         <button
           class="basis-20 border border-rose-500 rounded-md text-center text-rose-500"
-          on:click={() => dispatch("clickDelete", permit)}
+          onclick={() => dispatch("clickDelete", permit)}
         >
           Delete
         </button>

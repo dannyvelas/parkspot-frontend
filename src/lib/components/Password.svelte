@@ -1,12 +1,17 @@
 <script lang="ts">
-  // props
-  export let name: string;
-  export let placeholder: string;
+  
+  interface Props {
+    // props
+    name: string;
+    placeholder: string;
+  }
+
+  let { name, placeholder }: Props = $props();
 
   // model
-  let passwordsShown = false;
-  $: passwordType = passwordsShown ? "text" : "password";
-  $: icon = passwordsShown ? "mdi:eye" : "mdi:eye-off";
+  let passwordsShown = $state(false);
+  let passwordType = $derived(passwordsShown ? "text" : "password");
+  let icon = $derived(passwordsShown ? "mdi:eye" : "mdi:eye-off");
 
   // events
   function toggleType() {
@@ -22,7 +27,7 @@
     {name}
     {placeholder}
   />
-  <button type="button" class="border rounded-r flex items-center px-2" on:click={toggleType}>
-    <iconify-icon {icon} />
+  <button type="button" class="border rounded-r flex items-center px-2" onclick={toggleType}>
+    <iconify-icon {icon}></iconify-icon>
   </button>
 </div>

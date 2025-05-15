@@ -1,17 +1,18 @@
 <script lang="ts">
   import { MAX_AMT_PER_PAGE } from "$lib/constants";
 
-  // props
-  export let totalAmount: number;
-  export let pageNum: number;
-  export let pageToHref: (a: number) => string;
+  
+  interface Props {
+    // props
+    totalAmount: number;
+    pageNum: number;
+    pageToHref: (a: number) => string;
+  }
+
+  let { totalAmount, pageNum, pageToHref }: Props = $props();
 
   // model
   const rangeSize = 5;
-  $: amtPages = getAmtPages(totalAmount);
-  $: pageLinks = Array.from({ length: amtPages }, (_, i) => i + 1);
-  $: leftBound = pageNum;
-  $: rightBound = pageNum + rangeSize > amtPages ? amtPages : pageNum + rangeSize;
 
   function getAmtPages(totalAmount: number) {
     const int_div = totalAmount / MAX_AMT_PER_PAGE;
@@ -34,16 +35,20 @@
     rightBound = rightBound + incAmount;
     leftBound = rightBound - rangeSize <= 0 ? 1 : rightBound - rangeSize;
   }
+  let amtPages = $derived(getAmtPages(totalAmount));
+  let pageLinks = $derived(Array.from({ length: amtPages }, (_, i) => i + 1));
+  let leftBound = $derived(pageNum);
+  let rightBound = $derived(pageNum + rangeSize > amtPages ? amtPages : pageNum + rangeSize);
 </script>
 
 {#if pageLinks.length > 1}
   <nav class="flex flex-row justify-center align-center gap-2 mt-6">
     {#if leftBound > 1}
-      <button on:click={decBounds}>
+      <button onclick={decBounds}>
         <iconify-icon
           class="text-green-400"
           icon="material-symbols:arrow-circle-left-outline-rounded"
-        />
+></iconify-icon>
       </button>
     {/if}
     <ul class="list-none flex flex-row gap-2">
@@ -56,11 +61,11 @@
       {/each}
     </ul>
     {#if rightBound < amtPages}
-      <button on:click={incBounds}>
+      <button onclick={incBounds}>
         <iconify-icon
           class="text-green-400"
           icon="material-symbols:arrow-circle-right-outline-rounded"
-        />
+></iconify-icon>
       </button>
     {/if}
   </nav>

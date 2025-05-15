@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { permitList } from "$lib/models";
   import { capitalize } from "$lib/strings";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 
   // model
   let permitTabs: permitList[] = ["all", "active", "expired", "exceptions"];
@@ -18,7 +23,7 @@
         <a
           href="/permits/{permitTab}"
           class="text-sm text-gray-400"
-          class:active={$page.url.pathname.endsWith(permitTab)}
+          class:active={page.url.pathname.endsWith(permitTab)}
         >
           {capitalize(permitTab)}
         </a>
@@ -27,7 +32,7 @@
   </ul>
 </nav>
 
-<slot />
+{@render children?.()}
 
 <style lang="postcss">
   .active {

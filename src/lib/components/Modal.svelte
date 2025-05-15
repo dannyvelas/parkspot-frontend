@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   type ModalCtrl = {
     open: () => void;
     close: () => void;
@@ -12,14 +12,22 @@
 </script>
 
 <script lang="ts">
+  import { stopPropagation } from 'svelte/legacy';
+
   import { onDestroy } from "svelte";
   import { browser } from "$app/environment";
 
-  // props
-  export let id = ""; // default id of Modal with no argument is ""
+  
+  interface Props {
+    // props
+    id?: string; // default id of Modal with no argument is ""
+    children?: import('svelte').Snippet;
+  }
+
+  let { id = "", children }: Props = $props();
 
   // model
-  let visible = false;
+  let visible = $state(false);
 
   // events
   function openModal() {
@@ -64,19 +72,19 @@
 {#if visible}
   <div
     class="fixed z-10 inset-0 bg-gray-800 bg-opacity-25 flex justify-center items-center"
-    on:click={closeModal}
-    on:keypress={closeOnEscape}
+    onclick={closeModal}
+    onkeypress={closeOnEscape}
   >
     <div
       class="bg-white rounded-md px-4 py-3 overflow-auto"
       id="modal-window"
-      on:click|stopPropagation={() => {}}
-      on:keypress|stopPropagation={() => {}}
+      onclick={stopPropagation(() => {})}
+      onkeypress={stopPropagation(() => {})}
     >
-      <button on:click={closeModal}>
-        <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15" />
+      <button onclick={closeModal}>
+        <iconify-icon icon="mingcute:close-line" style="color:#6d6d6d" width="15" height="15"></iconify-icon>
       </button>
-      <slot />
+      {@render children?.()}
     </div>
   </div>
 {/if}
