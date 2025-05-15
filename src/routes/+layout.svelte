@@ -19,5 +19,5 @@
 <Nav on:openSidebar={() => openSidebar()} session={data.session} />
 
 <main class="px-4 md:px-10">
-  {@render children?.()}
+  {@render children()}
 </main>
