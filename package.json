@@ -23,7 +23,6 @@
     "@types/cookie": "^0.5.1",
     "@types/jsonwebtoken": "^8.5.8",
     "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-svelte": "^3.0.0",
