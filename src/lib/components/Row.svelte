@@ -1,35 +1,52 @@
-<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot making the component unusable -->
 <script lang="ts">
-  import { slide } from "svelte/transition";
+	import { slide } from 'svelte/transition';
+	import type { Snippet } from 'svelte';
 
-  // model
-  let isExpanded = false;
+	// props
+	interface Props {
+		cells: Snippet;
+		header?: Snippet;
+		topContent?: Snippet;
+		middleContent?: Snippet;
+		bottomContent: Snippet;
+	}
+
+	let { cells, header, topContent, middleContent, bottomContent }: Props = $props();
+
+	// model
+	let isExpanded = $state(false);
 </script>
 
-<div class="bg-white flex flex-col gap-2 rounded shadow-md px-2 lg:px-8 py-3">
-  <div
-    class="flex flex-row justify-between"
-    on:click={() => (isExpanded = !isExpanded)}
-    on:keypress={() => (isExpanded = !isExpanded)}
-  >
-    <div class="text-xs basis-3">
-      {#if !isExpanded}
-        <iconify-icon icon="material-symbols:keyboard-arrow-down-rounded" />
-      {:else}
-        <iconify-icon icon="material-symbols:keyboard-arrow-up-rounded" />
-      {/if}
-    </div>
-    <slot name="cells" />
-  </div>
-  {#if isExpanded}
-    <div transition:slide class="flex flex-col gap-y-5">
-      <div>
-        <slot name="header" />
-        <hr class="my-3" />
-        <slot name="top-content" />
-      </div>
-      <slot name="middle-content" />
-      <slot name="bottom-content" />
-    </div>
-  {/if}
+<div class="flex flex-col gap-2 rounded bg-white px-2 py-3 shadow-md lg:px-8">
+	<div
+		class="flex flex-row justify-between"
+		onclick={() => (isExpanded = !isExpanded)}
+		onkeypress={() => (isExpanded = !isExpanded)}
+	>
+		<div class="basis-3 text-xs">
+			{#if !isExpanded}
+				<iconify-icon icon="material-symbols:keyboard-arrow-down-rounded"></iconify-icon>
+			{:else}
+				<iconify-icon icon="material-symbols:keyboard-arrow-up-rounded"></iconify-icon>
+			{/if}
+		</div>
+		{@render cells()}
+	</div>
+	{#if isExpanded}
+		<div transition:slide class="flex flex-col gap-y-5">
+			<div>
+				{#if header}
+					{@render header()}
+				{/if}
+				<hr class="my-3" />
+				{#if topContent}
+					{@render topContent()}
+				{/if}
+			</div>
+			{#if middleContent}
+				{@render middleContent()}
+			{/if}
+			{@render bottomContent()}
+		</div>
+	{/if}
 </div>

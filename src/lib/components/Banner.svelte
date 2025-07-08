@@ -1,33 +1,32 @@
 <script lang="ts" module>
-  export let updateBanner = (_: boolean, __: string) => {};
-  export let clearBanner = () => {};
+	export let updateBanner = (_: boolean, __: string) => {};
+	export let clearBanner = () => {};
 </script>
 
 <script lang="ts">
-  
-  interface Props {
-    // model
-    isError?: boolean;
-    message?: string;
-  }
+	interface Props {
+		// model
+		isError?: boolean;
+		message?: string;
+	}
 
-  let { isError = $bindable(false), message = $bindable("") }: Props = $props();
+	let { isError = $bindable(false), message = $bindable('') }: Props = $props();
 
-  // api
-  updateBanner = (b: boolean, s: string) => {
-    isError = b;
-    message = s;
-  };
-  clearBanner = () => {
-    message = "";
-  };
+	// api
+	updateBanner = (b: boolean, s: string) => {
+		isError = b;
+		message = s;
+	};
+	clearBanner = () => {
+		message = '';
+	};
 
-  // styles
-  let colors = $derived(isError ? "bg-rose-200 border-rose-500" : "bg-green-200 border-green-500");
+	// styles
+	let colors = $derived(isError ? 'bg-rose-200 border-rose-500' : 'bg-green-200 border-green-500');
 </script>
 
-{#if message != ""}
-  <div class="min-w-full {colors} rounded-md border p-2">
-    <p class="text-sm">{message}</p>
-  </div>
+{#if message != ''}
+	<div class="min-w-full {colors} rounded-md border p-2">
+		<p class="text-sm">{message}</p>
+	</div>
 {/if}

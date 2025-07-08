@@ -1,68 +1,64 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
+	import type { Resident } from '$lib/models';
+	import { Request } from '$lib/api';
+	import { getLatestToken } from '$lib/auth/jwt';
+	import { isOk } from '$lib/functional';
+	import { residentDecoder } from '$lib/models';
+	import Banner, { updateBanner } from '$lib/components/Banner.svelte';
 
-  import type { Resident } from "$lib/models";
-  import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth/jwt";
-  import { isOk } from "$lib/functional";
-  import { residentDecoder } from "$lib/models";
-  import { createEventDispatcher } from "svelte";
-  import Banner, { updateBanner } from "$lib/components/Banner.svelte";
+	interface Props {
+		// props
+		item: Resident;
+		onUpdated: (item: Resident) => void;
+	}
 
-  // config
-  const dispatch = createEventDispatcher();
+	let { item, onUpdated }: Props = $props();
+	const newItem = $state(structuredClone($state.snapshot(item)));
 
-  
-  interface Props {
-    // props
-    item: Resident;
-  }
+	// events
+	async function handleSubmit(event: SubmitEvent) {
+		event.preventDefault();
+		const editRes = await new Request(residentDecoder)
+			.setAccessToken(await getLatestToken())
+			.put(`api/resident`, newItem);
+		if (!isOk(editRes)) {
+			updateBanner(true, editRes.message);
+			return;
+		}
 
-  let { item = $bindable() }: Props = $props();
+		updateBanner(false, 'Resident updated');
 
-  // events
-  async function handleSubmit() {
-    const editRes = await new Request(residentDecoder)
-      .setAccessToken(await getLatestToken())
-      .put(`api/resident`, item);
-    if (!isOk(editRes)) {
-      updateBanner(true, editRes.message);
-      return;
-    }
-
-    item = editRes.data;
-    updateBanner(false, "Resident updated");
-
-    dispatch("updated");
-  }
+		onUpdated(editRes.data);
+	}
 </script>
 
-<form
-  class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
-  onsubmit={preventDefault(handleSubmit)}
->
-  <Banner />
-  <p class="text-center font-bold text-lg">Edit Resident</p>
-  <input class="text-gray-500 border rounded p-2" bind:value={item.id} readonly />
-  <input
-    class="border rounded p-2"
-    placeholder="Enter new first name"
-    bind:value={item.firstName}
-  />
-  <input class="border rounded p-2" placeholder="Enter new last name" bind:value={item.lastName} />
-  <input class="border rounded p-2" placeholder="Enter new phone" bind:value={item.phone} />
-  <input class="border rounded p-2" placeholder="Enter new email" bind:value={item.email} />
-  <input
-    class="border rounded p-2"
-    type="number"
-    placeholder="Enter new amount of days used"
-    bind:value={item.amtParkingDaysUsed}
-  />
-  <div class="text-center">
-    <label for="unlimDays">Unlimited Days: </label>
-    <input id="unlimDays" type="checkbox" bind:checked={item.unlimDays} />
-  </div>
-  <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">
-    Edit Resident
-  </button>
+<form class="mx-auto flex w-52 flex-col gap-4 bg-white md:w-64" onsubmit={handleSubmit}>
+	<Banner />
+	<p class="text-center text-lg font-bold">Edit Resident</p>
+	<input class="rounded border p-2 text-gray-500" bind:value={newItem.id} readonly />
+	<input
+		class="rounded border p-2"
+		placeholder="Enter new first name"
+		bind:value={newItem.firstName}
+	/>
+	<input
+		class="rounded border p-2"
+		placeholder="Enter new last name"
+		bind:value={newItem.lastName}
+	/>
+	<input class="rounded border p-2" placeholder="Enter new phone" bind:value={newItem.phone} />
+	<input class="rounded border p-2" placeholder="Enter new email" bind:value={newItem.email} />
+	<input
+		class="rounded border p-2"
+		type="number"
+		placeholder="Enter new amount of days used"
+		bind:value={newItem.amtParkingDaysUsed}
+	/>
+	<div class="text-center">
+		<label for="unlimDays">Unlimited Days: </label>
+		<input id="unlimDays" type="checkbox" bind:checked={newItem.unlimDays} />
+	</div>
+	<button type="submit" class="rounded border bg-green-400 px-4 py-1 text-center text-white">
+		Edit Resident
+	</button>
 </form>

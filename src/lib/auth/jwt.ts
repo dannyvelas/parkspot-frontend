@@ -1,12 +1,12 @@
 import * as jose from "jose";
 import { Request } from "$lib/api";
-import { sessionDecoder, tokenStore } from "$lib/auth";
+import { sessionDecoder } from "$lib/auth/session";
+import { getToken, setToken } from '$lib/auth/token.svelte';
 import { isOk } from "$lib/functional";
-import { get } from "svelte/store";
 import { invalidateAll } from "$app/navigation";
 
 export const getLatestToken = async () => {
-  if (expiringSoon(get(tokenStore))) {
+  if (expiringSoon(getToken())) {
     const sessionRes = await new Request(sessionDecoder).post("api/refresh-tokens");
     if (!isOk(sessionRes)) {
       // logout user if refresh request failed
@@ -18,10 +18,10 @@ export const getLatestToken = async () => {
 
       return "";
     }
-    tokenStore.set(sessionRes.data.accessToken);
+    setToken(sessionRes.data.accessToken);
   }
 
-  return get(tokenStore);
+  return getToken();
 };
 
 const expiringSoon = (token: string) => {

@@ -1,57 +1,54 @@
-<!-- @migration-task Error while migrating Svelte code: `<tr>` cannot be a child of `<table>`. `<table>` only allows these children: `<caption>`, `<colgroup>`, `<tbody>`, `<thead>`, `<tfoot>`, `<style>`, `<script>`, `<template>`. The browser will 'repair' the HTML (by moving, removing, or inserting elements) which breaks Svelte's assumptions about the structure of your components.
-https://svelte.dev/e/node_invalid_placement -->
 <script lang="ts">
-  import type { Resident } from "$lib/models";
-  import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth/jwt";
-  import { isOk } from "$lib/functional";
-  import { createEventDispatcher } from "svelte";
-  import Banner, { updateBanner } from "$lib/components/Banner.svelte";
+	import type { Resident } from '$lib/models';
+	import { Request } from '$lib/api';
+	import { getLatestToken } from '$lib/auth/jwt';
+	import { isOk } from '$lib/functional';
+	import Banner, { updateBanner } from '$lib/components/Banner.svelte';
 
-  // config
-  const dispatch = createEventDispatcher();
+	interface Props {
+		item: Resident;
+		onDeleted: (item: Resident) => void;
+	}
+	let { item, onDeleted }: Props = $props();
 
-  // props
-  export let item: Resident;
+	// events
+	async function handleSubmit(event: SubmitEvent) {
+		event.preventDefault();
+		const delRes = await new Request()
+			.setAccessToken(await getLatestToken())
+			.delete(`api/resident/${item.id}`);
+		if (!isOk(delRes)) {
+			updateBanner(true, delRes.message);
+			return;
+		}
 
-  // events
-  async function handleSubmit() {
-    const delRes = await new Request()
-      .setAccessToken(await getLatestToken())
-      .delete(`api/resident/${item.id}`);
-    if (!isOk(delRes)) {
-      updateBanner(true, delRes.message);
-      return;
-    }
-
-    dispatch("deleted", item);
-  }
+		onDeleted(item);
+	}
 </script>
 
-<form
-  class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
-  on:submit|preventDefault={handleSubmit}
->
-  <Banner />
-  <p class="text-center">Delete the following resident?</p>
-  <table>
-    <tr>
-      <td class="font-bold">ID</td><td>{item.id}</td>
-    </tr>
-    <tr>
-      <td class="font-bold">First</td><td>{item.firstName}</td>
-    </tr>
-    <tr>
-      <td class="font-bold">Last</td><td>{item.lastName}</td>
-    </tr>
-    <tr>
-      <td class="font-bold">Phone</td><td>{item.phone}</td>
-    </tr>
-    <tr>
-      <td class="font-bold">Email</td><td>{item.email}</td>
-    </tr>
-  </table>
-  <button type="submit" class="bg-rose-400 text-white text-center border rounded px-4 py-1">
-    Delete Resident
-  </button>
+<form class="mx-auto flex w-52 flex-col gap-4 bg-white md:w-64" onsubmit={handleSubmit}>
+	<Banner />
+	<p class="text-center">Delete the following resident?</p>
+	<table>
+		<tbody>
+			<tr>
+				<td class="font-bold">ID</td><td>{item.id}</td>
+			</tr>
+			<tr>
+				<td class="font-bold">First</td><td>{item.firstName}</td>
+			</tr>
+			<tr>
+				<td class="font-bold">Last</td><td>{item.lastName}</td>
+			</tr>
+			<tr>
+				<td class="font-bold">Phone</td><td>{item.phone}</td>
+			</tr>
+			<tr>
+				<td class="font-bold">Email</td><td>{item.email}</td>
+			</tr>
+		</tbody>
+	</table>
+	<button type="submit" class="rounded border bg-rose-400 px-4 py-1 text-center text-white">
+		Delete Resident
+	</button>
 </form>

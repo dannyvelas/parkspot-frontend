@@ -1,15 +1,17 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+	interface Props {
+		// props
+		onclick: () => void;
+	}
 
-  // config
-  const dispatch = createEventDispatcher();
+	let { onclick }: Props = $props();
 </script>
 
 <div
-  class="flex flex-row items-center gap-x-2 cursor-default"
-  onclick={() => dispatch("click")}
-  onkeydown={() => dispatch("click")}
+	class="flex cursor-default flex-row items-center gap-x-2"
+	onclick={() => onclick()}
+	onkeydown={() => onclick()}
 >
-  <span class="text-xs text-green-400">Create</span>
-  <iconify-icon icon="ph:plus-circle-bold" class="text-green-400"></iconify-icon>
+	<span class="text-xs text-green-400">Create</span>
+	<iconify-icon icon="ph:plus-circle-bold" class="text-green-400"></iconify-icon>
 </div>

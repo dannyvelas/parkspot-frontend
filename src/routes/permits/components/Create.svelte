@@ -1,132 +1,128 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
+	import type { User, Car } from '$lib/models';
+	import { Request } from '$lib/api';
+	import { getLatestToken } from '$lib/auth/jwt';
+	import { isOk } from '$lib/functional';
+	import { listWithMetadataDecoder, carDecoder, residentDecoder, permitDecoder } from '$lib/models';
+	import Banner, { updateBanner, clearBanner } from '$lib/components/Banner.svelte';
+	import Litepicker, { getStartDate, getEndDate } from '$lib/components/Litepicker.svelte';
+	import type { Permit } from '$lib/models';
 
-  import type { User, Car } from "$lib/models";
-  import { Request } from "$lib/api";
-  import { getLatestToken } from "$lib/auth/jwt";
-  import { isOk } from "$lib/functional";
-  import { listWithMetadataDecoder, carDecoder, residentDecoder, permitDecoder } from "$lib/models";
-  import { createEventDispatcher } from "svelte";
-  import Banner, { updateBanner, clearBanner } from "$lib/components/Banner.svelte";
-  import Litepicker, { getStartDate, getEndDate } from "$lib/components/Litepicker.svelte";
+	interface Props {
+		// props
+		user: User;
+		onCreated: (permit: Permit) => void;
+	}
 
-  // config
-  const dispatch = createEventDispatcher();
+	let { user, onCreated }: Props = $props();
 
-  
-  interface Props {
-    // props
-    user: User;
-  }
+	// model
+	let carSelection = $state('');
+	let isException = $state(false);
+	let residentCars: Car[] = $state([]);
+	let residentID = $state(user.role === 'resident' ? user.id : '');
 
-  let { user }: Props = $props();
+	// init
+	if (user.role === 'resident') {
+		seedResidentCars();
+	}
 
-  // model
-  let carSelection = $state("");
-  let isException = $state(false);
-  let residentCars: Car[] = $state([]);
-  let residentID = $state(user.role === "resident" ? user.id : "");
+	// events
+	async function seedResidentCars() {
+		const carRes = await new Request(listWithMetadataDecoder(carDecoder))
+			.setAccessToken(await getLatestToken())
+			.get(`api/resident/${residentID}/cars`);
+		if (!isOk(carRes)) {
+			updateBanner(true, carRes.message);
+			return;
+		}
 
-  // init
-  if (user.role === "resident") {
-    seedResidentCars();
-  }
+		clearBanner();
+		residentCars = carRes.data.records;
+	}
 
-  // events
-  async function seedResidentCars() {
-    const carRes = await new Request(listWithMetadataDecoder(carDecoder))
-      .setAccessToken(await getLatestToken())
-      .get(`api/resident/${residentID}/cars`);
-    if (!isOk(carRes)) {
-      updateBanner(true, carRes.message);
-      return;
-    }
+	async function handleSubmit(
+		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }
+	) {
+		event.preventDefault();
 
-    clearBanner();
-    residentCars = carRes.data.records;
-  }
+		const formData = new FormData(event.currentTarget);
+		if (carSelection !== 'newCar') {
+			formData.set('carID', carSelection);
+		}
+		formData.set('startDate', getStartDate().toISOString());
+		formData.set('endDate', getEndDate().toISOString());
 
-  async function handleSubmit() {
-    const formData = new FormData(this);
-    if (carSelection !== "newCar") {
-      formData.set("carID", carSelection);
-    }
-    formData.set("startDate", getStartDate().toISOString());
-    formData.set("endDate", getEndDate().toISOString());
+		const formObject = Object.fromEntries(formData.entries());
+		const result = await new Request(permitDecoder)
+			.setAccessToken(await getLatestToken())
+			.post('api/permit', formObject);
+		if (!isOk(result)) {
+			updateBanner(true, result.message);
+			return;
+		}
 
-    const formObject = Object.fromEntries(formData.entries());
-    const result = await new Request(permitDecoder)
-      .setAccessToken(await getLatestToken())
-      .post("api/permit", formObject);
-    if (!isOk(result)) {
-      updateBanner(true, result.message);
-      return;
-    }
+		clearBanner();
+		onCreated(result.data);
+	}
 
-    clearBanner();
-    dispatch("created", result.data);
-  }
+	async function safeSeedResidentCars() {
+		if (!residentID) {
+			return;
+		}
+		const residentRes = await new Request(residentDecoder)
+			.setAccessToken(await getLatestToken())
+			.get(`api/resident/${residentID}`);
+		if (!isOk(residentRes)) {
+			updateBanner(true, residentRes.message);
+			return;
+		}
 
-  async function safeSeedResidentCars() {
-    if (!residentID) {
-      return;
-    }
-    const residentRes = await new Request(residentDecoder)
-      .setAccessToken(await getLatestToken())
-      .get(`api/resident/${residentID}`);
-    if (!isOk(residentRes)) {
-      updateBanner(true, residentRes.message);
-      return;
-    }
-
-    seedResidentCars();
-  }
+		seedResidentCars();
+	}
 </script>
 
-<form
-  class="bg-white flex flex-col mx-auto w-52 md:w-64 gap-4"
-  onsubmit={preventDefault(handleSubmit)}
->
-  <Banner />
-  <p class="text-center font-bold text-lg">Create Permit</p>
-  {#if user.role !== "resident"}
-    <input
-      required
-      class="border rounded p-2"
-      name="residentID"
-      placeholder="Enter Resident ID"
-      bind:value={residentID}
-      onblur={safeSeedResidentCars}
-    />
-  {/if}
-  <select class="border rounded p-2" bind:value={carSelection}>
-    <option value="" disabled selected>Select Car</option>
-    {#each residentCars as car}
-      <option value={car.id}>{car.color} {car.make} {car.model}</option>
-    {/each}
-    <option value="newCar">Add a new car</option>
-  </select>
-  {#if carSelection === "newCar"}
-    <input class="border rounded p-2" name="licensePlate" placeholder="Enter License Plate" />
-    <input class="border rounded p-2" name="color" placeholder="Enter Color" />
-    <input class="border rounded p-2" name="make" placeholder="Enter Make" />
-    <input class="border rounded p-2" name="model" placeholder="Enter Model" />
-  {/if}
-  <Litepicker />
-  {#if user.role === "admin"}
-    <div class="text-center">
-      <label for="isException">Exception: </label>
-      <input id="isException" type="checkbox" bind:checked={isException} />
-    </div>
-    {#if isException}
-      <textarea
-        class="border rounded p-2 resize-none"
-        name="exceptionReason"
-        placeholder="Reason for exception"
-></textarea>
-    {/if}
-  {/if}
-  <button type="submit" class="bg-green-400 text-white text-center border rounded px-4 py-1">
-    Create Permit
-  </button>
+<form class="mx-auto flex w-52 flex-col gap-4 bg-white md:w-64" onsubmit={handleSubmit}>
+	<Banner />
+	<p class="text-center text-lg font-bold">Create Permit</p>
+	{#if user.role !== 'resident'}
+		<input
+			required
+			class="rounded border p-2"
+			name="residentID"
+			placeholder="Enter Resident ID"
+			bind:value={residentID}
+			onblur={safeSeedResidentCars}
+		/>
+	{/if}
+	<select class="rounded border p-2" bind:value={carSelection}>
+		<option value="" disabled selected>Select Car</option>
+		{#each residentCars as car}
+			<option value={car.id}>{car.color} {car.make} {car.model}</option>
+		{/each}
+		<option value="newCar">Add a new car</option>
+	</select>
+	{#if carSelection === 'newCar'}
+		<input class="rounded border p-2" name="licensePlate" placeholder="Enter License Plate" />
+		<input class="rounded border p-2" name="color" placeholder="Enter Color" />
+		<input class="rounded border p-2" name="make" placeholder="Enter Make" />
+		<input class="rounded border p-2" name="model" placeholder="Enter Model" />
+	{/if}
+	<Litepicker />
+	{#if user.role === 'admin'}
+		<div class="text-center">
+			<label for="isException">Exception: </label>
+			<input id="isException" type="checkbox" bind:checked={isException} />
+		</div>
+		{#if isException}
+			<textarea
+				class="resize-none rounded border p-2"
+				name="exceptionReason"
+				placeholder="Reason for exception"
+			></textarea>
+		{/if}
+	{/if}
+	<button type="submit" class="rounded border bg-green-400 px-4 py-1 text-center text-white">
+		Create Permit
+	</button>
 </form>
