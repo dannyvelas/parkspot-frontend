@@ -46,7 +46,7 @@
 	/>
 	<div class="mb-4 flex flex-row gap-x-1 md:gap-x-4">
 		<Search search={data.search} />
-		<CreateBtn onclick={openCreate} />
+		<CreateBtn onclick={() => openCreate()} />
 	</div>
 	<Table
 		totalAmount={newResidents.data.metadata.totalAmount}

@@ -11,9 +11,8 @@
 <script lang="ts" generics="T extends Item">
 	import type { ListWithMetadata, User } from '$lib/models';
 	import type { Component } from 'svelte';
-	import Modal, { getModal } from '$lib/components/Modal.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 
-	// props
 	interface Props {
 		user: User;
 		list: ListWithMetadata<T>;
@@ -23,30 +22,26 @@
 		onModalUpdate: (newList: ListWithMetadata<T>) => void;
 	}
 
-	let {
-		user,
-		list = $bindable(),
-		onModalUpdate,
-		CreateModal,
-		EditModal,
-		DeleteModal
-	}: Props = $props();
+	let { user, list, onModalUpdate, CreateModal, EditModal, DeleteModal }: Props = $props();
 
 	// model
 	let editItem: T | undefined = $state();
 	let deleteItem: T | undefined = $state();
+	let createModal: Modal;
+	let editModal: Modal;
+	let deleteModal: Modal;
 
 	// API: modal open events
 	openCreate = () => {
-		getModal('create')?.open();
+		createModal.openModal();
 	};
 	openEdit = (t: T) => {
 		editItem = t;
-		getModal('edit')?.open();
+		editModal.openModal();
 	};
 	openDelete = (t: T) => {
 		deleteItem = t;
-		getModal('delete')?.open();
+		deleteModal.openModal();
 	};
 
 	// modal dispatch events
@@ -57,7 +52,7 @@
 				totalAmount: list.metadata.totalAmount + 1
 			}
 		};
-		getModal('create')?.close();
+		createModal.closeModal();
 		onModalUpdate(newList);
 	};
 	const updateItem = (item: T) => {
@@ -78,20 +73,20 @@
 			records: list.records.filter((p) => p.id !== item.id),
 			metadata: { totalAmount: list.metadata.totalAmount - 1 }
 		};
-		getModal('delete')?.close();
+		deleteModal.closeModal();
 		onModalUpdate(newList);
 	};
 </script>
 
-<Modal id="create">
+<Modal bind:this={createModal}>
 	<CreateModal {user} onCreated={addItem} />
 </Modal>
-<Modal id="edit">
+<Modal bind:this={editModal}>
 	{#if editItem}
 		<EditModal item={editItem} onUpdated={updateItem} />
 	{/if}
 </Modal>
-<Modal id="delete">
+<Modal bind:this={deleteModal}>
 	{#if deleteItem}
 		<DeleteModal item={deleteItem} onDeleted={removeItem} />
 	{/if}

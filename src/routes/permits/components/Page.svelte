@@ -49,7 +49,7 @@
 	<div class="mb-4 flex flex-row gap-x-1 md:gap-x-4">
 		<Search {search} />
 		{#if session.user.role === 'admin' || session.user.role === 'resident'}
-			<CreateBtn onclick={openCreate} />
+			<CreateBtn onclick={() => openCreate()} />
 		{/if}
 	</div>
 	<Table totalAmount={newPermits.data.metadata.totalAmount} {search} {pageNum}>

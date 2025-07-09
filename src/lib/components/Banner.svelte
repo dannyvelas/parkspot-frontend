@@ -4,13 +4,8 @@
 </script>
 
 <script lang="ts">
-	interface Props {
-		// model
-		isError?: boolean;
-		message?: string;
-	}
-
-	let { isError = $bindable(false), message = $bindable('') }: Props = $props();
+	let isError = $state(false);
+	let message = $state('');
 
 	// api
 	updateBanner = (b: boolean, s: string) => {
