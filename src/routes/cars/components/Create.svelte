@@ -1,16 +1,12 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
-
 	import type { User, Car } from '$lib/models';
 	import { Request } from '$lib/api';
 	import { getLatestToken } from '$lib/auth/jwt';
 	import { isOk } from '$lib/functional';
 	import { carDecoder } from '$lib/models';
-	import { createEventDispatcher } from 'svelte';
 	import Banner, { updateBanner, clearBanner } from '$lib/components/Banner.svelte';
 
 	interface Props {
-		// props
 		user: User;
 		onCreated: (car: Car) => void;
 	}

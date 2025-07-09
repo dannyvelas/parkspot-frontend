@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
-
 	import type { Car } from '$lib/models';
 	import { Request } from '$lib/api';
 	import { getLatestToken } from '$lib/auth/jwt';
@@ -9,7 +7,6 @@
 	import Banner, { updateBanner } from '$lib/components/Banner.svelte';
 
 	interface Props {
-		// props
 		item: Car;
 		onUpdated: (item: Car) => void;
 	}
