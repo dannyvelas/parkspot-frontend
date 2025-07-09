@@ -14,7 +14,6 @@
 	import Delete from './Delete.svelte';
 
 	interface Props {
-		// props
 		listName: permitList;
 		permits: Result<ListWithMetadata<Permit>>;
 		session: Session;

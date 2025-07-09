@@ -12,7 +12,6 @@
 	import Edit from './components/Edit.svelte';
 
 	interface Props {
-		// props
 		data: PageData;
 	}
 

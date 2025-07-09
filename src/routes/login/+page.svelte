@@ -3,7 +3,6 @@
 	import Password from '$lib/components/Password.svelte';
 
 	interface Props {
-		// props
 		form: Record<string, any> | undefined;
 	}
 

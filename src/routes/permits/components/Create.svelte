@@ -9,7 +9,6 @@
 	import type { Permit } from '$lib/models';
 
 	interface Props {
-		// props
 		user: User;
 		onCreated: (permit: Permit) => void;
 	}

@@ -7,7 +7,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { getStartOfToday, getEndOfTomorrow } from '$lib/time';
 
-	// props
 	let startDate = getStartOfToday();
 	let endDate = getEndOfTomorrow();
 

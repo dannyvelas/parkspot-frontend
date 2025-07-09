@@ -2,7 +2,6 @@
 	import { slide } from 'svelte/transition';
 	import type { Snippet } from 'svelte';
 
-	// props
 	interface Props {
 		cells: Snippet;
 		header?: Snippet;

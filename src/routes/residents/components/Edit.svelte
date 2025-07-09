@@ -7,7 +7,6 @@
 	import Banner, { updateBanner } from '$lib/components/Banner.svelte';
 
 	interface Props {
-		// props
 		item: Resident;
 		onUpdated: (item: Resident) => void;
 	}

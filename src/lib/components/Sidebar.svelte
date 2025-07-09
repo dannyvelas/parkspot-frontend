@@ -7,7 +7,6 @@
 	import { cubicIn } from 'svelte/easing';
 
 	interface Props {
-		// props
 		userRole: string | undefined;
 	}
 

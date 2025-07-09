@@ -3,7 +3,6 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	import type { Snippet } from 'svelte';
 
-	// props
 	interface Props {
 		totalAmount: number;
 		search: string;

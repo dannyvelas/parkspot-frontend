@@ -4,7 +4,6 @@
 	import Row from '$lib/components/Row.svelte';
 
 	interface Props {
-		// props
 		car: Car;
 		userRole: string;
 		onClickEdit: (car: Car) => void;

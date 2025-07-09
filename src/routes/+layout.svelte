@@ -5,7 +5,6 @@
 	import '../app.css';
 
 	interface Props {
-		// props
 		data: LayoutData;
 		children: import('svelte').Snippet;
 	}

@@ -2,7 +2,6 @@
 	import { MAX_AMT_PER_PAGE } from '$lib/constants';
 
 	interface Props {
-		// props
 		totalAmount: number;
 		pageNum: number;
 		pageToHref: (a: number) => string;

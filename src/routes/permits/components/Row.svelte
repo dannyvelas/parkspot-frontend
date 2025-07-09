@@ -6,7 +6,6 @@
 	import Tag from './Tag.svelte';
 
 	interface Props {
-		// props
 		permit: Permit;
 		userRole: string;
 		onClickEdit: (permit: Permit) => void;

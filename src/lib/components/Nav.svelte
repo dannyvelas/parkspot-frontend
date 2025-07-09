@@ -5,7 +5,6 @@
 	import type { Session } from '$lib/auth';
 
 	interface Props {
-		// props
 		session: Session | undefined;
 		openSidebar: () => void;
 	}

@@ -12,7 +12,6 @@
 	import Delete from './components/Delete.svelte';
 
 	interface Props {
-		// props
 		data: PageData;
 	}
 

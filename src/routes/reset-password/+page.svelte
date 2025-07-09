@@ -7,7 +7,6 @@
 	import Banner, { updateBanner } from '$lib/components/Banner.svelte';
 
 	interface Props {
-		// props
 		data: PageData;
 	}
 

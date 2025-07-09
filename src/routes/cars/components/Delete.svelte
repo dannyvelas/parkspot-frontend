@@ -5,7 +5,6 @@
 	import { isOk } from '$lib/functional';
 	import Banner, { updateBanner } from '$lib/components/Banner.svelte';
 
-	// props
 	interface Props {
 		item: Car;
 		onDeleted: (item: Car) => void;

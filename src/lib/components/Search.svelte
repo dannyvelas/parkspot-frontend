@@ -3,7 +3,6 @@
 	import { goto } from '$app/navigation';
 
 	interface Props {
-		// props
 		search: string;
 	}
 

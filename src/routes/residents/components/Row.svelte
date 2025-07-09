@@ -3,7 +3,6 @@
 	import Row from '$lib/components/Row.svelte';
 
 	interface Props {
-		// props
 		resident: Resident;
 		onClickEdit: (resident: Resident) => void;
 		onClickDelete: (resident: Resident) => void;
