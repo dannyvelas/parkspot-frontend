@@ -1,7 +1,9 @@
-import tailwindcss from '@tailwindcss/vite';
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import adapter from '@sveltejs/adapter-node';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-export default defineConfig({
-  plugins: [tailwindcss(), sveltekit()]
-});
+const config = {
+	preprocess: vitePreprocess(),
+	kit: { adapter: adapter() }
+};
+
+export default config;
