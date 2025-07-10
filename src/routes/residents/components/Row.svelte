@@ -11,7 +11,7 @@
 	let { resident, onClickEdit, onClickDelete }: Props = $props();
 
 	// model
-	let fullName = resident.firstName + ' ' + resident.lastName;
+	let fullName = $derived(resident.firstName + ' ' + resident.lastName);
 
 	// styles
 	const twGreenStatus = 'bg-green-200 text-green-500';
