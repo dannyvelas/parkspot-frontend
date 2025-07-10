@@ -19,7 +19,7 @@
 	let newCars = $derived(data.cars);
 
 	function refreshList(newList: ListWithMetadata<Car>) {
-		// $derived runes dont proxy properties recursively like the $state rune, so to trigger an update, we must overrite the whole variable
+		// $derived runes dont proxy properties recursively like the $state rune, so to trigger an update, we must overwrite the whole variable
 		newCars = { tag: 'Ok', data: newList };
 	}
 </script>
