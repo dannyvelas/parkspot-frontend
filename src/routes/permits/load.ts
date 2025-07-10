@@ -1,5 +1,6 @@
-import type { PageLoad } from "./all/$types";
 import type { Result } from "$lib/functional";
+import type { RouteParams, PageServerData, PageParentData } from './all/$types';
+import type * as Kit from '@sveltejs/kit';
 import type { ListWithMetadata, Permit } from "$lib/models";
 import { MAX_AMT_PER_PAGE } from "$lib/constants";
 import { browser } from "$app/environment";
@@ -13,8 +14,10 @@ type OutputData = {
   pageNum: number;
 };
 
-export const loadPermits = (endpoint: string): PageLoad<OutputData> => {
-  const loadFn: PageLoad<OutputData> = async (loadInput) => {
+type PageLoad<E extends string> = Kit.Load<RouteParams, PageServerData, PageParentData, OutputData, E>;
+
+export const loadPermits = <E extends string>(endpoint: string): PageLoad<E> => {
+  const loadFn: PageLoad<typeof endpoint> = async (loadInput) => {
     const parentData = await loadInput.parent();
     const accessToken = !browser ? parentData.session.accessToken : await getLatestToken();
     const page = Number(loadInput.url.searchParams.get("page")) || 1;
