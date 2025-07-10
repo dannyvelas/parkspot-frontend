@@ -29,9 +29,10 @@
 
 <slot />
 
-<style>
+<style lang="postcss">
+	@reference "tailwindcss";
+
 	.active {
-		border-bottom: 2px solid #4ade80;
-		color: #4ade80;
+		@apply border-b-2 border-green-400 text-green-400;
 	}
 </style>

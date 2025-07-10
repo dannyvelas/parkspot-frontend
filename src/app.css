@@ -6,7 +6,6 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: #E5E7EB;
-    outline-color: #4ADE80;
+    @apply border-gray-200 outline-green-400
   }
 }
