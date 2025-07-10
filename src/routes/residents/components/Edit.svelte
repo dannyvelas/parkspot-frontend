@@ -12,7 +12,7 @@
 	}
 
 	let { item, onUpdated }: Props = $props();
-	const newItem = $state(structuredClone($state.snapshot(item)));
+	const newItem = $state(item);
 
 	// events
 	async function handleSubmit(event: SubmitEvent) {
