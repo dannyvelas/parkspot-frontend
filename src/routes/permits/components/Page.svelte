@@ -22,10 +22,11 @@
 	}
 
 	let { listName, permits, session, search, pageNum }: Props = $props();
-	const newPermits = $derived(structuredClone(permits));
+	let newPermits = $derived(permits);
 
 	function refreshList(newList: ListWithMetadata<Permit>) {
-		newPermits.data = newList;
+		// $derived runes dont proxy properties recursively like the $state rune, so to trigger an update, we must overrite the whole variable
+		newPermits = { tag: 'Ok', data: newList };
 	}
 </script>
 
@@ -36,7 +37,7 @@
 
 {#if !isOk(newPermits)}
 	{newPermits.message}
-{:else if isOk(newPermits)}
+{:else}
 	<ListModals
 		list={newPermits.data}
 		user={session.user}
@@ -61,7 +62,7 @@
 			<div class="basis-16 text-xs">Status</div>
 		{/snippet}
 		{#snippet rows()}
-			{#each newPermits.data.records as permit (permit.id)}
+			{#each newPermits.data?.records || [] as permit (permit.id)}
 				<Row
 					{permit}
 					userRole={session.user.role}

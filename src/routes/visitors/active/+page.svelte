@@ -15,10 +15,11 @@
 	}
 
 	let { data }: Props = $props();
-	const newVisitors = $derived(structuredClone(data.visitors));
+	let newVisitors = $derived(data.visitors);
 
 	function refreshList(newList: ListWithMetadata<Visitor>) {
-		newVisitors.data = newList;
+		// $derived runes dont proxy properties recursively like the $state rune, so to trigger an update, we must overrite the whole variable
+		newVisitors = { tag: 'Ok', data: newList };
 	}
 </script>
 
@@ -60,7 +61,7 @@
 			<div class="hidden text-xs md:inline md:basis-20">Relation</div>
 		{/snippet}
 		{#snippet rows()}
-			{#each newVisitors.data.records as visitor (visitor.id)}
+			{#each newVisitors.data?.records || [] as visitor (visitor.id)}
 				<Row {visitor} userRole={data.session.user.role} onClickDelete={openDelete} />
 			{/each}
 		{/snippet}
