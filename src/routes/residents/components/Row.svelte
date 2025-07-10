@@ -25,9 +25,9 @@
 		<div class="basis-20 text-xs text-zinc-800">{resident.id}</div>
 		<div class="basis-32 text-xs text-zinc-800">{fullName}</div>
 		<div class="hidden lg:flex lg:inline lg:basis-24 lg:flex-row">
-			<span class="basis-16 text-xs {twPermissionColors} rounded-lg py-0.5 text-center">
+			<div class="basis-16 text-xs {twPermissionColors} rounded-lg py-0.5 text-center">
 				{permissionText}
-			</span>
+			</div>
 		</div>
 		<div class="basis-8 text-xs text-zinc-800">{resident.amtParkingDaysUsed}</div>
 	{/snippet}
