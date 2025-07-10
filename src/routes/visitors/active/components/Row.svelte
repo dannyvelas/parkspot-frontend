@@ -25,7 +25,7 @@
 	{#snippet cells()}
 		<div class="basis-32 text-xs text-zinc-800">{fullName}</div>
 		<div class="basis-20 text-xs text-zinc-800">{visitor.residentID}</div>
-		<div class="hidden md:flex md:inline md:basis-20 md:flex-row">
+		<div class="hidden md:flex md:basis-20 md:flex-row">
 			<div class="basis-16 text-xs {twRelationColors} rounded-lg py-0.5 text-center">
 				{relationText}
 			</div>
