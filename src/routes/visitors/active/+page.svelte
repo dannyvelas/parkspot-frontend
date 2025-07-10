@@ -15,7 +15,7 @@
 	}
 
 	let { data }: Props = $props();
-	const newVisitors = $state(structuredClone(data.visitors));
+	const newVisitors = $derived(structuredClone(data.visitors));
 
 	function refreshList(newList: ListWithMetadata<Visitor>) {
 		newVisitors.data = newList;

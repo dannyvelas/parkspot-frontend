@@ -22,7 +22,7 @@
 	}
 
 	let { listName, permits, session, search, pageNum }: Props = $props();
-	const newPermits = $state(structuredClone(permits));
+	const newPermits = $derived(structuredClone(permits));
 
 	function refreshList(newList: ListWithMetadata<Permit>) {
 		newPermits.data = newList;

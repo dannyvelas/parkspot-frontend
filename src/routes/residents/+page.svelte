@@ -16,7 +16,7 @@
 	}
 
 	let { data }: Props = $props();
-	const newResidents = $state(structuredClone(data.residents));
+	const newResidents = $derived(structuredClone(data.residents));
 
 	function refreshList(newList: ListWithMetadata<Resident>) {
 		newResidents.data = newList;
