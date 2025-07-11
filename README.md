@@ -18,9 +18,14 @@ You will start at the `/dashboard` page of your community. From there, you can u
 
 ## Screenshots
 
+### Permits page (resident view)
 ![Permits page for resident](./screenshots/permits-page-resident.png)
-![Permits Page for Resident, with a row open](./screenshots/permits-page-resident.png)
-![Sidebar](./screenshots/permits-page-resident.png)
+
+### List items have expandable rows with options
+![Permits Page for Resident, with a row open](./screenshots/permits-page-resident-row-open.png)
+
+### Navigation sidebar
+![Sidebar](./screenshots/sidebar.png)
 
 ## Setup
 1. Clone [parkspot backend](https://github.com/dannyvelas/parkspot-backend)
