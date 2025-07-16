@@ -29,7 +29,7 @@ You will start at the `/dashboard` page of your community. From there, you can u
 
 ## Setup
 1. Clone [parkspot backend](https://github.com/dannyvelas/parkspot-backend)
-2. Set it up
+2. Follow the setup instructions in its README
 3. Create an `.env` file: `cp .env.example .env`
 4. Install the dependencies: `npm install`
 5. Run in development mode: `npm run dev`
