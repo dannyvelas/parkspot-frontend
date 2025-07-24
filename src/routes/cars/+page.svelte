@@ -46,7 +46,7 @@
 	/>
 	<div class="mb-4 flex flex-row gap-x-1 md:gap-x-4">
 		<Search search={data.search} />
-		{#if data.session.user.role === 'admin' || data.session.user.role === 'resident'}
+		{#if data.session.user.role === 'admin'}
 			<CreateBtn onclick={() => openCreate()} />
 		{/if}
 	</div>
