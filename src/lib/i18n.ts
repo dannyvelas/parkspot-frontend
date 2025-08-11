@@ -16,8 +16,8 @@ function initDictionary(seedLocale: string) {
       subtitle: "Nuestra aplicación ha cambiado mucho.",
       listName: "¿Qué hay de nuevo?",
       l0: "Ahora podrás navegar nuestra aplicación con la nueva barra lateral. Ahí mismo encontrarás enlaces para ver tus permisos, carros y visitantes.",
-      l1: "Creamos la página de carros, donde podrás ver la lista de todos los carros que han usado un permiso de visitante",
-      l2: 'En la página de permisos, puedes escoger de tu lista de "carros visitantes"',
+      l1: "Creamos la página de carros, donde podrás ver la lista de todos los carros que han usado un permiso de visitante.",
+      l2: 'En la página de permisos, puedes escoger de tu lista de "carros visitantes".',
       l3: 'Para crear un permiso, sencillamente ve a la página de permisos, y haz clic en el botón que dice "Create" en la parte derecha de la barra de búsqueda.',
     },
 
