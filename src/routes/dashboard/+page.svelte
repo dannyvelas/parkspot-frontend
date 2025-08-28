@@ -27,10 +27,18 @@
 
 <p class="mb-3">{$_('subtitle')}</p>
 
-<h2 class="mb-3 font-bold">{$_('listName')}</h2>
-<ul class="ml-4 list-disc">
+<h2 class="font-bold">{$_('listName')}</h2>
+<ul class="m-4 list-disc">
 	<li>{$_('l0')}</li>
 	<li>{$_('l1')}</li>
 	<li>{$_('l2')}</li>
 	<li>{$_('l3')}</li>
+</ul>
+
+<h2 class="font-bold">{$_('rulesName')}</h2>
+<ul class="m-4 list-disc">
+	<li>{$_('rule0')}</li>
+	<li>{$_('rule1')}</li>
+	<li>{$_('rule2')}</li>
+	<li>{$_('rule3')}</li>
 </ul>
