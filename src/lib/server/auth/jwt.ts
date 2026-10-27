@@ -1,5 +1,5 @@
 import type { User } from '$lib/models';
-import { TOKEN_REFRESHSECRET } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import * as jose from 'jose';
 
 export const newRefresh = async (user: User) => {
@@ -7,5 +7,5 @@ export const newRefresh = async (user: User) => {
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(Buffer.from(TOKEN_REFRESHSECRET));
+    .sign(Buffer.from(env.TOKEN_REFRESHSECRET as string));
 };
