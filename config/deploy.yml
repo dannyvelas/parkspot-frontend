@@ -1,0 +1,36 @@
+service: parkspot-frontend
+image: dannyvelas/parkspot-frontend
+
+servers:
+  web:
+    hosts:
+      - 45.77.73.20
+
+proxy:
+  ssl: true
+  host: app.park-spot.co
+  app_port: 3000
+
+builder:
+  arch: amd64
+  args:
+    PUBLIC_BACKENDURL: https://api.park-spot.co
+    PUBLIC_COOKIEDOMAIN: park-spot.co
+    PUBLIC_ENV: prod
+
+registry:
+  server: ghcr.io
+  username: dannyvelas
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+ssh:
+  user: deploy
+  port: 27983
+  keys:
+    - ~/.ssh/id_ed25519_parkspot-kamal
+  keys_only: true
+
+env:
+  secret:
+    - TOKEN_REFRESHSECRET
